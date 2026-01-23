@@ -1,0 +1,83 @@
+package com.finalshell.portmap;
+
+import javax.swing.table.AbstractTableModel;
+import java.util.*;
+
+/**
+ * 端口映射规则表格模型
+ * 
+ * Based on analysis of FinalShell 3.8.3
+ */
+public class MapRuleListModel extends AbstractTableModel {
+    
+    private static final String[] COLUMNS = {"名称", "类型", "本地地址", "本地端口", "远程地址", "远程端口", "状态"};
+    private List<MapRule> rules;
+    
+    public MapRuleListModel() {
+        this.rules = new ArrayList<>();
+    }
+    
+    @Override
+    public int getRowCount() {
+        return rules.size();
+    }
+    
+    @Override
+    public int getColumnCount() {
+        return COLUMNS.length;
+    }
+    
+    @Override
+    public String getColumnName(int column) {
+        return COLUMNS[column];
+    }
+    
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        if (rowIndex < 0 || rowIndex >= rules.size()) {
+            return null;
+        }
+        
+        MapRule rule = rules.get(rowIndex);
+        switch (columnIndex) {
+            case 0: return rule.getName();
+            case 1: return rule.getType();
+            case 2: return rule.getLocalHost();
+            case 3: return rule.getLocalPort();
+            case 4: return rule.getRemoteHost();
+            case 5: return rule.getRemotePort();
+            case 6: return rule.isRunning() ? "运行中" : "已停止";
+            default: return null;
+        }
+    }
+    
+    public void addRule(MapRule rule) {
+        rules.add(rule);
+        fireTableRowsInserted(rules.size() - 1, rules.size() - 1);
+    }
+    
+    public void removeRule(int row) {
+        if (row >= 0 && row < rules.size()) {
+            rules.remove(row);
+            fireTableRowsDeleted(row, row);
+        }
+    }
+    
+    public void updateRule(int row, MapRule rule) {
+        if (row >= 0 && row < rules.size()) {
+            rules.set(row, rule);
+            fireTableRowsUpdated(row, row);
+        }
+    }
+    
+    public MapRule getRuleAt(int row) {
+        if (row >= 0 && row < rules.size()) {
+            return rules.get(row);
+        }
+        return null;
+    }
+    
+    public List<MapRule> getAllRules() {
+        return new ArrayList<>(rules);
+    }
+}
