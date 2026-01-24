@@ -184,7 +184,25 @@ public class QuickCommandPanel extends JPanel implements QuickCommandManager.Qui
         if (selected != null && executor != null) {
             executor.executeCommand(selected.getCommand(), selected.isSendEnter());
             logger.debug("Executed quick command: {}", selected.getName());
+            
+            // Show brief tooltip notification
+            showExecutionTooltip(selected.getName());
         }
+    }
+    
+    private void showExecutionTooltip(String commandName) {
+        JToolTip tip = new JToolTip();
+        tip.setTipText("已执行: " + commandName);
+        
+        Popup popup = PopupFactory.getSharedInstance().getPopup(
+            this, tip, 
+            getLocationOnScreen().x + 10, 
+            getLocationOnScreen().y + getHeight() - 30);
+        popup.show();
+        
+        Timer timer = new Timer(1500, e -> popup.hide());
+        timer.setRepeats(false);
+        timer.start();
     }
     
     @Override
