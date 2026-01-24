@@ -1,0 +1,100 @@
+﻿[ERROR] COMPILATION ERROR : 
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[17,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[184,29] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[188,32] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/filetree/CustomBasicTreeUI.java:[96,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[66,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[67,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[70,64] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[99,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[100,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[102,64] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[129,43] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[130,43] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[132,60] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetPanel.java:[51,53] 不兼容的类型: int无法转换为com.finalshell.network.NetRow
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetPanel.java:[60,17] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/TransTaskTableModel.java:[106,46] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/TransTaskTableModel.java:[108,46] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/AskPasswordDialog.java:[106,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/AutoUploadManager.java:[133,23] 无法将类 com.finalshell.sftp.FtpClient中的方法 upload应用到给定类型;
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpClient.java:[117,17] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/plugin/PluginContext.java:[52,30] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[106,48] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[235,36] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[236,36] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[282,24] 无法将类 com.finalshell.rdp.RDPPanel中的构造器 RDPPanel应用到给定类型;
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[33,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[34,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[35,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[36,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[72,27] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/key/KeyChooseDialog.java:[66,30] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[62,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[66,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[70,29] MainWindowManager() 在 com.finalshell.ui.MainWindowManager 中是 private 访问控制
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[71,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[74,21] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[80,21] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[86,21] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[95,25] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[104,25] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[113,25] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[120,35] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[132,21] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpFileTree.java:[109,39] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/HotkeyCellRenderer.java:[33,35] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/HotkeyCellRenderer.java:[38,35] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/batch/BatchPanel.java:[203,65] for-each 不适用于表达式类型
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/batch/BatchTask.java:[82,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/SysInfoPanel.java:[131,38] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/SysInfoPanel.java:[138,40] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/SysInfoPanel.java:[144,38] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/SysInfoPanel.java:[151,42] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/hotkey/HotkeyPanel.java:[32,23] 无法将类 com.finalshell.ui.table.HotkeyTable中的构造器 HotkeyTable应用到给定类型;
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/hotkey/HotkeyPanel.java:[57,86] 不兼容的类型: java.awt.Window无法转换为java.awt.Frame
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/hotkey/HotkeyPanel.java:[60,40] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/hotkey/HotkeyPanel.java:[70,51] 不兼容的类型: com.finalshell.hotkey.HotkeyConfig无法转换为com.finalshell.hotkey.HotkeyInfo
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/hotkey/HotkeyPanel.java:[71,86] 不兼容的类型: java.awt.Window无法转换为java.awt.Frame
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/hotkey/HotkeyPanel.java:[74,48] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/hotkey/HotkeyPanel.java:[93,23] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[114,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[115,44] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[116,43] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[117,45] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[135,15] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[136,15] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[137,15] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[138,15] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/SocketTableModel.java:[28,29] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/SocketTableModel.java:[31,29] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/SocketTableModel.java:[32,29] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[407,49] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[408,49] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[409,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[410,50] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[414,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[415,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[419,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[423,48] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[424,45] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[425,52] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[426,53] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[429,52] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[430,44] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[431,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[438,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[439,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[440,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[441,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[445,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[446,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[450,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[454,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[455,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[456,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[457,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[460,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[461,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[462,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[465,22] 找不到符号

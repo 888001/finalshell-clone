@@ -1,6 +1,7 @@
 package com.finalshell.ui.filetree;
 
 import javax.swing.*;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.*;
 import java.awt.*;
@@ -36,7 +37,7 @@ public class CustomBasicTreeUI extends BasicTreeUI {
         tree.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                int row = getRowForLocation(tree, e.getX(), e.getY());
+                int row = tree.getRowForLocation(e.getX(), e.getY());
                 if (row != hoveredRow) {
                     hoveredRow = row;
                     tree.repaint();

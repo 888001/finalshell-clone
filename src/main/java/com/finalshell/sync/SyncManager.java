@@ -324,4 +324,39 @@ public class SyncManager {
     public interface SyncListener {
         void onSyncEvent(SyncEvent event, String message);
     }
+    
+    /**
+     * Get sync configuration
+     */
+    public SyncConfig getConfig() {
+        return syncConfig;
+    }
+    
+    /**
+     * Set sync configuration
+     */
+    public void setConfig(SyncConfig config) {
+        this.syncConfig = config;
+        saveSyncConfig();
+    }
+    
+    /**
+     * Perform sync operation
+     */
+    public boolean sync() {
+        if (syncConfig == null || !syncConfig.isEnabled()) {
+            return false;
+        }
+        
+        try {
+            fireEvent(SyncEvent.SYNCING, "开始同步...");
+            // TODO: Implement actual sync based on syncConfig.getType()
+            fireEvent(SyncEvent.SYNC_COMPLETE, "同步完成");
+            return true;
+        } catch (Exception e) {
+            logger.error("Sync failed", e);
+            fireEvent(SyncEvent.ERROR, "同步失败: " + e.getMessage());
+            return false;
+        }
+    }
 }

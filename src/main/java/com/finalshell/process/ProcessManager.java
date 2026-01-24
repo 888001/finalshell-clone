@@ -65,6 +65,18 @@ public class ProcessManager {
     }
     
     /**
+     * 杀死进程 (with force option)
+     */
+    public boolean killProcess(int pid, boolean force) {
+        try {
+            return killProcess(pid, force ? 9 : 15);
+        } catch (Exception e) {
+            logger.error("结束进程失败: {}", pid, e);
+            return false;
+        }
+    }
+    
+    /**
      * 杀死进程
      */
     public boolean killProcess(int pid, int signal) throws Exception {

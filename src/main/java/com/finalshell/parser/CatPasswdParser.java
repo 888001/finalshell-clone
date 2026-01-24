@@ -1,5 +1,6 @@
 package com.finalshell.parser;
 
+import com.finalshell.monitor.parser.BaseParser;
 import java.util.*;
 
 /**
@@ -16,11 +17,11 @@ public class CatPasswdParser extends BaseParser {
     }
     
     @Override
-    public void parse(String content) {
-        if (content == null || content.isEmpty()) return;
+    public void parse() {
+        if (rawOutput == null || rawOutput.isEmpty()) return;
         
         entries.clear();
-        String[] lines = content.split("\n");
+        String[] lines = rawOutput.split("\n");
         
         for (String line : lines) {
             line = line.trim();

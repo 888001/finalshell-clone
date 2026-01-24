@@ -200,8 +200,8 @@ public class BatchPanel extends JPanel {
     
     private void loadConnections() {
         connectionModel.clear();
-        for (ConnectConfig config : configManager.getConnections()) {
-            if ("SSH".equals(config.getType())) {
+        for (ConnectConfig config : configManager.getConnections().values()) {
+            if (config.getType() == 1) { // 1 = SSH
                 connectionModel.addElement(config);
             }
         }

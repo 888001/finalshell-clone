@@ -69,6 +69,16 @@ public class IPInfo {
         this.locationInfo = locationInfo; 
     }
     
+    public String getRegion() {
+        StringBuilder sb = new StringBuilder();
+        if (province != null && !province.isEmpty()) sb.append(province);
+        if (city != null && !city.isEmpty()) {
+            if (sb.length() > 0) sb.append(" ");
+            sb.append(city);
+        }
+        return sb.length() > 0 ? sb.toString() : "";
+    }
+    
     @Override
     public String toString() {
         return String.format("IPInfo[ip=%s, location=%s]", ip, getLocationInfo());

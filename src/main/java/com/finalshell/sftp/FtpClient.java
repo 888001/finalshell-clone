@@ -143,6 +143,11 @@ public class FtpClient {
         }
     }
     
+    public void upload(String localPath, String remotePath) 
+            throws SftpException, JSchException, InterruptedException {
+        upload(localPath, remotePath, null);
+    }
+    
     public void mkdir(String path) throws SftpException {
         mainChannel.mkdir(path);
     }

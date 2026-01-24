@@ -1,6 +1,6 @@
 package com.finalshell.control;
 
-import com.finalshell.App;
+import com.finalshell.app.App;
 
 /**
  * 检查线程

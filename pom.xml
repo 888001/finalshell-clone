@@ -14,8 +14,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <jsch.version>0.1.55</jsch.version>
         <fastjson.version>1.2.83</fastjson.version>
         <slf4j.version>1.7.36</slf4j.version>
@@ -38,11 +38,16 @@
             <version>${jsch.version}</version>
         </dependency>
 
-        <!-- Terminal Emulator - JediTerm -->
+        <!-- Terminal Emulator - JediTerm (via jitpack, 使用 master 分支最新) -->
         <dependency>
-            <groupId>com.github.JetBrains</groupId>
-            <artifactId>jediterm</artifactId>
-            <version>2.50</version>
+            <groupId>com.github.JetBrains.jediterm</groupId>
+            <artifactId>jediterm-core</artifactId>
+            <version>master-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.JetBrains.jediterm</groupId>
+            <artifactId>jediterm-ui</artifactId>
+            <version>master-SNAPSHOT</version>
         </dependency>
 
         <!-- UI Framework - WebLaF -->
@@ -89,6 +94,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.21</version>
+        </dependency>
 
         <!-- Testing -->
         <dependency>
@@ -107,8 +117,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.10.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>11</source>
+                    <target>11</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>

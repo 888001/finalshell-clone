@@ -87,10 +87,10 @@ public class SysInfoPanel extends BaseTabPanel {
     
     public void setMonitorData(MonitorData data) {
         this.monitorData = data;
-        updateUI();
+        refreshUI();
     }
     
-    private void updateUI() {
+    private void refreshUI() {
         if (monitorData == null) return;
         
         SwingUtilities.invokeLater(() -> {

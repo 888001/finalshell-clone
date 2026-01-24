@@ -1,5 +1,6 @@
 package com.finalshell.telnet;
 
+import com.jediterm.terminal.Questioner;
 import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
@@ -123,9 +124,13 @@ public class TelnetPanel extends JPanel implements TelnetSession.TelnetListener 
             @Override
             public void componentResized(ComponentEvent e) {
                 if (session != null && session.isConnected()) {
-                    Dimension size = terminalWidget.getTerminalPanel().getTerminalSizeFromComponent();
-                    if (size != null) {
-                        session.resize(size.width, size.height);
+                    try {
+                        var termSize = terminalWidget.getTerminalPanel().getTerminalSizeFromComponent();
+                        if (termSize != null) {
+                            session.resize(termSize.getColumns(), termSize.getRows());
+                        }
+                    } catch (Exception ex) {
+                        // Ignore resize errors
                     }
                 }
             }

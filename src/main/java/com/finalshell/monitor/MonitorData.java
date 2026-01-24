@@ -59,6 +59,12 @@ public class MonitorData {
     // Timestamp
     private long timestamp;
     
+    // Ping data for CLabel
+    private List<Long> pingResponseTimes = new ArrayList<>();
+    private int receivedCount;
+    private int droppedCount;
+    private long averageLatency;
+    
     public MonitorData() {
         this.timestamp = System.currentTimeMillis();
     }
@@ -169,6 +175,51 @@ public class MonitorData {
     // Timestamp
     public long getTimestamp() { return timestamp; }
     public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
+    
+    // Alias methods for compatibility
+    public double getLoad1() { return loadAverage1; }
+    public void setLoad1(double load) { this.loadAverage1 = load; }
+    public double getLoad5() { return loadAverage5; }
+    public void setLoad5(double load) { this.loadAverage5 = load; }
+    public double getLoad15() { return loadAverage15; }
+    public void setLoad15(double load) { this.loadAverage15 = load; }
+    public double getMemUsage() { return memUsagePercent; }
+    public void setUptime(String uptime) { /* parse if needed */ }
+    
+    // CpuInfo/MemInfo/DiskInfo/NetInfo list accessors
+    private CpuInfo cpuInfo;
+    private MemInfo memInfo;
+    private java.util.List<com.finalshell.monitor.DiskInfo> diskInfoList = new java.util.ArrayList<>();
+    private java.util.List<NetInfo> netInfoList = new java.util.ArrayList<>();
+    
+    public CpuInfo getCpuInfo() { return cpuInfo; }
+    public void setCpuInfo(CpuInfo cpuInfo) { this.cpuInfo = cpuInfo; }
+    public MemInfo getMemInfo() { return memInfo; }
+    public void setMemInfo(MemInfo memInfo) { this.memInfo = memInfo; }
+    public java.util.List<com.finalshell.monitor.DiskInfo> getDiskInfoList() { return diskInfoList; }
+    public void setDiskInfoList(java.util.List<com.finalshell.monitor.DiskInfo> list) { this.diskInfoList = list; }
+    public java.util.List<NetInfo> getNetInfoList() { return netInfoList; }
+    public void setNetInfoList(java.util.List<NetInfo> list) { this.netInfoList = list; }
+    
+    // More alias methods
+    public void setTotalMemory(long mem) { this.memTotal = mem; }
+    public void setUsedMemory(long mem) { this.memUsed = mem; }
+    public long getTotalMemory() { return memTotal; }
+    public long getUsedMemory() { return memUsed; }
+    
+    // Ping data getters/setters
+    public List<Long> getPingResponseTimes() { return pingResponseTimes; }
+    public void setPingResponseTimes(List<Long> pingResponseTimes) { this.pingResponseTimes = pingResponseTimes; }
+    public void addPingResponseTime(long rtt) { this.pingResponseTimes.add(rtt); }
+    
+    public int getReceivedCount() { return receivedCount; }
+    public void setReceivedCount(int receivedCount) { this.receivedCount = receivedCount; }
+    
+    public int getDroppedCount() { return droppedCount; }
+    public void setDroppedCount(int droppedCount) { this.droppedCount = droppedCount; }
+    
+    public long getAverageLatency() { return averageLatency; }
+    public void setAverageLatency(long averageLatency) { this.averageLatency = averageLatency; }
     
     /**
      * Format bytes to human readable

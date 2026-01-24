@@ -113,7 +113,7 @@ public class TaskPanel extends JPanel {
         int selectedRow = taskTable.getSelectedRow();
         if (selectedRow >= 0) {
             int modelRow = taskTable.convertRowIndexToModel(selectedRow);
-            TaskRow task = tableModel.getTaskAt(modelRow);
+            com.finalshell.monitor.TaskInfo task = tableModel.getTaskInfoAt(modelRow);
             detailPanel.setTask(task);
         } else {
             detailPanel.setTask(null);

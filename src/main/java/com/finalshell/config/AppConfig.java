@@ -49,6 +49,28 @@ public class AppConfig {
     private boolean darkTheme = true;
     private String accentColor = "#0078D7";
     
+    // Connection settings
+    private boolean autoReconnect = true;
+    private int reconnectDelay = 5;
+    private boolean confirmExit = true;
+    private boolean minimizeToTray = false;
+    
+    // Terminal size
+    private int terminalRows = 24;
+    private int terminalCols = 80;
+    private boolean cursorBlink = true;
+    
+    // Transfer settings
+    private int maxConcurrentTransfers = 3;
+    private int transferBufferSize = 32768;
+    private boolean confirmOverwrite = true;
+    private boolean preserveTimestamp = true;
+    
+    // Security settings
+    private boolean rememberPassword = true;
+    private boolean autoLock = false;
+    private int autoLockTime = 30;
+    
     public AppConfig() {
     }
     
@@ -285,4 +307,50 @@ public class AppConfig {
     public void setAudibleBell(boolean audibleBell) {
         this.audibleBell = audibleBell;
     }
+    
+    // Connection settings
+    public boolean isAutoReconnect() { return autoReconnect; }
+    public void setAutoReconnect(boolean autoReconnect) { this.autoReconnect = autoReconnect; }
+    
+    public int getReconnectDelay() { return reconnectDelay; }
+    public void setReconnectDelay(int reconnectDelay) { this.reconnectDelay = reconnectDelay; }
+    
+    public boolean isConfirmExit() { return confirmExit; }
+    public void setConfirmExit(boolean confirmExit) { this.confirmExit = confirmExit; }
+    
+    public boolean isMinimizeToTray() { return minimizeToTray; }
+    public void setMinimizeToTray(boolean minimizeToTray) { this.minimizeToTray = minimizeToTray; }
+    
+    // Terminal size
+    public int getTerminalRows() { return terminalRows; }
+    public void setTerminalRows(int terminalRows) { this.terminalRows = terminalRows; }
+    
+    public int getTerminalCols() { return terminalCols; }
+    public void setTerminalCols(int terminalCols) { this.terminalCols = terminalCols; }
+    
+    public boolean isCursorBlink() { return cursorBlink; }
+    public void setCursorBlink(boolean cursorBlink) { this.cursorBlink = cursorBlink; }
+    
+    // Transfer settings
+    public int getMaxConcurrentTransfers() { return maxConcurrentTransfers; }
+    public void setMaxConcurrentTransfers(int maxConcurrentTransfers) { this.maxConcurrentTransfers = maxConcurrentTransfers; }
+    
+    public int getTransferBufferSize() { return transferBufferSize; }
+    public void setTransferBufferSize(int transferBufferSize) { this.transferBufferSize = transferBufferSize; }
+    
+    public boolean isConfirmOverwrite() { return confirmOverwrite; }
+    public void setConfirmOverwrite(boolean confirmOverwrite) { this.confirmOverwrite = confirmOverwrite; }
+    
+    public boolean isPreserveTimestamp() { return preserveTimestamp; }
+    public void setPreserveTimestamp(boolean preserveTimestamp) { this.preserveTimestamp = preserveTimestamp; }
+    
+    // Security settings
+    public boolean isRememberPassword() { return rememberPassword; }
+    public void setRememberPassword(boolean rememberPassword) { this.rememberPassword = rememberPassword; }
+    
+    public boolean isAutoLock() { return autoLock; }
+    public void setAutoLock(boolean autoLock) { this.autoLock = autoLock; }
+    
+    public int getAutoLockTime() { return autoLockTime; }
+    public void setAutoLockTime(int autoLockTime) { this.autoLockTime = autoLockTime; }
 }

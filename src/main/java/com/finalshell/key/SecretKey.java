@@ -159,6 +159,14 @@ public class SecretKey {
         return "";
     }
     
+    public String getType() {
+        return getKeyTypeString();
+    }
+    
+    public int getLength() {
+        return keyData != null ? keyData.length : 0;
+    }
+    
     @Override
     public String toString() {
         return name + " (" + getKeyTypeString() + ")";

@@ -101,7 +101,7 @@ public class PortForwardPanel extends JPanel implements PortForwardManager.Forwa
         toolbar.add(removeBtn);
         
         JButton removeAllBtn = new JButton("全部删除");
-        removeAllBtn.addActionListener(e -> removeAll());
+        removeAllBtn.addActionListener(e -> removeAllForwards());
         toolbar.add(removeAllBtn);
         
         add(toolbar, BorderLayout.NORTH);
@@ -182,7 +182,7 @@ public class PortForwardPanel extends JPanel implements PortForwardManager.Forwa
     /**
      * Remove all forwards
      */
-    private void removeAll() {
+    private void removeAllForwards() {
         if (forwardManager.getActiveForwards().isEmpty()) {
             return;
         }

@@ -1,5 +1,7 @@
 package com.finalshell.sftp;
 
+import com.finalshell.ui.panel.TransePanel;
+
 import javax.swing.*;
 import java.awt.*;
 

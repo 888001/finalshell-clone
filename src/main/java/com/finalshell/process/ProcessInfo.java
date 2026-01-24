@@ -52,6 +52,9 @@ public class ProcessInfo {
     public String getCommand() { return command; }
     public void setCommand(String command) { this.command = command; }
     
+    public String getState() { return stat; }
+    public void setState(String state) { this.stat = state; }
+    
     public String getMemoryDisplay() {
         if (rss < 1024) return rss + " KB";
         if (rss < 1024 * 1024) return String.format("%.1f MB", rss / 1024.0);

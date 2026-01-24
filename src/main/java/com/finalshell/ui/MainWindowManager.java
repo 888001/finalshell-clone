@@ -17,7 +17,7 @@ public class MainWindowManager {
     
     private static MainWindowManager instance;
     
-    private MainWindowManager() {}
+    MainWindowManager() {}
     
     public static synchronized MainWindowManager getInstance() {
         if (instance == null) {
@@ -139,6 +139,44 @@ public class MainWindowManager {
         windowList.clear();
         windowMap.clear();
         currentWindow = null;
+    }
+    
+    /**
+     * 初始化
+     */
+    public void initialize() {
+        // 初始化默认配置
+    }
+    
+    /**
+     * 显示指定名称的窗口
+     */
+    public void showWindow(String name) {
+        for (MainWindow window : windowList) {
+            if (name != null && name.equals(window.getName())) {
+                window.setVisible(true);
+                window.toFront();
+                setCurrentWindow(window);
+                return;
+            }
+        }
+        // 如果没有找到，创建新窗口
+        MainWindow window = createWindow();
+        window.setName(name);
+    }
+    
+    /**
+     * 显示默认窗口
+     */
+    public void showDefaultWindow() {
+        if (windowList.isEmpty()) {
+            createWindow();
+        } else {
+            MainWindow window = windowList.get(0);
+            window.setVisible(true);
+            window.toFront();
+            setCurrentWindow(window);
+        }
     }
     
     /**

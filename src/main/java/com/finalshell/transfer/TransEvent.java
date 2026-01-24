@@ -16,6 +16,13 @@ public class TransEvent {
     public static final int EVENT_PAUSE = 130;
     public static final int EVENT_RESUME = 201;
     
+    // Aliases
+    public static final int TYPE_START = EVENT_START;
+    public static final int TYPE_PROGRESS = EVENT_PROGRESS;
+    public static final int TYPE_COMPLETE = EVENT_COMPLETE;
+    public static final int TYPE_ERROR = EVENT_ERROR;
+    public static final int TYPE_CANCEL = EVENT_CANCEL;
+    
     private int type;
     private TransTask transTask;
     private boolean download;
@@ -23,6 +30,11 @@ public class TransEvent {
     public TransEvent(TransTask transTask, int type) {
         this.transTask = transTask;
         this.type = type;
+    }
+    
+    public TransEvent(int type, TransTask transTask) {
+        this.type = type;
+        this.transTask = transTask;
     }
     
     public int getType() { return type; }

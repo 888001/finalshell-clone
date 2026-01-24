@@ -114,6 +114,45 @@ public class TabBar extends JPanel {
         return tabs.indexOf(tab);
     }
     
+    public java.util.List<com.finalshell.ui.TabWrap> getTabList() {
+        java.util.List<com.finalshell.ui.TabWrap> wraps = new java.util.ArrayList<>();
+        for (TabButton tab : tabs) {
+            com.finalshell.ui.TabWrap wrap = new com.finalshell.ui.TabWrap(tab.getTitle(), null);
+            wrap.setUserData(tab.getContent());
+            wraps.add(wrap);
+        }
+        return wraps;
+    }
+    
+    public void closeAllTabs() {
+        for (TabButton tab : new java.util.ArrayList<>(tabs)) {
+            removeTab(tab);
+        }
+    }
+    
+    public void closeTab(com.finalshell.ui.TabWrap wrap) {
+        for (TabButton tab : tabs) {
+            if (tab.getTitle().equals(wrap.getTitle())) {
+                removeTab(tab);
+                break;
+            }
+        }
+    }
+    
+    public void selectTab(com.finalshell.ui.TabWrap wrap) {
+        if (wrap == null) return;
+        for (TabButton tab : tabs) {
+            if (tab.getTitle().equals(wrap.getTitle())) {
+                selectTab(tab);
+                break;
+            }
+        }
+    }
+    
+    public TabButton addTab(String title, java.awt.Component content) {
+        return addTab(title, null, content);
+    }
+    
     public void setTabTitle(TabButton tab, String title) {
         tab.setTitle(title);
     }

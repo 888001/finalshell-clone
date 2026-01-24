@@ -37,6 +37,15 @@ public class RDPPanel extends JPanel implements RDPSession.RDPListener {
         initLayout();
     }
     
+    public RDPPanel(SSHSession session) {
+        this.sshSession = session;
+        this.sshConfig = session != null ? session.getConfig() : null;
+        this.rdpConfig = new RDPConfig();
+        
+        initComponents();
+        initLayout();
+    }
+    
     private void initComponents() {
         statusLabel = new JLabel("未连接");
         statusLabel.setFont(statusLabel.getFont().deriveFont(Font.BOLD, 14f));

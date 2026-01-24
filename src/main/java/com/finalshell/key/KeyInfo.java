@@ -105,6 +105,12 @@ public class KeyInfo {
         this.createTime = createTime;
     }
     
+    public String getPrivateKeyPath() { return keyFile; }
+    public void setPrivateKeyPath(String path) { this.keyFile = path; }
+    
+    public String getPublicKeyPath() { return publicKeyFile; }
+    public void setPublicKeyPath(String path) { this.publicKeyFile = path; }
+    
     @Override
     public String toString() {
         return name + " (" + type + ")";

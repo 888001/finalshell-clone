@@ -348,4 +348,24 @@ public class ConnectConfig implements Cloneable {
     public String toString() {
         return name != null ? name : host;
     }
+    
+    // Alias methods for compatibility
+    public String getKeyPath() { return privateKey; }
+    public void setKeyPath(String keyPath) { this.privateKey = keyPath; }
+    public String getKeyPassphrase() { return passphrase; }
+    public String getUser() { return userName; }
+    public String getUsername() { return userName; }
+    public void setUsername(String username) { this.userName = username; }
+    public String getFolderId() { return parentId; }
+    public void setEncryptedPassword(String encPassword) { this.password = encPassword; }
+    
+    private boolean rememberPassword = true;
+    public boolean isRememberPassword() { return rememberPassword; }
+    public void setRememberPassword(boolean rememberPassword) { this.rememberPassword = rememberPassword; }
+    
+    public static final int TYPE_RDP = 3;
+    
+    private String description;
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 }

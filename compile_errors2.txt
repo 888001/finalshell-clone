@@ -1,0 +1,200 @@
+﻿[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/parser/IpAddrParser.java:[15,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/parser/IpAddrParser.java:[68,17] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/parser/IpAddrParser.java:[72,12] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/process/TaskPanel.java:[15,13] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/process/TaskPanel.java:[16,13] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/process/TaskPanel.java:[123,12] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/process/TaskPanel.java:[127,12] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/telnet/TelnetPanel.java:[220,29] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorParser.java:[41,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorParser.java:[85,24] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[17,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[184,29] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[188,32] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/filetree/CustomBasicTreeUI.java:[96,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[66,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[67,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[70,64] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[99,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[100,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[102,64] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[129,43] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[130,43] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[132,60] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetPanel.java:[51,53] 不兼容的类型: int无法转换为com.finalshell.network.NetRow
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetPanel.java:[60,17] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/TransTaskTableModel.java:[106,46] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/TransTaskTableModel.java:[108,46] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/AskPasswordDialog.java:[106,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/TerminalSettingsProvider.java:[79,18] com.finalshell.terminal.TerminalSettingsProvider中的getTerminalColorPalette()无法实现com.jediterm.terminal.ui.settings.UserSettingsProvider中的getTerminalColorPalette()
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/TerminalSettingsProvider.java:[73,37] 不兼容的类型: java.awt.Color无法转换为com.jediterm.core.Color
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/TerminalSettingsProvider.java:[74,37] 不兼容的类型: java.awt.Color无法转换为com.jediterm.core.Color
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/TerminalSettingsProvider.java:[78,5] 方法不会覆盖或实现超类型的方法
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/AutoUploadManager.java:[133,23] 无法将类 com.finalshell.sftp.FtpClient中的方法 upload应用到给定类型;
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpClient.java:[43,39] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpClient.java:[45,46] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpClient.java:[54,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpClient.java:[117,17] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/plugin/PluginContext.java:[52,30] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[106,48] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[235,36] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[236,36] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[282,24] 无法将类 com.finalshell.rdp.RDPPanel中的构造器 RDPPanel应用到给定类型;
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/TerminalPanel.java:[148,100] 不兼容的类型: com.jediterm.core.util.TermSize无法转换为java.awt.Dimension
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardPanel.java:[185,18] com.finalshell.forward.PortForwardPanel中的removeAll()无法覆盖java.awt.Container中的removeAll()
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[41,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[70,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[98,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[121,18] 枚举 switch case 标签必须为枚举常量的非限定名称
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[123,18] 枚举 switch case 标签必须为枚举常量的非限定名称
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[125,18] 枚举 switch case 标签必须为枚举常量的非限定名称
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[144,31] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[147,31] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[150,31] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/rdp/RDPSession.java:[68,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/rdp/RDPSession.java:[181,27] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/CLabel.java:[38,46] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/CLabel.java:[56,42] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/CLabel.java:[94,35] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/CLabel.java:[95,34] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/CLabel.java:[123,38] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/script/ScriptEngine.java:[209,58] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[33,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[34,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[35,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[36,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[72,27] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/key/KeyChooseDialog.java:[66,30] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[61,30] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[62,13] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[62,34] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[70,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[76,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[82,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[89,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[95,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/filetree/FileTreeModel.java:[64,37] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetworkTool.java:[75,48] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetworkTool.java:[163,48] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncManager.java:[162,70] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[62,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[66,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[70,29] MainWindowManager() 在 com.finalshell.ui.MainWindowManager 中是 private 访问控制
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[71,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/parser/SSParser.java:[13,8] com.finalshell.parser.SSParser不是抽象的, 并且未覆盖com.finalshell.monitor.parser.BaseParser中的抽象方法parse()
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/parser/SSParser.java:[21,5] 方法不会覆盖或实现超类型的方法
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[74,21] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[80,21] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[86,21] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[95,25] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[104,25] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[113,25] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[120,35] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[132,21] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpFileTree.java:[109,39] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/HotkeyCellRenderer.java:[33,35] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/HotkeyCellRenderer.java:[38,35] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/batch/BatchPanel.java:[203,65] for-each 不适用于表达式类型
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/batch/BatchExecutor.java:[118,44] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/batch/BatchTask.java:[82,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/parser/CatCpuInfoParser.java:[13,8] com.finalshell.parser.CatCpuInfoParser不是抽象的, 并且未覆盖com.finalshell.monitor.parser.BaseParser中的抽象方法parse()
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/parser/IpAddrParser.java:[15,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/parser/IpAddrParser.java:[68,17] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/parser/IpAddrParser.java:[72,12] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/process/TaskPanel.java:[15,13] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/process/TaskPanel.java:[16,13] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/process/TaskPanel.java:[123,12] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/process/TaskPanel.java:[127,12] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/telnet/TelnetPanel.java:[220,29] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorParser.java:[41,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorParser.java:[85,24] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[17,18] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[184,29] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[188,32] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/filetree/CustomBasicTreeUI.java:[96,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[66,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[67,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[70,64] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[99,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[100,47] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[102,64] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[129,43] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[130,43] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[132,60] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetPanel.java:[51,53] 不兼容的类型: int无法转换为com.finalshell.network.NetRow
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetPanel.java:[60,17] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/TransTaskTableModel.java:[106,46] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/TransTaskTableModel.java:[108,46] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/AskPasswordDialog.java:[106,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/TerminalSettingsProvider.java:[79,18] com.finalshell.terminal.TerminalSettingsProvider中的getTerminalColorPalette()无法实现com.jediterm.terminal.ui.settings.UserSettingsProvider中的getTerminalColorPalette()
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/TerminalSettingsProvider.java:[73,37] 不兼容的类型: java.awt.Color无法转换为com.jediterm.core.Color
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/TerminalSettingsProvider.java:[74,37] 不兼容的类型: java.awt.Color无法转换为com.jediterm.core.Color
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/TerminalSettingsProvider.java:[78,5] 方法不会覆盖或实现超类型的方法
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/AutoUploadManager.java:[133,23] 无法将类 com.finalshell.sftp.FtpClient中的方法 upload应用到给定类型;
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpClient.java:[43,39] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpClient.java:[45,46] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpClient.java:[54,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpClient.java:[117,17] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/plugin/PluginContext.java:[52,30] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[106,48] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[235,36] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[236,36] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[282,24] 无法将类 com.finalshell.rdp.RDPPanel中的构造器 RDPPanel应用到给定类型;
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/TerminalPanel.java:[148,100] 不兼容的类型: com.jediterm.core.util.TermSize无法转换为java.awt.Dimension
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardPanel.java:[185,18] com.finalshell.forward.PortForwardPanel中的removeAll()无法覆盖java.awt.Container中的removeAll()
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[41,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[70,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[98,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[121,18] 枚举 switch case 标签必须为枚举常量的非限定名称
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[123,18] 枚举 switch case 标签必须为枚举常量的非限定名称
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[125,18] 枚举 switch case 标签必须为枚举常量的非限定名称
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[144,31] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[147,31] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/forward/PortForwardManager.java:[150,31] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/rdp/RDPSession.java:[68,19] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/rdp/RDPSession.java:[181,27] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/CLabel.java:[38,46] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/CLabel.java:[56,42] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/CLabel.java:[94,35] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/CLabel.java:[95,34] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/CLabel.java:[123,38] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/script/ScriptEngine.java:[209,58] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[33,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[34,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[35,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[36,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[72,27] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/key/KeyChooseDialog.java:[66,30] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[61,30] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[62,13] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[62,34] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[70,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[76,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[82,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[89,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransTaskRender.java:[95,22] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/filetree/FileTreeModel.java:[64,37] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetworkTool.java:[75,48] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetworkTool.java:[163,48] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncManager.java:[162,70] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[62,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[66,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[70,29] MainWindowManager() 在 com.finalshell.ui.MainWindowManager 中是 private 访问控制
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[71,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/parser/SSParser.java:[13,8] com.finalshell.parser.SSParser不是抽象的, 并且未覆盖com.finalshell.monitor.parser.BaseParser中的抽象方法parse()
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/parser/SSParser.java:[21,5] 方法不会覆盖或实现超类型的方法
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[74,21] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[80,21] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[86,21] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[95,25] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[104,25] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[113,25] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[120,35] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[132,21] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpFileTree.java:[109,39] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/HotkeyCellRenderer.java:[33,35] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/HotkeyCellRenderer.java:[38,35] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/batch/BatchPanel.java:[203,65] for-each 不适用于表达式类型
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/batch/BatchExecutor.java:[118,44] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/batch/BatchTask.java:[82,26] 找不到符号
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/parser/CatCpuInfoParser.java:[13,8] com.finalshell.parser.CatCpuInfoParser不是抽象的, 并且未覆盖com.finalshell.monitor.parser.BaseParser中的抽象方法parse()

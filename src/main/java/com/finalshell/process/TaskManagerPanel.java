@@ -189,7 +189,7 @@ public class TaskManagerPanel extends JPanel {
         
         new SwingWorker<List<ProcessInfo>, Void>() {
             @Override
-            protected List<ProcessInfo> doInBackground() {
+            protected List<ProcessInfo> doInBackground() throws Exception {
                 return processManager.getProcessList();
             }
             

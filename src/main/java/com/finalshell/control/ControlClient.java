@@ -167,6 +167,15 @@ public class ControlClient {
     public int getLoginCode() { return loginCode; }
     public String getDeviceId() { return deviceId; }
     
+    public boolean isConnected() { return isLoginComplete; }
+    
+    public void checkStatus() {
+        // Check status periodically
+        if (isLoginComplete) {
+            lastActiveTime = System.currentTimeMillis();
+        }
+    }
+    
     /**
      * 登录回调接口
      */

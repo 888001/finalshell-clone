@@ -11,6 +11,12 @@ public class ProxyConfig {
     /**
      * Proxy type enumeration
      */
+    public static final int TYPE_NONE = 0;
+    public static final int TYPE_HTTP = 1;
+    public static final int TYPE_SOCKS4 = 2;
+    public static final int TYPE_SOCKS5 = 3;
+    public static final int TYPE_JUMP_HOST = 4;
+    
     public enum ProxyType {
         NONE("无代理"),
         HTTP("HTTP代理"),
@@ -66,8 +72,23 @@ public class ProxyConfig {
     public ProxyType getType() { return type; }
     public void setType(ProxyType type) { this.type = type; }
     
+    public void setType(String typeStr) {
+        if (typeStr == null) { this.type = ProxyType.NONE; return; }
+        switch (typeStr.toUpperCase()) {
+            case "HTTP": this.type = ProxyType.HTTP; break;
+            case "SOCKS4": this.type = ProxyType.SOCKS4; break;
+            case "SOCKS5": this.type = ProxyType.SOCKS5; break;
+            case "JUMP_HOST": case "跳板机": this.type = ProxyType.JUMP_HOST; break;
+            default: this.type = ProxyType.NONE;
+        }
+    }
+    
     public String getProxyHost() { return proxyHost; }
     public void setProxyHost(String proxyHost) { this.proxyHost = proxyHost; }
+    
+    public String getHost() { return proxyHost; }
+    
+    public int getPort() { return proxyPort; }
     
     public int getProxyPort() { return proxyPort; }
     public void setProxyPort(int proxyPort) { this.proxyPort = proxyPort; }
@@ -77,6 +98,13 @@ public class ProxyConfig {
     
     public String getProxyPassword() { return proxyPassword; }
     public void setProxyPassword(String proxyPassword) { this.proxyPassword = proxyPassword; }
+    
+    public void setPassword(String password) { this.proxyPassword = password; }
+    public String getPassword() { return proxyPassword; }
+    public void setPort(int port) { this.proxyPort = port; }
+    public void setUsername(String username) { this.proxyUsername = username; }
+    public String getUsername() { return proxyUsername; }
+    public void setHost(String host) { this.proxyHost = host; }
     
     public String getJumpHost() { return jumpHost; }
     public void setJumpHost(String jumpHost) { this.jumpHost = jumpHost; }

@@ -1,6 +1,7 @@
 package com.finalshell.search;
 
 import com.finalshell.ssh.SSHSession;
+import com.finalshell.editor.RemoteFileEditor;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

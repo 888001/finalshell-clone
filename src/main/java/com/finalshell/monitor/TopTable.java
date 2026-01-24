@@ -32,8 +32,8 @@ public class TopTable extends JTable {
         tableModel.setData(rows);
     }
     
-    public TopRow getSelectedRow() {
-        int row = getSelectedRow();
+    public TopRow getSelectedTopRow() {
+        int row = super.getSelectedRow();
         if (row >= 0) {
             int modelRow = convertRowIndexToModel(row);
             return tableModel.getRowAt(modelRow);

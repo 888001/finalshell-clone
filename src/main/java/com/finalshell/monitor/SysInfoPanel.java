@@ -130,22 +130,28 @@ public class SysInfoPanel extends JPanel {
             // 获取CPU使用率
             String procStat = session.executeCommand("cat /proc/stat | head -1");
             ProcStatParser cpuParser = new ProcStatParser();
-            double cpuUsage = cpuParser.parse(procStat);
+            cpuParser.setRawOutput(procStat);
+            cpuParser.parse();
+            double cpuUsage = cpuParser.getCpuUsage();
             
             // 获取内存信息
             String freeOutput = session.executeCommand("free -b");
             FreeParser freeParser = new FreeParser();
-            FreeParser.MemoryInfo memInfo = freeParser.parse(freeOutput);
+            freeParser.setRawOutput(freeOutput);
+            freeParser.parse();
             
             // 获取磁盘信息
             String dfOutput = session.executeCommand("df -B1");
             DfParser dfParser = new DfParser();
-            java.util.List<DfParser.DiskInfo> diskList = dfParser.parse(dfOutput);
+            dfParser.setRawOutput(dfOutput);
+            dfParser.parse();
+            java.util.List<DfParser.DiskInfo> diskList = dfParser.getDisks();
             
             // 获取负载
             String uptimeOutput = session.executeCommand("uptime");
             UptimeParser uptimeParser = new UptimeParser();
-            UptimeParser.UptimeInfo uptimeInfo = uptimeParser.parse(uptimeOutput);
+            uptimeParser.setRawOutput(uptimeOutput);
+            uptimeParser.parse();
             
             // 更新UI
             SwingUtilities.invokeLater(() -> {
@@ -156,38 +162,34 @@ public class SysInfoPanel extends JPanel {
                 cpuLabel.setText("CPU使用率:");
                 
                 // 内存
-                if (memInfo != null) {
-                    int memPercent = (int) memInfo.getUsedPercent();
-                    memBar.setValue(memPercent);
-                    memBar.setString(String.format("%d%% (%.1f/%.1f GB)", 
-                        memPercent, 
-                        memInfo.getUsed() / 1024.0 / 1024.0 / 1024.0,
-                        memInfo.getTotal() / 1024.0 / 1024.0 / 1024.0));
-                    
-                    int swapPercent = (int) memInfo.getSwapUsedPercent();
-                    swapBar.setValue(swapPercent);
-                    swapBar.setString(swapPercent + "%");
-                }
+                int memPercent = (int) freeParser.getMemUsagePercent();
+                memBar.setValue(memPercent);
+                memBar.setString(String.format("%d%% (%.1f/%.1f GB)", 
+                    memPercent, 
+                    freeParser.getMemUsed() / 1024.0 / 1024.0 / 1024.0,
+                    freeParser.getMemTotal() / 1024.0 / 1024.0 / 1024.0));
+                
+                int swapPercent = (int) freeParser.getSwapUsagePercent();
+                swapBar.setValue(swapPercent);
+                swapBar.setString(swapPercent + "%");
                 
                 // 负载
-                if (uptimeInfo != null) {
-                    loadLabel.setText(String.format("系统负载: %.2f, %.2f, %.2f",
-                        uptimeInfo.getLoad1(), uptimeInfo.getLoad5(), uptimeInfo.getLoad15()));
-                    uptimeLabel.setText("运行时间: " + uptimeInfo.getUptimeString());
-                }
+                loadLabel.setText(String.format("系统负载: %.2f, %.2f, %.2f",
+                    uptimeParser.getLoad1(), uptimeParser.getLoad5(), uptimeParser.getLoad15()));
+                uptimeLabel.setText("运行时间: " + uptimeParser.getUptime());
                 
                 // 磁盘
                 diskPanel.removeAll();
                 for (DfParser.DiskInfo disk : diskList) {
                     JPanel diskItem = new JPanel(new BorderLayout(5, 0));
-                    diskItem.add(new JLabel(disk.getMountPoint()), BorderLayout.WEST);
+                    diskItem.add(new JLabel(disk.mountPoint), BorderLayout.WEST);
                     JProgressBar diskBar = new JProgressBar(0, 100);
-                    diskBar.setValue((int) disk.getUsedPercent());
+                    diskBar.setValue(disk.usePercent);
                     diskBar.setStringPainted(true);
                     diskBar.setString(String.format("%d%% (%s/%s)", 
-                        (int) disk.getUsedPercent(),
-                        DfParser.formatSize(disk.getUsed()),
-                        DfParser.formatSize(disk.getTotal())));
+                        disk.usePercent,
+                        disk.getFormattedUsed(),
+                        disk.getFormattedSize()));
                     diskItem.add(diskBar, BorderLayout.CENTER);
                     diskPanel.add(diskItem);
                 }

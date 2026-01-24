@@ -155,6 +155,14 @@ public class ConfigManager {
         saveFolders();
     }
     
+    public void saveConfig() {
+        saveAll();
+    }
+    
+    public File getConfigDir() {
+        return configDir.toFile();
+    }
+    
     public void saveAppConfig() {
         Path configFile = configDir.resolve("config.json");
         
@@ -223,7 +231,7 @@ public class ConfigManager {
         }
     }
     
-    public Path getConfigDir() {
+    public Path getConfigDirPath() {
         return configDir;
     }
     
@@ -233,6 +241,10 @@ public class ConfigManager {
     
     public Map<String, ConnectConfig> getConnections() {
         return Collections.unmodifiableMap(connections);
+    }
+    
+    public List<ConnectConfig> getAllConnections() {
+        return new ArrayList<>(connections.values());
     }
     
     public ConnectConfig getConnection(String id) {

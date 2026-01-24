@@ -105,4 +105,8 @@ public class TaskDetailPanel extends JPanel {
         commandLabel.setText("-");
         detailArea.setText("");
     }
+    
+    public void setTask(TaskInfo task) {
+        showTask(task);
+    }
 }

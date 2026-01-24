@@ -369,4 +369,19 @@ public class MainWindow extends JFrame {
     public void removeTab(Component component) {
         tabPane.remove(component);
     }
+    
+    public void toggleFullScreen() {
+        GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        if (device.getFullScreenWindow() == this) {
+            device.setFullScreenWindow(null);
+        } else {
+            device.setFullScreenWindow(this);
+        }
+    }
+    
+    public void openConnection(com.finalshell.config.ConnectConfig config) {
+        if (config == null) return;
+        // TODO: Implement connection opening based on config type
+        setStatus("正在连接: " + config.getName());
+    }
 }

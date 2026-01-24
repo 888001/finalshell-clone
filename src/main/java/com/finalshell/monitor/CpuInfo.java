@@ -12,6 +12,9 @@ public class CpuInfo {
     private double mhz;
     private String vendor;
     private String cacheSize;
+    private double userPercent;
+    private double systemPercent;
+    private double idlePercent;
     
     public CpuInfo() {
     }
@@ -61,6 +64,15 @@ public class CpuInfo {
     public void setCacheSize(String cacheSize) {
         this.cacheSize = cacheSize;
     }
+    
+    public double getUserPercent() { return userPercent; }
+    public void setUserPercent(double userPercent) { this.userPercent = userPercent; }
+    
+    public double getSystemPercent() { return systemPercent; }
+    public void setSystemPercent(double systemPercent) { this.systemPercent = systemPercent; }
+    
+    public double getIdlePercent() { return idlePercent; }
+    public void setIdlePercent(double idlePercent) { this.idlePercent = idlePercent; }
     
     @Override
     public String toString() {

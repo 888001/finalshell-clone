@@ -51,6 +51,9 @@ public class ProxyInfo {
     public boolean isDefaultProxy() { return defaultProxy; }
     public void setDefaultProxy(boolean defaultProxy) { this.defaultProxy = defaultProxy; }
     
+    public boolean isDefault() { return defaultProxy; }
+    public void setDefault(boolean isDefault) { this.defaultProxy = isDefault; }
+    
     public String getTypeString() {
         switch (type) {
             case TYPE_NONE: return "无";

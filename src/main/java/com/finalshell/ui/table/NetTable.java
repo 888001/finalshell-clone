@@ -1,6 +1,6 @@
 package com.finalshell.ui.table;
 
-import com.finalshell.monitor.NetRow;
+import com.finalshell.network.NetRow;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -63,4 +63,10 @@ public class NetTable extends JTable {
     public NetTableModel getNetModel() {
         return model;
     }
+    
+    public void refresh() {
+        model.fireTableDataChanged();
+    }
+    
+    // Note: getSelectedRow() returns int from JTable parent, use getSelectedNetRow() for NetRow
 }

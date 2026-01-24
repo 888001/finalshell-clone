@@ -1,5 +1,7 @@
 package com.finalshell.parser;
 
+import com.finalshell.monitor.parser.BaseParser;
+
 import java.util.*;
 import java.util.regex.*;
 
@@ -17,11 +19,11 @@ public class SSParser extends BaseParser {
     }
     
     @Override
-    public void parse(String content) {
-        if (content == null || content.isEmpty()) return;
+    public void parse() {
+        if (rawOutput == null || rawOutput.isEmpty()) return;
         
         records.clear();
-        String[] lines = content.split("\n");
+        String[] lines = rawOutput.split("\n");
         boolean headerSkipped = false;
         
         for (String line : lines) {

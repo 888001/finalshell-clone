@@ -68,13 +68,13 @@ public class TransPopupMenu extends JPopupMenu {
         this.listener = listener;
     }
     
-    public void updateForTask(TransferTask task) {
+    public void updateForTask(FileTransferManager.TransferTask task) {
         if (task == null) return;
         
-        boolean isRunning = task.getStatus() == TransferTask.Status.RUNNING;
-        boolean isPaused = task.getStatus() == TransferTask.Status.PAUSED;
-        boolean isCompleted = task.getStatus() == TransferTask.Status.COMPLETED;
-        boolean isFailed = task.getStatus() == TransferTask.Status.FAILED;
+        boolean isRunning = task.getStatus() == FileTransferManager.TransferTask.Status.RUNNING;
+        boolean isPaused = task.getStatus() == FileTransferManager.TransferTask.Status.PAUSED;
+        boolean isCompleted = task.getStatus() == FileTransferManager.TransferTask.Status.COMPLETED;
+        boolean isFailed = task.getStatus() == FileTransferManager.TransferTask.Status.FAILED;
         
         pauseItem.setEnabled(isRunning);
         resumeItem.setEnabled(isPaused);

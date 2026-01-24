@@ -83,8 +83,23 @@ public class RemoteFile {
         return modifyTime;
     }
     
+    public long getModifiedTime() {
+        return modifyTime;
+    }
+    
     public void setModifyTime(long modifyTime) {
         this.modifyTime = modifyTime;
+    }
+    
+    // Alias for setModifyTime
+    public void setMtime(long mtime) {
+        this.modifyTime = mtime;
+    }
+    
+    public String getFullPath() {
+        if (path == null) return name;
+        if (path.endsWith("/")) return path + name;
+        return path + "/" + name;
     }
     
     public int getUid() {

@@ -234,7 +234,7 @@ public class FileTransferManager {
     public static class TransferTask {
         
         public enum Type { UPLOAD, DOWNLOAD }
-        public enum Status { PENDING, RUNNING, COMPLETED, FAILED, CANCELLED }
+        public enum Status { PENDING, RUNNING, COMPLETED, FAILED, CANCELLED, PAUSED }
         
         private final String id;
         private final Type type;

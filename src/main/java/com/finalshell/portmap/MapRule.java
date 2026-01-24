@@ -16,6 +16,7 @@ public class MapRule {
     private int remotePort;
     private boolean running;
     private String description;
+    private boolean enabled = true;
     
     public MapRule() {
         this.id = java.util.UUID.randomUUID().toString();
@@ -95,6 +96,9 @@ public class MapRule {
     public void setDescription(String description) {
         this.description = description;
     }
+    
+    public boolean isEnabled() { return enabled; }
+    public void setEnabled(boolean enabled) { this.enabled = enabled; }
     
     @Override
     public String toString() {

@@ -55,6 +55,9 @@ public class QuickCommand {
     public boolean isSendEnter() { return sendEnter; }
     public void setSendEnter(boolean sendEnter) { this.sendEnter = sendEnter; }
     
+    public boolean isAutoEnter() { return sendEnter; }
+    public void setAutoEnter(boolean autoEnter) { this.sendEnter = autoEnter; }
+    
     public int getOrder() { return order; }
     public void setOrder(int order) { this.order = order; }
     

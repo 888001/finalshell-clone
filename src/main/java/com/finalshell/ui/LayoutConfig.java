@@ -12,6 +12,10 @@ public class LayoutConfig implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
+    private String name = "Default";
+    private boolean showTree = true;
+    private boolean showStatusBar = true;
+    private int treeWidth = 200;
     private int mainDividerLocation = 200;
     private int terminalDividerLocation = 300;
     private int sftpDividerLocation = 400;
@@ -90,4 +94,16 @@ public class LayoutConfig implements Serializable {
     public void setBottomPanelHeight(int bottomPanelHeight) { 
         this.bottomPanelHeight = bottomPanelHeight; 
     }
+    
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    
+    public boolean isShowTree() { return showTree; }
+    public void setShowTree(boolean showTree) { this.showTree = showTree; }
+    
+    public boolean isShowStatusBar() { return showStatusBar; }
+    public void setShowStatusBar(boolean showStatusBar) { this.showStatusBar = showStatusBar; }
+    
+    public int getTreeWidth() { return treeWidth; }
+    public void setTreeWidth(int treeWidth) { this.treeWidth = treeWidth; }
 }

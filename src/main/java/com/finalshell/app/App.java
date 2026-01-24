@@ -56,6 +56,10 @@ public class App {
         return instance;
     }
     
+    public static com.finalshell.control.ControlClient getControlClient() {
+        return com.finalshell.control.ControlClient.getInstance();
+    }
+    
     private App() {
         // Private constructor for singleton
     }

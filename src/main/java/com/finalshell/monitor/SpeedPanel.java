@@ -28,6 +28,15 @@ public class SpeedPanel extends JPanel {
         initUI();
     }
     
+    public SpeedPanel(String title, String unit, int maxValue) {
+        initUI();
+        setBorder(BorderFactory.createTitledBorder(title));
+    }
+    
+    public void addValue(double value) {
+        canvas.addData(value, 0);
+    }
+    
     private void initUI() {
         setLayout(new BorderLayout(5, 5));
         setBorder(BorderFactory.createTitledBorder("网络速度"));

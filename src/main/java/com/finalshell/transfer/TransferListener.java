@@ -18,6 +18,16 @@ public interface TransferListener {
     
     void onTransferCancelled(TransEvent event);
     
+    default void onTransferEvent(TransEvent event) {
+        switch (event.getType()) {
+            case TransEvent.EVENT_START: onTransferStart(event); break;
+            case TransEvent.EVENT_PROGRESS: onTransferProgress(event); break;
+            case TransEvent.EVENT_COMPLETE: onTransferComplete(event); break;
+            case TransEvent.EVENT_ERROR: onTransferError(event); break;
+            case TransEvent.EVENT_CANCEL: onTransferCancelled(event); break;
+        }
+    }
+    
     /**
      * 适配器类
      */

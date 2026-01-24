@@ -73,4 +73,16 @@ public class HotkeyTableModel extends AbstractTableModel {
     public List<HotkeyConfig> getHotkeys() {
         return new ArrayList<>(hotkeys);
     }
+    
+    public void updateHotkey(int row, HotkeyConfig hotkey) {
+        if (row >= 0 && row < hotkeys.size()) {
+            hotkeys.set(row, hotkey);
+            fireTableRowsUpdated(row, row);
+        }
+    }
+    
+    public void resetToDefault() {
+        hotkeys.clear();
+        fireTableDataChanged();
+    }
 }

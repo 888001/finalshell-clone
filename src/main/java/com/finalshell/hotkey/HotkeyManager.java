@@ -111,6 +111,35 @@ public class HotkeyManager {
     }
     
     /**
+     * 获取所有热键配置 (for HotkeyManagerDialog)
+     */
+    public java.util.List<HotkeyConfig> getHotkeys() {
+        java.util.List<HotkeyConfig> list = new java.util.ArrayList<>();
+        for (HotkeyBinding b : bindings.values()) {
+            HotkeyConfig config = new HotkeyConfig();
+            config.setName(b.getName());
+            config.setActionName(b.getId());
+            config.setKeyCode(b.getKeyCode());
+            config.setModifiers(b.getModifiers());
+            list.add(config);
+        }
+        return list;
+    }
+    
+    public void addHotkey(HotkeyConfig config) {
+        register(config.getActionName(), config.getName(), config.getKeyCode(), config.getModifiers());
+    }
+    
+    public void updateHotkey(HotkeyConfig config) {
+        update(config.getActionName(), config.getKeyCode(), config.getModifiers());
+    }
+    
+    public void removeHotkey(HotkeyConfig config) {
+        bindings.remove(config.getActionName());
+        notifyListeners();
+    }
+    
+    /**
      * 获取KeyStroke
      */
     public KeyStroke getKeyStroke(String id) {
@@ -159,6 +188,15 @@ public class HotkeyManager {
             }
         }
         return false;
+    }
+    
+    /**
+     * Process key event
+     */
+    public boolean processKeyEvent(java.awt.event.KeyEvent e) {
+        KeyStroke pressed = KeyStroke.getKeyStrokeForEvent(e);
+        String actionId = findByKeyStroke(pressed);
+        return actionId != null;
     }
     
     /**

@@ -60,7 +60,7 @@ public class PackDialogLocal extends JDialog {
         packButton = new JButton("打包");
         cancelButton = new JButton("取消");
         
-        packButton.addActionListener(e -> pack());
+        packButton.addActionListener(e -> doPack());
         cancelButton.addActionListener(e -> cancel());
         
         buttonPanel.add(packButton);
@@ -89,7 +89,7 @@ public class PackDialogLocal extends JDialog {
         }
     }
     
-    private void pack() {
+    private void doPack() {
         String output = outputField.getText().trim();
         if (output.isEmpty()) {
             JOptionPane.showMessageDialog(this, "请指定输出文件", "提示", JOptionPane.WARNING_MESSAGE);

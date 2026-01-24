@@ -120,6 +120,15 @@ public class PingPanel extends JPanel {
         running = false;
     }
     
+    public void start(String host) {
+        hostField.setText(host);
+        startPing();
+    }
+    
+    public void stop() {
+        stopPing();
+    }
+    
     private int parseDelay(String line) {
         // 解析 "时间=XXXms" 格式
         int idx = line.indexOf("时间=");

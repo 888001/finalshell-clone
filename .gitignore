@@ -68,3 +68,7 @@ Thumbs.db
 *.bak
 *.swp
 *.tmp
+
+# WindsurfChatOpen
+.windsurfchatopen/
+.windsurfrules

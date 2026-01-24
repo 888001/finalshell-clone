@@ -10,6 +10,7 @@ public class FolderConfig {
     
     private String id;
     private String name;
+    private String description;
     private String parentId;
     private int sortOrder = 0;
     private boolean expanded = true;
@@ -84,6 +85,9 @@ public class FolderConfig {
     public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
     }
+    
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
     
     @Override
     public String toString() {

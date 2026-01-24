@@ -98,6 +98,10 @@ public class TransTaskTableModel extends AbstractTableModel {
         return new ArrayList<>(tasks);
     }
     
+    public List<TransTask> getAllTasks() {
+        return getTasks();
+    }
+    
     public void clearCompleted() {
         Iterator<TransTask> it = tasks.iterator();
         int index = 0;

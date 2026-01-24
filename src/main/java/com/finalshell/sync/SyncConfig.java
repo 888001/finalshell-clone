@@ -30,6 +30,8 @@ public class SyncConfig {
     private String sftpRemotePath = "/home/backup/finalshell";
     
     // General settings
+    private boolean enabled = false;
+    private String email;
     private boolean autoSync = false;
     private int syncIntervalMinutes = 30;
     private boolean encryptBackup = true;
@@ -91,6 +93,17 @@ public class SyncConfig {
     
     public boolean isSyncHistory() { return syncHistory; }
     public void setSyncHistory(boolean syncHistory) { this.syncHistory = syncHistory; }
+    
+    public boolean isEnabled() { return enabled; }
+    public void setEnabled(boolean enabled) { this.enabled = enabled; }
+    
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    
+    // Compatibility methods for SyncClient
+    public String getUsername() { return webdavUsername; }
+    public String getPassword() { return webdavPassword; }
+    public String getSyncServerUrl() { return webdavUrl; }
     
     /**
      * Validate configuration

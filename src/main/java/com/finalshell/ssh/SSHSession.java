@@ -238,6 +238,20 @@ public class SSHSession {
     }
     
     /**
+     * Execute command and return output (alias for exec)
+     */
+    public String executeCommand(String command) throws SSHException {
+        return exec(command);
+    }
+    
+    /**
+     * Another alias for exec
+     */
+    public String execCommand(String command) throws SSHException {
+        return exec(command);
+    }
+    
+    /**
      * Execute command and return output
      */
     public String exec(String command) throws SSHException {
@@ -479,6 +493,47 @@ public class SSHSession {
     
     public Session getJSchSession() {
         return session;
+    }
+    
+    public Session getSession() {
+        return session;
+    }
+    
+    public ChannelShell getShellChannel() {
+        return shellChannel;
+    }
+    
+    // Alias methods for PortForwardManager compatibility
+    public void addLocalPortForwarding(int localPort, String remoteHost, int remotePort) throws SSHException {
+        addLocalPortForward(localPort, remoteHost, remotePort);
+    }
+    
+    public void addRemotePortForwarding(int remotePort, String localHost, int localPort) throws SSHException {
+        addRemotePortForward(remotePort, localHost, localPort);
+    }
+    
+    public void addDynamicPortForwarding(int localPort) throws SSHException {
+        addDynamicPortForward(localPort);
+    }
+    
+    public void removeLocalPortForwarding(int localPort) throws SSHException {
+        try {
+            session.delPortForwardingL(localPort);
+        } catch (JSchException e) {
+            throw new SSHException("Failed to remove local port forward", e);
+        }
+    }
+    
+    public void removeRemotePortForwarding(int remotePort) throws SSHException {
+        try {
+            session.delPortForwardingR(remotePort);
+        } catch (JSchException e) {
+            throw new SSHException("Failed to remove remote port forward", e);
+        }
+    }
+    
+    public void removeDynamicPortForwarding(int localPort) throws SSHException {
+        removeLocalPortForwarding(localPort);
     }
     
     /**

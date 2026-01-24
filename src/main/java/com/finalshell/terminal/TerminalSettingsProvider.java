@@ -66,36 +66,12 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
     
     @Override
     public TextStyle getDefaultStyle() {
-        Color fg = theme.getForegroundColor();
-        Color bg = theme.getBackgroundColor();
-        
-        return new TextStyle(
-            TerminalColor.fromColor(fg),
-            TerminalColor.fromColor(bg)
-        );
+        return super.getDefaultStyle();
     }
     
     @Override
-    public Color getTerminalColorPalette()[] {
-        // ANSI 16 color palette
-        return new Color[] {
-            parseColor(theme.getBlack(), new Color(0, 0, 0)),
-            parseColor(theme.getRed(), new Color(205, 49, 49)),
-            parseColor(theme.getGreen(), new Color(13, 188, 121)),
-            parseColor(theme.getYellow(), new Color(229, 229, 16)),
-            parseColor(theme.getBlue(), new Color(36, 114, 200)),
-            parseColor(theme.getMagenta(), new Color(188, 63, 188)),
-            parseColor(theme.getCyan(), new Color(17, 168, 205)),
-            parseColor(theme.getWhite(), new Color(229, 229, 229)),
-            parseColor(theme.getBrightBlack(), new Color(102, 102, 102)),
-            parseColor(theme.getBrightRed(), new Color(241, 76, 76)),
-            parseColor(theme.getBrightGreen(), new Color(35, 209, 139)),
-            parseColor(theme.getBrightYellow(), new Color(245, 245, 67)),
-            parseColor(theme.getBrightBlue(), new Color(59, 142, 234)),
-            parseColor(theme.getBrightMagenta(), new Color(214, 112, 214)),
-            parseColor(theme.getBrightCyan(), new Color(41, 184, 219)),
-            parseColor(theme.getBrightWhite(), new Color(255, 255, 255))
-        };
+    public ColorPalette getTerminalColorPalette() {
+        return super.getTerminalColorPalette();
     }
     
     @Override

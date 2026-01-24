@@ -151,4 +151,81 @@ public class FtpFileTree extends JTree implements TreeWillExpandListener {
         }
         return files;
     }
+    
+    // Methods needed by FtpTreePopupMenu
+    public void openSelected() {
+        RemoteFile file = getSelectedFile();
+        if (file != null && !file.isDirectory()) {
+            // TODO: Open file for editing
+        }
+    }
+    
+    public void downloadSelected() {
+        List<RemoteFile> files = getSelectedFiles();
+        if (!files.isEmpty()) {
+            // TODO: Implement download
+        }
+    }
+    
+    public void uploadFile() {
+        // TODO: Implement upload dialog
+    }
+    
+    public void uploadFile(java.io.File file) {
+        if (ftpClient != null && file != null && file.exists()) {
+            // TODO: Implement file upload
+            refresh();
+        }
+    }
+    
+    public void deleteSelected() {
+        List<RemoteFile> files = getSelectedFiles();
+        if (!files.isEmpty() && ftpClient != null) {
+            // TODO: Implement delete
+            refresh();
+        }
+    }
+    
+    public void renameSelected(String newName) {
+        RemoteFile file = getSelectedFile();
+        if (file != null && ftpClient != null && newName != null) {
+            // TODO: Implement rename
+            refresh();
+        }
+    }
+    
+    public void createFolder(String folderName) {
+        if (ftpClient != null && folderName != null) {
+            // TODO: Implement create folder
+            refresh();
+        }
+    }
+    
+    public void setPermissions(String permissions) {
+        RemoteFile file = getSelectedFile();
+        if (file != null && ftpClient != null) {
+            // TODO: Implement set permissions
+        }
+    }
+    
+    public String getSelectedPath() {
+        RemoteFile file = getSelectedFile();
+        if (file != null) {
+            return file.getFullPath();
+        }
+        return currentPath;
+    }
+    
+    public void showProperties() {
+        RemoteFile file = getSelectedFile();
+        if (file != null) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("名称: ").append(file.getName()).append("\n");
+            sb.append("路径: ").append(file.getFullPath()).append("\n");
+            sb.append("大小: ").append(file.getSize()).append(" bytes\n");
+            sb.append("类型: ").append(file.isDirectory() ? "目录" : "文件").append("\n");
+            
+            JOptionPane.showMessageDialog(this, sb.toString(), "属性", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 }

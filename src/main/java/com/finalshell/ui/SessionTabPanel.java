@@ -103,8 +103,8 @@ public class SessionTabPanel extends JPanel {
         // Theme selector
         JComboBox<String> themeCombo = new JComboBox<>();
         ThemeManager themeManager = ThemeManager.getInstance();
-        for (TerminalTheme theme : themeManager.getAvailableThemes()) {
-            themeCombo.addItem(theme.getName());
+        for (String themeName : themeManager.getAvailableThemes()) {
+            themeCombo.addItem(themeName);
         }
         themeCombo.setSelectedItem(themeManager.getCurrentTheme().getName());
         themeCombo.setToolTipText("终端主题");

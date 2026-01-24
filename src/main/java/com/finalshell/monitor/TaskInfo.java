@@ -92,6 +92,18 @@ public class TaskInfo {
         this.stat = stat;
     }
     
+    public String getStatus() { return stat; }
+    public void setStatus(String status) { this.stat = status; }
+    
+    public double getMem() { return memPercent; }
+    public void setMem(double mem) { this.memPercent = mem; }
+    
+    public double getCpu() { return cpuPercent; }
+    public void setCpu(double cpu) { this.cpuPercent = cpu; }
+    
+    public String getName() { return command; }
+    public void setName(String name) { this.command = name; }
+    
     public String getTime() {
         return time;
     }

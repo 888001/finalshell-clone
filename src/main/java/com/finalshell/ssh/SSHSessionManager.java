@@ -110,4 +110,16 @@ public class SSHSessionManager {
     public Map<String, SSHSession> getAllSessions() {
         return sessions;
     }
+    
+    /**
+     * Get active session (first connected session)
+     */
+    public SSHSession getActiveSession() {
+        for (SSHSession session : sessions.values()) {
+            if (session.isConnected()) {
+                return session;
+            }
+        }
+        return null;
+    }
 }

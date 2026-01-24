@@ -8,8 +8,11 @@ package com.finalshell.network;
 public class SocketRow {
     
     private String type;
+    private String protocol;
     private String localAddress;
     private int localPort;
+    private String remoteAddress;
+    private int remotePort;
     private String state;
     private int inode;
     private String path;
@@ -89,6 +92,15 @@ public class SocketRow {
     public void setProcessName(String processName) {
         this.processName = processName;
     }
+    
+    public String getProtocol() { return protocol != null ? protocol : type; }
+    public void setProtocol(String protocol) { this.protocol = protocol; }
+    
+    public String getRemoteAddress() { return remoteAddress; }
+    public void setRemoteAddress(String remoteAddress) { this.remoteAddress = remoteAddress; }
+    
+    public int getRemotePort() { return remotePort; }
+    public void setRemotePort(int remotePort) { this.remotePort = remotePort; }
     
     @Override
     public String toString() {

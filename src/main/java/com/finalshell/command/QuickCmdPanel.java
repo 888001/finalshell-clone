@@ -226,4 +226,12 @@ public class QuickCmdPanel extends JPanel {
     public interface CommandExecutor {
         void execute(String command);
     }
+    
+    public void refresh() {
+        loadCommands();
+    }
+    
+    public void showAddDialog() {
+        addCommand();
+    }
 }

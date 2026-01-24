@@ -1,0 +1,635 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< com.finalshell:finalshell-clone >-------------------
+[INFO] Building FinalShell Clone 1.0.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from jitpack.io: https://jitpack.io/com/github/JetBrains/jediterm/jediterm-core/master-SNAPSHOT/maven-metadata.xml
+Progress (1): 400 B
+                   
+Downloaded from jitpack.io: https://jitpack.io/com/github/JetBrains/jediterm/jediterm-core/master-SNAPSHOT/maven-metadata.xml (400 B at 119 B/s)
+Downloading from jitpack.io: https://jitpack.io/com/github/JetBrains/jediterm/jediterm-ui/master-SNAPSHOT/maven-metadata.xml
+Progress (1): 398 B
+                   
+Downloaded from jitpack.io: https://jitpack.io/com/github/JetBrains/jediterm/jediterm-ui/master-SNAPSHOT/maven-metadata.xml (398 B at 364 B/s)
+[INFO] 
+[INFO] --- resources:3.3.0:resources (default-resources) @ finalshell-clone ---
+[INFO] Copying 150 resources
+[INFO] 
+[INFO] --- compiler:3.10.1:compile (default-compile) @ finalshell-clone ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 565 source files to D:\windsulf_ws\shell\finalshell-clone\target\classes
+[INFO] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/TerminalSettingsProvider.java: 某些输入文件使用或覆盖了已过时的 API。
+[INFO] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/TerminalSettingsProvider.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[INFO] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/SSHTtyConnector.java: 某些输入文件使用或覆盖了标记为待删除的已过时 API。
+[INFO] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/terminal/SSHTtyConnector.java: 有关详细信息, 请使用 -Xlint:removal 重新编译。
+[INFO] 某些消息已经过简化; 请使用 -Xdiags:verbose 重新编译以获得完整输出
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[17,18] 找不到符号
+  符号:   类 MonitorListener
+  位置: 类 com.finalshell.monitor.MonitorScannerShell
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[184,29] 找不到符号
+  符号:   类 MonitorListener
+  位置: 类 com.finalshell.monitor.MonitorScannerShell
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[188,32] 找不到符号
+  符号:   类 MonitorListener
+  位置: 类 com.finalshell.monitor.MonitorScannerShell
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/filetree/CustomBasicTreeUI.java:[96,19] 找不到符号
+  符号:   类 ComponentUI
+  位置: 类 com.finalshell.ui.filetree.CustomBasicTreeUI
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[66,47] 找不到符号
+  符号:   方法 getUsername()
+  位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[67,47] 找不到符号
+  符号:   方法 getPassword()
+  位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[70,64] 找不到符号
+  符号:   方法 getSyncServerUrl()
+  位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[99,47] 找不到符号
+  符号:   方法 getUsername()
+  位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[100,47] 找不到符号
+  符号:   方法 getPassword()
+  位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[102,64] 找不到符号
+  符号:   方法 getSyncServerUrl()
+  位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[129,43] 找不到符号
+  符号:   方法 getUsername()
+  位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[130,43] 找不到符号
+  符号:   方法 getPassword()
+  位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[132,60] 找不到符号
+  符号:   方法 getSyncServerUrl()
+  位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetPanel.java:[51,53] 不兼容的类型: int无法转换为com.finalshell.network.NetRow
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetPanel.java:[60,17] 找不到符号
+  符号:   方法 refresh()
+  位置: 类型为com.finalshell.ui.table.NetTable的变量 netTable
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/TransTaskTableModel.java:[106,46] 找不到符号
+  符号:   变量 STATUS_SUCCESS
+  位置: 类 com.finalshell.transfer.TransTask
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/TransTaskTableModel.java:[108,46] 找不到符号
+  符号:   变量 STATUS_CANCEL
+  位置: 类 com.finalshell.transfer.TransTask
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/AskPasswordDialog.java:[106,26] 找不到符号
+  符号:   方法 setEncryptedPassword(java.lang.String)
+  位置: 类型为com.finalshell.config.ConnectConfig的变量 connectConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/AutoUploadManager.java:[133,23] 无法将类 com.finalshell.sftp.FtpClient中的方法 upload应用到给定类型;
+  需要: java.lang.String,java.lang.String,com.jcraft.jsch.SftpProgressMonitor
+  找到: java.lang.String,java.lang.String
+  原因: 实际参数列表和形式参数列表长度不同
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpClient.java:[117,17] 找不到符号
+  符号:   方法 setMtime(long)
+  位置: 类型为com.finalshell.sftp.RemoteFile的变量 file
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/plugin/PluginContext.java:[52,30] 找不到符号
+  符号:   方法 getActiveSession()
+  位置: 类型为com.finalshell.ssh.SSHSessionManager的变量 sessionManager
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[106,48] 找不到符号
+  符号:   方法 getAvailableThemes()
+  位置: 类型为com.finalshell.terminal.ThemeManager的变量 themeManager
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[235,36] 找不到符号
+  符号:   方法 getShellChannel()
+  位置: 类型为com.finalshell.ssh.SSHSession的变量 session
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[236,36] 找不到符号
+  符号:   方法 getShellChannel()
+  位置: 类型为com.finalshell.ssh.SSHSession的变量 session
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[282,24] 无法将类 com.finalshell.rdp.RDPPanel中的构造器 RDPPanel应用到给定类型;
+  需要: com.finalshell.rdp.RDPConfig,com.finalshell.config.ConnectConfig
+  找到: com.finalshell.ssh.SSHSession
+  原因: 实际参数列表和形式参数列表长度不同
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[33,22] 找不到符号
+  符号:   方法 setName(java.lang.String)
+  位置: 类型为com.finalshell.ui.LayoutConfig的变量 defaultLayout
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[34,22] 找不到符号
+  符号:   方法 setShowTree(boolean)
+  位置: 类型为com.finalshell.ui.LayoutConfig的变量 defaultLayout
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[35,22] 找不到符号
+  符号:   方法 setShowStatusBar(boolean)
+  位置: 类型为com.finalshell.ui.LayoutConfig的变量 defaultLayout
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[36,22] 找不到符号
+  符号:   方法 setTreeWidth(int)
+  位置: 类型为com.finalshell.ui.LayoutConfig的变量 defaultLayout
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[72,27] 找不到符号
+  符号:   方法 getName()
+  位置: 类型为com.finalshell.ui.LayoutConfig的变量 layout
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/key/KeyChooseDialog.java:[66,30] 找不到符号
+  符号:   变量 KeyManager
+  位置: 类 com.finalshell.key.KeyChooseDialog
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[62,26] 找不到符号
+  符号:   方法 showWindow(java.lang.String)
+  位置: 类型为com.finalshell.ui.MainWindowManager的变量 mainWindowManager
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[66,26] 找不到符号
+  符号:   方法 showDefaultWindow()
+  位置: 类型为com.finalshell.ui.MainWindowManager的变量 mainWindowManager
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[70,29] MainWindowManager() 在 com.finalshell.ui.MainWindowManager 中是 private 访问控制
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[71,26] 找不到符号
+  符号:   方法 initialize()
+  位置: 类型为com.finalshell.ui.MainWindowManager的变量 mainWindowManager
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[74,21] 找不到符号
+  符号:   方法 openSelected()
+  位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[80,21] 找不到符号
+  符号:   方法 downloadSelected()
+  位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[86,21] 找不到符号
+  符号:   方法 uploadFile()
+  位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[95,25] 找不到符号
+  符号:   方法 deleteSelected()
+  位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[104,25] 找不到符号
+  符号:   方法 renameSelected(java.lang.String)
+  位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[113,25] 找不到符号
+  符号:   方法 createFolder(java.lang.String)
+  位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[120,35] 找不到符号
+  符号:   方法 getSelectedPath()
+  位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[132,21] 找不到符号
+  符号:   方法 showProperties()
+  位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpFileTree.java:[109,39] 找不到符号
+  符号:   方法 getFullPath()
+  位置: 类型为com.finalshell.sftp.RemoteFile的变量 file
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/HotkeyCellRenderer.java:[33,35] 找不到符号
+  符号:   方法 getActionName()
+  位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/HotkeyCellRenderer.java:[38,35] 找不到符号
+  符号:   方法 getKeyStrokeString()
+  位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/batch/BatchPanel.java:[203,65] for-each 不适用于表达式类型
+  要求: 数组或 java.lang.Iterable
+  找到:    java.util.Map<java.lang.String,com.finalshell.config.ConnectConfig>
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/batch/BatchTask.java:[82,26] 找不到符号
+  符号:   方法 getUsername()
+  位置: 类型为com.finalshell.config.ConnectConfig的变量 connection
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/hotkey/HotkeyPanel.java:[60,40] 找不到符号
+  符号:   方法 getHotkey()
+  位置: 类型为com.finalshell.ui.dialog.AddHotkeyDialog的变量 dialog
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/hotkey/HotkeyPanel.java:[74,48] 找不到符号
+  符号:   方法 getHotkey()
+  位置: 类型为com.finalshell.ui.dialog.AddHotkeyDialog的变量 dialog
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[114,47] 找不到符号
+  符号:   方法 getActionName()
+  位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[115,44] 找不到符号
+  符号:   方法 isCtrl()
+  位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[116,43] 找不到符号
+  符号:   方法 isAlt()
+  位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[117,45] 找不到符号
+  符号:   方法 isShift()
+  位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[135,15] 找不到符号
+  符号:   方法 setActionName(java.lang.String)
+  位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[136,15] 找不到符号
+  符号:   方法 setCtrl(boolean)
+  位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[137,15] 找不到符号
+  符号:   方法 setAlt(boolean)
+  位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[138,15] 找不到符号
+  符号:   方法 setShift(boolean)
+  位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/SocketTableModel.java:[28,29] 找不到符号
+  符号:   方法 getProtocol()
+  位置: 类型为com.finalshell.network.SocketRow的变量 r
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/SocketTableModel.java:[31,29] 找不到符号
+  符号:   方法 getRemoteAddress()
+  位置: 类型为com.finalshell.network.SocketRow的变量 r
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/SocketTableModel.java:[32,29] 找不到符号
+  符号:   方法 getRemotePort()
+  位置: 类型为com.finalshell.network.SocketRow的变量 r
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[407,49] 找不到符号
+  符号:   方法 isAutoReconnect()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[408,49] 找不到符号
+  符号:   方法 getReconnectDelay()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[409,47] 找不到符号
+  符号:   方法 isConfirmExit()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[410,50] 找不到符号
+  符号:   方法 isMinimizeToTray()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[414,47] 找不到符号
+  符号:   方法 getTerminalRows()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[415,47] 找不到符号
+  符号:   方法 getTerminalCols()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[419,47] 找不到符号
+  符号:   方法 isCursorBlink()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[423,48] 找不到符号
+  符号:   方法 getMaxConcurrentTransfers()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[424,45] 找不到符号
+  符号:   方法 getTransferBufferSize()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[425,52] 找不到符号
+  符号:   方法 isConfirmOverwrite()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[426,53] 找不到符号
+  符号:   方法 isPreserveTimestamp()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[429,52] 找不到符号
+  符号:   方法 isRememberPassword()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[430,44] 找不到符号
+  符号:   方法 isAutoLock()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[431,47] 找不到符号
+  符号:   方法 getAutoLockTime()
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[438,18] 找不到符号
+  符号:   方法 setAutoReconnect(boolean)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[439,18] 找不到符号
+  符号:   方法 setReconnectDelay(java.lang.Integer)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[440,18] 找不到符号
+  符号:   方法 setConfirmExit(boolean)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[441,18] 找不到符号
+  符号:   方法 setMinimizeToTray(boolean)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[445,18] 找不到符号
+  符号:   方法 setTerminalRows(java.lang.Integer)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[446,18] 找不到符号
+  符号:   方法 setTerminalCols(java.lang.Integer)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[450,18] 找不到符号
+  符号:   方法 setCursorBlink(boolean)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[454,18] 找不到符号
+  符号:   方法 setMaxConcurrentTransfers(java.lang.Integer)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[455,18] 找不到符号
+  符号:   方法 setTransferBufferSize(java.lang.Integer)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[456,18] 找不到符号
+  符号:   方法 setConfirmOverwrite(boolean)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[457,18] 找不到符号
+  符号:   方法 setPreserveTimestamp(boolean)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[460,18] 找不到符号
+  符号:   方法 setRememberPassword(boolean)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[461,18] 找不到符号
+  符号:   方法 setAutoLock(boolean)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[462,18] 找不到符号
+  符号:   方法 setAutoLockTime(java.lang.Integer)
+  位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[465,22] 找不到符号
+  符号:   方法 saveConfig()
+  位置: 类型为com.finalshell.config.ConfigManager的变量 configManager
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransPopupMenu.java:[75,87] 找不到符号
+  符号:   变量 PAUSED
+  位置: 类 com.finalshell.sftp.FileTransferManager.TransferTask.Status
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransPanelWrap.java:[57,19] 找不到符号
+  符号:   方法 pauseAllTasks()
+  位置: 类型为com.finalshell.ui.panel.TransePanel的变量 transPanel
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransPanelWrap.java:[62,19] 找不到符号
+  符号:   方法 resumeAllTasks()
+  位置: 类型为com.finalshell.ui.panel.TransePanel的变量 transPanel
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransPanelWrap.java:[67,19] 找不到符号
+  符号:   方法 clearCompletedTasks()
+  位置: 类型为com.finalshell.ui.panel.TransePanel的变量 transPanel
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransPanelWrap.java:[72,31] 找不到符号
+  符号:   方法 getTaskCount()
+  位置: 类型为com.finalshell.ui.panel.TransePanel的变量 transPanel
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreeTransferHandler.java:[50,29] 找不到符号
+  符号:   方法 uploadFile(java.io.File)
+  位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/TopTable.java:[35,19] com.finalshell.monitor.TopTable中的getSelectedRow()无法覆盖javax.swing.JTable中的getSelectedRow()
+  返回类型com.finalshell.monitor.TopRow与int不兼容
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/TopTable.java:[36,33] 不兼容的类型: com.finalshell.monitor.TopRow无法转换为int
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/TopTableModel.java:[28,29] 找不到符号
+  符号:   方法 getPid()
+  位置: 类型为com.finalshell.monitor.TopRow的变量 r
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/TopTableModel.java:[29,29] 找不到符号
+  符号:   方法 getUser()
+  位置: 类型为com.finalshell.monitor.TopRow的变量 r
+[INFO] 100 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  13.308 s
+[INFO] Finished at: 2026-01-24T12:16:58+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.10.1:compile (default-compile) on project finalshell-clone: Compilation failure: Compilation failure: 
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[17,18] 找不到符号
+[ERROR]   符号:   类 MonitorListener
+[ERROR]   位置: 类 com.finalshell.monitor.MonitorScannerShell
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[184,29] 找不到符号
+[ERROR]   符号:   类 MonitorListener
+[ERROR]   位置: 类 com.finalshell.monitor.MonitorScannerShell
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/MonitorScannerShell.java:[188,32] 找不到符号
+[ERROR]   符号:   类 MonitorListener
+[ERROR]   位置: 类 com.finalshell.monitor.MonitorScannerShell
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/filetree/CustomBasicTreeUI.java:[96,19] 找不到符号
+[ERROR]   符号:   类 ComponentUI
+[ERROR]   位置: 类 com.finalshell.ui.filetree.CustomBasicTreeUI
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[66,47] 找不到符号
+[ERROR]   符号:   方法 getUsername()
+[ERROR]   位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[67,47] 找不到符号
+[ERROR]   符号:   方法 getPassword()
+[ERROR]   位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[70,64] 找不到符号
+[ERROR]   符号:   方法 getSyncServerUrl()
+[ERROR]   位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[99,47] 找不到符号
+[ERROR]   符号:   方法 getUsername()
+[ERROR]   位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[100,47] 找不到符号
+[ERROR]   符号:   方法 getPassword()
+[ERROR]   位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[102,64] 找不到符号
+[ERROR]   符号:   方法 getSyncServerUrl()
+[ERROR]   位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[129,43] 找不到符号
+[ERROR]   符号:   方法 getUsername()
+[ERROR]   位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[130,43] 找不到符号
+[ERROR]   符号:   方法 getPassword()
+[ERROR]   位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sync/SyncClient.java:[132,60] 找不到符号
+[ERROR]   符号:   方法 getSyncServerUrl()
+[ERROR]   位置: 类型为com.finalshell.sync.SyncConfig的变量 syncConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetPanel.java:[51,53] 不兼容的类型: int无法转换为com.finalshell.network.NetRow
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/NetPanel.java:[60,17] 找不到符号
+[ERROR]   符号:   方法 refresh()
+[ERROR]   位置: 类型为com.finalshell.ui.table.NetTable的变量 netTable
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/TransTaskTableModel.java:[106,46] 找不到符号
+[ERROR]   符号:   变量 STATUS_SUCCESS
+[ERROR]   位置: 类 com.finalshell.transfer.TransTask
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/TransTaskTableModel.java:[108,46] 找不到符号
+[ERROR]   符号:   变量 STATUS_CANCEL
+[ERROR]   位置: 类 com.finalshell.transfer.TransTask
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/AskPasswordDialog.java:[106,26] 找不到符号
+[ERROR]   符号:   方法 setEncryptedPassword(java.lang.String)
+[ERROR]   位置: 类型为com.finalshell.config.ConnectConfig的变量 connectConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/AutoUploadManager.java:[133,23] 无法将类 com.finalshell.sftp.FtpClient中的方法 upload应用到给定类型;
+[ERROR]   需要: java.lang.String,java.lang.String,com.jcraft.jsch.SftpProgressMonitor
+[ERROR]   找到: java.lang.String,java.lang.String
+[ERROR]   原因: 实际参数列表和形式参数列表长度不同
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpClient.java:[117,17] 找不到符号
+[ERROR]   符号:   方法 setMtime(long)
+[ERROR]   位置: 类型为com.finalshell.sftp.RemoteFile的变量 file
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/plugin/PluginContext.java:[52,30] 找不到符号
+[ERROR]   符号:   方法 getActiveSession()
+[ERROR]   位置: 类型为com.finalshell.ssh.SSHSessionManager的变量 sessionManager
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[106,48] 找不到符号
+[ERROR]   符号:   方法 getAvailableThemes()
+[ERROR]   位置: 类型为com.finalshell.terminal.ThemeManager的变量 themeManager
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[235,36] 找不到符号
+[ERROR]   符号:   方法 getShellChannel()
+[ERROR]   位置: 类型为com.finalshell.ssh.SSHSession的变量 session
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[236,36] 找不到符号
+[ERROR]   符号:   方法 getShellChannel()
+[ERROR]   位置: 类型为com.finalshell.ssh.SSHSession的变量 session
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SessionTabPanel.java:[282,24] 无法将类 com.finalshell.rdp.RDPPanel中的构造器 RDPPanel应用到给定类型;
+[ERROR]   需要: com.finalshell.rdp.RDPConfig,com.finalshell.config.ConnectConfig
+[ERROR]   找到: com.finalshell.ssh.SSHSession
+[ERROR]   原因: 实际参数列表和形式参数列表长度不同
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[33,22] 找不到符号
+[ERROR]   符号:   方法 setName(java.lang.String)
+[ERROR]   位置: 类型为com.finalshell.ui.LayoutConfig的变量 defaultLayout
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[34,22] 找不到符号
+[ERROR]   符号:   方法 setShowTree(boolean)
+[ERROR]   位置: 类型为com.finalshell.ui.LayoutConfig的变量 defaultLayout
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[35,22] 找不到符号
+[ERROR]   符号:   方法 setShowStatusBar(boolean)
+[ERROR]   位置: 类型为com.finalshell.ui.LayoutConfig的变量 defaultLayout
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[36,22] 找不到符号
+[ERROR]   符号:   方法 setTreeWidth(int)
+[ERROR]   位置: 类型为com.finalshell.ui.LayoutConfig的变量 defaultLayout
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/LayoutConfigManager.java:[72,27] 找不到符号
+[ERROR]   符号:   方法 getName()
+[ERROR]   位置: 类型为com.finalshell.ui.LayoutConfig的变量 layout
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/key/KeyChooseDialog.java:[66,30] 找不到符号
+[ERROR]   符号:   变量 KeyManager
+[ERROR]   位置: 类 com.finalshell.key.KeyChooseDialog
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[62,26] 找不到符号
+[ERROR]   符号:   方法 showWindow(java.lang.String)
+[ERROR]   位置: 类型为com.finalshell.ui.MainWindowManager的变量 mainWindowManager
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[66,26] 找不到符号
+[ERROR]   符号:   方法 showDefaultWindow()
+[ERROR]   位置: 类型为com.finalshell.ui.MainWindowManager的变量 mainWindowManager
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[70,29] MainWindowManager() 在 com.finalshell.ui.MainWindowManager 中是 private 访问控制
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/UI.java:[71,26] 找不到符号
+[ERROR]   符号:   方法 initialize()
+[ERROR]   位置: 类型为com.finalshell.ui.MainWindowManager的变量 mainWindowManager
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[74,21] 找不到符号
+[ERROR]   符号:   方法 openSelected()
+[ERROR]   位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[80,21] 找不到符号
+[ERROR]   符号:   方法 downloadSelected()
+[ERROR]   位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[86,21] 找不到符号
+[ERROR]   符号:   方法 uploadFile()
+[ERROR]   位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[95,25] 找不到符号
+[ERROR]   符号:   方法 deleteSelected()
+[ERROR]   位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[104,25] 找不到符号
+[ERROR]   符号:   方法 renameSelected(java.lang.String)
+[ERROR]   位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[113,25] 找不到符号
+[ERROR]   符号:   方法 createFolder(java.lang.String)
+[ERROR]   位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[120,35] 找不到符号
+[ERROR]   符号:   方法 getSelectedPath()
+[ERROR]   位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreePopupMenu.java:[132,21] 找不到符号
+[ERROR]   符号:   方法 showProperties()
+[ERROR]   位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpFileTree.java:[109,39] 找不到符号
+[ERROR]   符号:   方法 getFullPath()
+[ERROR]   位置: 类型为com.finalshell.sftp.RemoteFile的变量 file
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/HotkeyCellRenderer.java:[33,35] 找不到符号
+[ERROR]   符号:   方法 getActionName()
+[ERROR]   位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/table/HotkeyCellRenderer.java:[38,35] 找不到符号
+[ERROR]   符号:   方法 getKeyStrokeString()
+[ERROR]   位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/batch/BatchPanel.java:[203,65] for-each 不适用于表达式类型
+[ERROR]   要求: 数组或 java.lang.Iterable
+[ERROR]   找到:    java.util.Map<java.lang.String,com.finalshell.config.ConnectConfig>
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/batch/BatchTask.java:[82,26] 找不到符号
+[ERROR]   符号:   方法 getUsername()
+[ERROR]   位置: 类型为com.finalshell.config.ConnectConfig的变量 connection
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/hotkey/HotkeyPanel.java:[60,40] 找不到符号
+[ERROR]   符号:   方法 getHotkey()
+[ERROR]   位置: 类型为com.finalshell.ui.dialog.AddHotkeyDialog的变量 dialog
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/hotkey/HotkeyPanel.java:[74,48] 找不到符号
+[ERROR]   符号:   方法 getHotkey()
+[ERROR]   位置: 类型为com.finalshell.ui.dialog.AddHotkeyDialog的变量 dialog
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[114,47] 找不到符号
+[ERROR]   符号:   方法 getActionName()
+[ERROR]   位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[115,44] 找不到符号
+[ERROR]   符号:   方法 isCtrl()
+[ERROR]   位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[116,43] 找不到符号
+[ERROR]   符号:   方法 isAlt()
+[ERROR]   位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[117,45] 找不到符号
+[ERROR]   符号:   方法 isShift()
+[ERROR]   位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[135,15] 找不到符号
+[ERROR]   符号:   方法 setActionName(java.lang.String)
+[ERROR]   位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[136,15] 找不到符号
+[ERROR]   符号:   方法 setCtrl(boolean)
+[ERROR]   位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[137,15] 找不到符号
+[ERROR]   符号:   方法 setAlt(boolean)
+[ERROR]   位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/dialog/AddHotkeyDialog.java:[138,15] 找不到符号
+[ERROR]   符号:   方法 setShift(boolean)
+[ERROR]   位置: 类型为com.finalshell.hotkey.HotkeyConfig的变量 config
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/SocketTableModel.java:[28,29] 找不到符号
+[ERROR]   符号:   方法 getProtocol()
+[ERROR]   位置: 类型为com.finalshell.network.SocketRow的变量 r
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/SocketTableModel.java:[31,29] 找不到符号
+[ERROR]   符号:   方法 getRemoteAddress()
+[ERROR]   位置: 类型为com.finalshell.network.SocketRow的变量 r
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/network/SocketTableModel.java:[32,29] 找不到符号
+[ERROR]   符号:   方法 getRemotePort()
+[ERROR]   位置: 类型为com.finalshell.network.SocketRow的变量 r
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[407,49] 找不到符号
+[ERROR]   符号:   方法 isAutoReconnect()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[408,49] 找不到符号
+[ERROR]   符号:   方法 getReconnectDelay()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[409,47] 找不到符号
+[ERROR]   符号:   方法 isConfirmExit()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[410,50] 找不到符号
+[ERROR]   符号:   方法 isMinimizeToTray()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[414,47] 找不到符号
+[ERROR]   符号:   方法 getTerminalRows()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[415,47] 找不到符号
+[ERROR]   符号:   方法 getTerminalCols()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[419,47] 找不到符号
+[ERROR]   符号:   方法 isCursorBlink()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[423,48] 找不到符号
+[ERROR]   符号:   方法 getMaxConcurrentTransfers()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[424,45] 找不到符号
+[ERROR]   符号:   方法 getTransferBufferSize()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[425,52] 找不到符号
+[ERROR]   符号:   方法 isConfirmOverwrite()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[426,53] 找不到符号
+[ERROR]   符号:   方法 isPreserveTimestamp()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[429,52] 找不到符号
+[ERROR]   符号:   方法 isRememberPassword()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[430,44] 找不到符号
+[ERROR]   符号:   方法 isAutoLock()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[431,47] 找不到符号
+[ERROR]   符号:   方法 getAutoLockTime()
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[438,18] 找不到符号
+[ERROR]   符号:   方法 setAutoReconnect(boolean)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[439,18] 找不到符号
+[ERROR]   符号:   方法 setReconnectDelay(java.lang.Integer)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[440,18] 找不到符号
+[ERROR]   符号:   方法 setConfirmExit(boolean)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[441,18] 找不到符号
+[ERROR]   符号:   方法 setMinimizeToTray(boolean)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[445,18] 找不到符号
+[ERROR]   符号:   方法 setTerminalRows(java.lang.Integer)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[446,18] 找不到符号
+[ERROR]   符号:   方法 setTerminalCols(java.lang.Integer)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[450,18] 找不到符号
+[ERROR]   符号:   方法 setCursorBlink(boolean)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[454,18] 找不到符号
+[ERROR]   符号:   方法 setMaxConcurrentTransfers(java.lang.Integer)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[455,18] 找不到符号
+[ERROR]   符号:   方法 setTransferBufferSize(java.lang.Integer)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[456,18] 找不到符号
+[ERROR]   符号:   方法 setConfirmOverwrite(boolean)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[457,18] 找不到符号
+[ERROR]   符号:   方法 setPreserveTimestamp(boolean)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[460,18] 找不到符号
+[ERROR]   符号:   方法 setRememberPassword(boolean)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[461,18] 找不到符号
+[ERROR]   符号:   方法 setAutoLock(boolean)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[462,18] 找不到符号
+[ERROR]   符号:   方法 setAutoLockTime(java.lang.Integer)
+[ERROR]   位置: 类型为com.finalshell.config.AppConfig的变量 appConfig
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/ui/SettingsDialog.java:[465,22] 找不到符号
+[ERROR]   符号:   方法 saveConfig()
+[ERROR]   位置: 类型为com.finalshell.config.ConfigManager的变量 configManager
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransPopupMenu.java:[75,87] 找不到符号
+[ERROR]   符号:   变量 PAUSED
+[ERROR]   位置: 类 com.finalshell.sftp.FileTransferManager.TransferTask.Status
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransPanelWrap.java:[57,19] 找不到符号
+[ERROR]   符号:   方法 pauseAllTasks()
+[ERROR]   位置: 类型为com.finalshell.ui.panel.TransePanel的变量 transPanel
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransPanelWrap.java:[62,19] 找不到符号
+[ERROR]   符号:   方法 resumeAllTasks()
+[ERROR]   位置: 类型为com.finalshell.ui.panel.TransePanel的变量 transPanel
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransPanelWrap.java:[67,19] 找不到符号
+[ERROR]   符号:   方法 clearCompletedTasks()
+[ERROR]   位置: 类型为com.finalshell.ui.panel.TransePanel的变量 transPanel
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/TransPanelWrap.java:[72,31] 找不到符号
+[ERROR]   符号:   方法 getTaskCount()
+[ERROR]   位置: 类型为com.finalshell.ui.panel.TransePanel的变量 transPanel
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/sftp/FtpTreeTransferHandler.java:[50,29] 找不到符号
+[ERROR]   符号:   方法 uploadFile(java.io.File)
+[ERROR]   位置: 类型为com.finalshell.sftp.FtpFileTree的变量 fileTree
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/TopTable.java:[35,19] com.finalshell.monitor.TopTable中的getSelectedRow()无法覆盖javax.swing.JTable中的getSelectedRow()
+[ERROR]   返回类型com.finalshell.monitor.TopRow与int不兼容
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/TopTable.java:[36,33] 不兼容的类型: com.finalshell.monitor.TopRow无法转换为int
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/TopTableModel.java:[28,29] 找不到符号
+[ERROR]   符号:   方法 getPid()
+[ERROR]   位置: 类型为com.finalshell.monitor.TopRow的变量 r
+[ERROR] /D:/windsulf_ws/shell/finalshell-clone/src/main/java/com/finalshell/monitor/TopTableModel.java:[29,29] 找不到符号
+[ERROR]   符号:   方法 getUser()
+[ERROR]   位置: 类型为com.finalshell.monitor.TopRow的变量 r
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

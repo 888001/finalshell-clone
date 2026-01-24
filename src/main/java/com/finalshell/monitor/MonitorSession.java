@@ -58,6 +58,21 @@ public class MonitorSession {
     }
     
     /**
+     * Refresh monitoring data immediately
+     */
+    public void refresh() {
+        if (running) {
+            try {
+                MonitorData data = collectData();
+                fireDataReceived(data);
+            } catch (Exception e) {
+                logger.error("Refresh failed", e);
+                fireError(e.getMessage());
+            }
+        }
+    }
+    
+    /**
      * Stop monitoring
      */
     public void stop() {

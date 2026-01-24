@@ -12,6 +12,11 @@ import java.util.regex.*;
  */
 public class NetstatParser extends BaseParser {
     
+    @Override
+    public void parse() {
+        // Parse using rawOutput from parent class
+    }
+    
     private static final Pattern TCP_PATTERN = Pattern.compile(
         "^(tcp[46]?)\\s+\\d+\\s+\\d+\\s+(\\S+):(\\d+)\\s+(\\S+):(\\d+|\\*)\\s+(\\S+)(?:\\s+(\\d+)/(.+))?",
         Pattern.CASE_INSENSITIVE

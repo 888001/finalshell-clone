@@ -98,6 +98,36 @@ public class RDPConfig {
     public String getDrivesToRedirect() { return drivesToRedirect; }
     public void setDrivesToRedirect(String drivesToRedirect) { this.drivesToRedirect = drivesToRedirect; }
     
+    // Alias methods for compatibility
+    public void setHost(String host) { this.rdpHost = host; }
+    public void setPort(int port) { this.rdpPort = port; }
+    public void setUsername(String username) { this.rdpUsername = username; }
+    public void setPassword(String password) { this.rdpPassword = password; }
+    public void setDomain(String domain) { this.rdpDomain = domain; }
+    public boolean isFullScreen() { return fullscreen; }
+    public String getResolution() { return getResolutionString(); }
+    public String getUsername() { return rdpUsername; }
+    public String getPassword() { return rdpPassword; }
+    public String getDomain() { return rdpDomain; }
+    public String getHost() { return rdpHost; }
+    public int getPort() { return rdpPort; }
+    public void setResolution(String resolution) {
+        if (resolution != null && resolution.contains("x")) {
+            String[] parts = resolution.split("x");
+            if (parts.length == 2) {
+                try {
+                    this.width = Integer.parseInt(parts[0].trim());
+                    this.height = Integer.parseInt(parts[1].trim());
+                } catch (NumberFormatException e) { }
+            }
+        }
+    }
+    public void setFullScreen(boolean fullScreen) { this.fullscreen = fullScreen; }
+    
+    private boolean rememberPassword = true;
+    public boolean isRememberPassword() { return rememberPassword; }
+    public void setRememberPassword(boolean rememberPassword) { this.rememberPassword = rememberPassword; }
+    
     /**
      * Get resolution string
      */

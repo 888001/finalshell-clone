@@ -32,6 +32,10 @@ public class DiskInfo {
         this.fileSystem = fileSystem;
     }
     
+    public void setFilesystem(String filesystem) {
+        this.fileSystem = filesystem;
+    }
+    
     public long getTotalSize() {
         return totalSize;
     }
@@ -68,4 +72,8 @@ public class DiskInfo {
         if (totalSize <= 0) return 0;
         return (usedSize * 100.0) / totalSize;
     }
+    
+    public void setTotal(long total) { this.totalSize = total; }
+    public void setUsed(long used) { this.usedSize = used; }
+    public void setAvailable(long available) { this.availableSize = available; }
 }

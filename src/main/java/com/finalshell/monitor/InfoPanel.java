@@ -63,18 +63,34 @@ public class InfoPanel extends JPanel {
         hostnameLabel.setText(data.getHostname() != null ? data.getHostname() : "-");
         osLabel.setText(data.getOsName() != null ? data.getOsName() : "-");
         kernelLabel.setText(data.getKernelVersion() != null ? data.getKernelVersion() : "-");
-        uptimeLabel.setText(data.getUptime() != null ? data.getUptime() : "-");
+        uptimeLabel.setText(MonitorData.formatUptime(data.getUptime()));
         
         if (data.getCpuInfo() != null) {
             cpuLabel.setText(data.getCpuInfo().toString());
         }
         
         memoryLabel.setText(String.format("%s / %s", 
-            formatSize(data.getUsedMemory()), 
-            formatSize(data.getTotalMemory())));
+            formatSize(data.getMemUsed()), 
+            formatSize(data.getMemTotal())));
         
         loadLabel.setText(String.format("%.2f, %.2f, %.2f", 
             data.getLoad1(), data.getLoad5(), data.getLoad15()));
+    }
+    
+    public void setHostname(String hostname) {
+        hostnameLabel.setText(hostname != null ? hostname : "-");
+    }
+    
+    public void setOs(String os) {
+        osLabel.setText(os != null ? os : "-");
+    }
+    
+    public void setKernel(String kernel) {
+        kernelLabel.setText(kernel != null ? kernel : "-");
+    }
+    
+    public void setUptime(String uptime) {
+        uptimeLabel.setText(uptime != null ? uptime : "-");
     }
     
     private String formatSize(long bytes) {

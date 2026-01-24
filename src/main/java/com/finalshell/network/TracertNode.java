@@ -1,5 +1,7 @@
 package com.finalshell.network;
 
+import com.finalshell.monitor.MonitorData;
+
 /**
  * Traceroute节点数据
  * 
@@ -15,6 +17,7 @@ public class TracertNode {
     private long rtt3;
     private String rawLine;
     private String location;
+    private MonitorData monitorData;
     
     public TracertNode() {
     }
@@ -101,5 +104,13 @@ public class TracertNode {
     @Override
     public String toString() {
         return String.format("%d: %s (%d ms)", hop, ipAddress, getAverageRtt());
+    }
+    
+    public MonitorData getMonitorData() {
+        return monitorData;
+    }
+    
+    public void setMonitorData(MonitorData monitorData) {
+        this.monitorData = monitorData;
     }
 }

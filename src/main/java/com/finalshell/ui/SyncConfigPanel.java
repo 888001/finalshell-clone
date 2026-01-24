@@ -38,7 +38,7 @@ public class SyncConfigPanel extends JPanel {
         
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         enableSyncCheckbox = new JCheckBox("启用云同步");
-        enableSyncCheckbox.addActionListener(e -> updateUI());
+        enableSyncCheckbox.addActionListener(e -> refreshUI());
         add(enableSyncCheckbox, gbc);
         
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 1;
@@ -71,11 +71,11 @@ public class SyncConfigPanel extends JPanel {
         if (config != null) {
             enableSyncCheckbox.setSelected(config.isEnabled());
             emailField.setText(config.getEmail());
-            updateUI();
+            refreshUI();
         }
     }
     
-    private void updateUI() {
+    private void refreshUI() {
         boolean enabled = enableSyncCheckbox.isSelected();
         changePwdButton.setEnabled(enabled);
         syncNowButton.setEnabled(enabled);

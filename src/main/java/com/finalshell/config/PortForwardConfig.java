@@ -103,6 +103,20 @@ public class PortForwardConfig {
         this.remotePort = remotePort;
     }
     
+    private boolean active;
+    
+    public boolean isLocalToRemote() {
+        return type == Type.LOCAL;
+    }
+    
+    public boolean isActive() {
+        return active;
+    }
+    
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    
     @Override
     public String toString() {
         if (name != null && !name.isEmpty()) {

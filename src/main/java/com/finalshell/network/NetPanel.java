@@ -1,5 +1,7 @@
 package com.finalshell.network;
 
+import com.finalshell.ui.table.NetTable;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -46,7 +48,7 @@ public class NetPanel extends JPanel {
         
         netTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                NetRow row = netTable.getSelectedRow();
+                NetRow row = netTable.getSelectedNetRow();
                 if (row != null) {
                     detailPanel.showDetail(row);
                 }

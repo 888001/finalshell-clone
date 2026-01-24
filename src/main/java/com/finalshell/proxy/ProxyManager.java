@@ -74,13 +74,12 @@ public class ProxyManager {
         }
         
         Proxy.Type type;
-        switch (info.getType().toUpperCase()) {
-            case "SOCKS5":
-            case "SOCKS4":
+        switch (info.getType()) {
+            case ProxyInfo.TYPE_SOCKS5:
+            case ProxyInfo.TYPE_SOCKS4:
                 type = Proxy.Type.SOCKS;
                 break;
-            case "HTTP":
-            case "HTTPS":
+            case ProxyInfo.TYPE_HTTP:
                 type = Proxy.Type.HTTP;
                 break;
             default:

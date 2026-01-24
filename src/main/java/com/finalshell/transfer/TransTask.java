@@ -17,6 +17,11 @@ public class TransTask {
     public static final int STATUS_ERROR = 4;
     public static final int STATUS_CANCELLED = 5;
     
+    // Aliases
+    public static final int STATUS_SUCCESS = STATUS_COMPLETE;
+    public static final int STATUS_CANCEL = STATUS_CANCELLED;
+    public static final int STATUS_PAUSE = STATUS_PAUSED;
+    
     private String id;
     private String localPath;
     private String remotePath;
@@ -98,4 +103,10 @@ public class TransTask {
     public String getErrorMessage() { return errorMessage; }
     public long getStartTime() { return startTime; }
     public long getEndTime() { return endTime; }
+    
+    public long getFileSize() { return totalSize; }
+    
+    public void execute() {
+        start();
+    }
 }

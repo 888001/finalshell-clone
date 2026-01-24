@@ -142,4 +142,28 @@ public class TransePanel extends JPanel {
     public TransTable getTransTable() {
         return transTable;
     }
+    
+    public void pauseAllTasks() {
+        for (TransTask task : transTable.getTransModel().getAllTasks()) {
+            if (task.getStatus() == TransTask.STATUS_RUNNING) {
+                task.pause();
+            }
+        }
+    }
+    
+    public void resumeAllTasks() {
+        for (TransTask task : transTable.getTransModel().getAllTasks()) {
+            if (task.getStatus() == TransTask.STATUS_PAUSED) {
+                task.resume();
+            }
+        }
+    }
+    
+    public void clearCompletedTasks() {
+        clearCompleted();
+    }
+    
+    public int getTaskCount() {
+        return transTable.getTransModel().getRowCount();
+    }
 }

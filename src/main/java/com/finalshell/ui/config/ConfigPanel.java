@@ -23,7 +23,7 @@ public abstract class ConfigPanel extends JPanel {
     /**
      * 验证配置
      */
-    public boolean validate() {
+    public boolean validateConfig() {
         return true;
     }
 }

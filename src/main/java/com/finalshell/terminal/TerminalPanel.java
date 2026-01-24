@@ -145,9 +145,9 @@ public class TerminalPanel extends JPanel implements SSHSession.SSHSessionListen
             @Override
             public void componentResized(ComponentEvent e) {
                 if (sshSession != null && sshSession.isShellOpen()) {
-                    Dimension size = terminalWidget.getTerminalPanel().getTerminalSizeFromComponent();
-                    if (size != null) {
-                        sshSession.resizeTerminal(size.width, size.height);
+                    com.jediterm.core.util.TermSize termSize = terminalWidget.getTerminalPanel().getTerminalSizeFromComponent();
+                    if (termSize != null) {
+                        sshSession.resizeTerminal(termSize.getColumns(), termSize.getRows());
                     }
                 }
             }

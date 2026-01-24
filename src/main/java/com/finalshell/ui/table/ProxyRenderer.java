@@ -47,7 +47,7 @@ public class ProxyRenderer extends JPanel implements TableCellRenderer {
             if (config != null) {
                 switch (column) {
                     case 1: textLabel.setText(config.getName()); break;
-                    case 2: textLabel.setText(getTypeText(config.getType())); break;
+                    case 2: textLabel.setText(config.getType().getDisplayName()); break;
                     case 3: textLabel.setText(config.getHost()); break;
                     case 4: textLabel.setText(String.valueOf(config.getPort())); break;
                 }
@@ -66,12 +66,4 @@ public class ProxyRenderer extends JPanel implements TableCellRenderer {
         return this;
     }
     
-    private String getTypeText(int type) {
-        switch (type) {
-            case ProxyConfig.TYPE_HTTP: return "HTTP";
-            case ProxyConfig.TYPE_SOCKS4: return "SOCKS4";
-            case ProxyConfig.TYPE_SOCKS5: return "SOCKS5";
-            default: return "未知";
-        }
-    }
 }

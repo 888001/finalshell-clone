@@ -1,6 +1,6 @@
 package com.finalshell.ui.table;
 
-import com.finalshell.monitor.NetRow;
+import com.finalshell.network.NetRow;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;

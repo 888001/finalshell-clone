@@ -66,4 +66,14 @@ public class TabWrap {
     
     public Object getUserData() { return userData; }
     public void setUserData(Object userData) { this.userData = userData; }
+    
+    public java.awt.Component getComponent() {
+        if (panel != null) {
+            return panel;
+        }
+        if (userData instanceof java.awt.Component) {
+            return (java.awt.Component) userData;
+        }
+        return null;
+    }
 }

@@ -29,7 +29,7 @@ public class HotkeyPanel extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         tableModel = new HotkeyTableModel();
-        hotkeyTable = new HotkeyTable(tableModel);
+        hotkeyTable = new HotkeyTable();
         JScrollPane scrollPane = new JScrollPane(hotkeyTable);
         
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
@@ -54,7 +54,7 @@ public class HotkeyPanel extends JPanel {
     }
     
     private void addHotkey() {
-        AddHotkeyDialog dialog = new AddHotkeyDialog(SwingUtilities.getWindowAncestor(this));
+        AddHotkeyDialog dialog = new AddHotkeyDialog((Frame) SwingUtilities.getWindowAncestor(this));
         dialog.setVisible(true);
         if (dialog.isConfirmed()) {
             tableModel.addHotkey(dialog.getHotkey());
@@ -67,8 +67,8 @@ public class HotkeyPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "请先选择一个快捷键");
             return;
         }
-        HotkeyInfo hotkey = tableModel.getHotkeyAt(row);
-        AddHotkeyDialog dialog = new AddHotkeyDialog(SwingUtilities.getWindowAncestor(this), hotkey);
+        HotkeyConfig hotkey = tableModel.getHotkeyAt(row);
+        AddHotkeyDialog dialog = new AddHotkeyDialog((Frame) SwingUtilities.getWindowAncestor(this), hotkey);
         dialog.setVisible(true);
         if (dialog.isConfirmed()) {
             tableModel.updateHotkey(row, dialog.getHotkey());

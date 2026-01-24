@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.List;
 
 /**
- * 文件表格拖放处理器
+ * File table transfer handler
  * 
  * Based on analysis of FinalShell 3.8.3
  */
@@ -16,7 +16,7 @@ public class FileTableTransferHandler extends TransferHandler {
     
     public interface FileTransferListener {
         void onFilesDropped(List<File> files, int dropAction);
-        void onFilesDragged(List<SftpFile> files);
+        void onFilesDragged(List<RemoteFile> files);
     }
     
     public FileTableTransferHandler() {

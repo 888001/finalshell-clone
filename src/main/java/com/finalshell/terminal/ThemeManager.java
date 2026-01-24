@@ -124,6 +124,13 @@ public class ThemeManager {
     }
     
     /**
+     * Get available themes (alias for getThemeNames)
+     */
+    public List<String> getAvailableThemes() {
+        return getThemeNames();
+    }
+    
+    /**
      * Get theme by name
      */
     public TerminalTheme getTheme(String name) {

@@ -38,6 +38,18 @@ public class TopRow {
     private long swapUsed;
     private long swapAvail;
     
+    // Process-level fields
+    private int pid;
+    private String user;
+    private double cpuPercent;
+    private double memPercent;
+    private String state;
+    private String command;
+    private String name;
+    private double cpu;
+    private double mem;
+    private int connections;
+    
     public TopRow() {
     }
     
@@ -259,4 +271,38 @@ public class TopRow {
         }
         return (memUsed * 100.0) / memTotal;
     }
+    
+    // Process-level getters and setters
+    public int getPid() { return pid; }
+    public void setPid(int pid) { this.pid = pid; }
+    
+    public String getUser() { return user; }
+    public void setUser(String user) { this.user = user; }
+    
+    public double getCpuPercent() { return cpuPercent; }
+    public void setCpuPercent(double cpuPercent) { this.cpuPercent = cpuPercent; }
+    
+    public double getMemPercent() { return memPercent; }
+    public void setMemPercent(double memPercent) { this.memPercent = memPercent; }
+    
+    public String getState() { return state; }
+    public void setState(String state) { this.state = state; }
+    
+    public String getStatus() { return state; }
+    public void setStatus(String status) { this.state = status; }
+    
+    public String getCommand() { return command; }
+    public void setCommand(String command) { this.command = command; }
+    
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    
+    public double getCpu() { return cpu; }
+    public void setCpu(double cpu) { this.cpu = cpu; }
+    
+    public double getMem() { return mem; }
+    public void setMem(double mem) { this.mem = mem; }
+    
+    public int getConnections() { return connections; }
+    public void setConnections(int connections) { this.connections = connections; }
 }

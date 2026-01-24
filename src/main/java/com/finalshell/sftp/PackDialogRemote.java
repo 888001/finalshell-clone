@@ -56,7 +56,7 @@ public class PackDialogRemote extends JDialog {
         packButton = new JButton("打包");
         cancelButton = new JButton("取消");
         
-        packButton.addActionListener(e -> pack());
+        packButton.addActionListener(e -> doPack());
         cancelButton.addActionListener(e -> cancel());
         
         buttonPanel.add(packButton);
@@ -76,7 +76,7 @@ public class PackDialogRemote extends JDialog {
         }
     }
     
-    private void pack() {
+    private void doPack() {
         outputPath = outputField.getText().trim();
         if (outputPath.isEmpty()) {
             JOptionPane.showMessageDialog(this, "请指定输出路径", "提示", JOptionPane.WARNING_MESSAGE);

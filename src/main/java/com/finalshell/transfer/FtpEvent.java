@@ -1,10 +1,10 @@
 package com.finalshell.transfer;
 
-import com.finalshell.sftp.VDir;
-import com.finalshell.sftp.VFile;
+import com.finalshell.ui.VDir;
+import com.finalshell.ui.VFile;
 
 /**
- * FTP事件类
+ * FTP Event
  * 
  * Based on analysis of FinalShell 3.8.3
  * Reference: FtpTransfer_Event_DeepAnalysis.md - FtpEvent

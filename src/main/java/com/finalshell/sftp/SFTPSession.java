@@ -64,8 +64,16 @@ public class SFTPSession {
         checkChannel();
         List<RemoteFile> files = new ArrayList<>();
         
+        // Normalize path
+        if (path == null || path.isEmpty()) {
+            path = "/";
+        }
+        
         try {
-            Vector<ChannelSftp.LsEntry> entries = channel.ls(path);
+            // Try to cd first to validate path, then get absolute path
+            channel.cd(path);
+            String absPath = channel.pwd();
+            Vector<ChannelSftp.LsEntry> entries = channel.ls(".");
             for (ChannelSftp.LsEntry entry : entries) {
                 String name = entry.getFilename();
                 if (".".equals(name)) continue;
@@ -73,7 +81,7 @@ public class SFTPSession {
                 SftpATTRS attrs = entry.getAttrs();
                 RemoteFile file = new RemoteFile();
                 file.setName(name);
-                file.setPath(path.endsWith("/") ? path + name : path + "/" + name);
+                file.setPath(absPath.endsWith("/") ? absPath + name : absPath + "/" + name);
                 file.setDirectory(attrs.isDir());
                 file.setLink(attrs.isLink());
                 file.setSize(attrs.getSize());

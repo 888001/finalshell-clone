@@ -126,4 +126,12 @@ public class QuickCmdManager {
     public interface QuickCmdListener {
         void onCommandsChanged();
     }
+    
+    public static void importFromFile(File file) {
+        // TODO: Implement import from file
+    }
+    
+    public static void exportToFile(File file) {
+        // TODO: Implement export to file
+    }
 }

@@ -13,6 +13,7 @@ public class HotkeyConfig {
     
     private int id;
     private String name;
+    private String actionName;
     private int modifiers;
     private int keyCode;
     private KeyStroke keyStroke;
@@ -95,6 +96,32 @@ public class HotkeyConfig {
     
     public KeyStroke getKeyStroke() { return keyStroke; }
     public void setKeyStroke(KeyStroke keyStroke) { this.keyStroke = keyStroke; }
+    
+    public String getActionName() { return actionName != null ? actionName : name; }
+    public void setActionName(String actionName) { this.actionName = actionName; }
+    
+    public String getKeyStrokeString() { return getKeyText(); }
+    
+    public boolean isCtrl() { return (modifiers & KeyEvent.CTRL_DOWN_MASK) != 0; }
+    public void setCtrl(boolean ctrl) {
+        if (ctrl) modifiers |= KeyEvent.CTRL_DOWN_MASK;
+        else modifiers &= ~KeyEvent.CTRL_DOWN_MASK;
+        updateKeyStroke();
+    }
+    
+    public boolean isAlt() { return (modifiers & KeyEvent.ALT_DOWN_MASK) != 0; }
+    public void setAlt(boolean alt) {
+        if (alt) modifiers |= KeyEvent.ALT_DOWN_MASK;
+        else modifiers &= ~KeyEvent.ALT_DOWN_MASK;
+        updateKeyStroke();
+    }
+    
+    public boolean isShift() { return (modifiers & KeyEvent.SHIFT_DOWN_MASK) != 0; }
+    public void setShift(boolean shift) {
+        if (shift) modifiers |= KeyEvent.SHIFT_DOWN_MASK;
+        else modifiers &= ~KeyEvent.SHIFT_DOWN_MASK;
+        updateKeyStroke();
+    }
     
     @Override
     public String toString() {

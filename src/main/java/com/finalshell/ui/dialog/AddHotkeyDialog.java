@@ -154,4 +154,8 @@ public class AddHotkeyDialog extends JDialog {
     public HotkeyConfig getConfig() {
         return config;
     }
+    
+    public HotkeyConfig getHotkey() {
+        return config;
+    }
 }

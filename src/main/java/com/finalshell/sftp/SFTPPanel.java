@@ -404,7 +404,11 @@ public class SFTPPanel extends JPanel implements SFTPSession.SFTPEventListener {
         new SwingWorker<List<RemoteFile>, Void>() {
             @Override
             protected List<RemoteFile> doInBackground() throws Exception {
-                currentRemotePath = sftpSession.pwd();
+                String path = sftpSession.pwd();
+                if (path == null || path.isEmpty()) {
+                    path = "/";
+                }
+                currentRemotePath = path;
                 return sftpSession.listFiles(currentRemotePath);
             }
             

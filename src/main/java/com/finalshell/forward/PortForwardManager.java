@@ -118,11 +118,11 @@ public class PortForwardManager {
      */
     public ForwardEntry addForward(PortForwardConfig config) throws SSHException {
         switch (config.getType()) {
-            case "local":
+            case LOCAL:
                 return addLocalForward(config.getLocalPort(), config.getRemoteHost(), config.getRemotePort());
-            case "remote":
+            case REMOTE:
                 return addRemoteForward(config.getRemotePort(), config.getLocalHost(), config.getLocalPort());
-            case "dynamic":
+            case DYNAMIC:
                 return addDynamicForward(config.getLocalPort());
             default:
                 throw new SSHException("Unknown forward type: " + config.getType());

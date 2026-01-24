@@ -20,7 +20,7 @@ public class MonitorPanel extends JPanel implements MonitorSession.MonitorListen
     
     private static final Logger logger = LoggerFactory.getLogger(MonitorPanel.class);
     
-    private final SSHSession sshSession;
+    private SSHSession sshSession;
     private MonitorSession monitorSession;
     
     // Overview panel
@@ -56,11 +56,26 @@ public class MonitorPanel extends JPanel implements MonitorSession.MonitorListen
     private JLabel statusLabel;
     private JToggleButton startStopBtn;
     
+    public MonitorPanel() {
+        initComponents();
+        initLayout();
+    }
+    
     public MonitorPanel(SSHSession sshSession) {
         this.sshSession = sshSession;
         
         initComponents();
         initLayout();
+    }
+    
+    public void refresh() {
+        if (monitorSession != null) {
+            monitorSession.refresh();
+        }
+    }
+    
+    public void updateData(MonitorData data) {
+        updateUI(data);
     }
     
     private void initComponents() {
