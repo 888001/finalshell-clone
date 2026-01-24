@@ -70,9 +70,17 @@ public class SFTPSession {
         }
         
         try {
-            // Try to cd first to validate path, then get absolute path
-            channel.cd(path);
-            String absPath = channel.pwd();
+            // Try to cd first to validate path, fallback to root if fails
+            String absPath;
+            try {
+                channel.cd(path);
+                absPath = channel.pwd();
+            } catch (SftpException cdEx) {
+                // Path doesn't exist, try root
+                logger.warn("Cannot cd to {}, falling back to /", path);
+                channel.cd("/");
+                absPath = "/";
+            }
             Vector<ChannelSftp.LsEntry> entries = channel.ls(".");
             for (ChannelSftp.LsEntry entry : entries) {
                 String name = entry.getFilename();
