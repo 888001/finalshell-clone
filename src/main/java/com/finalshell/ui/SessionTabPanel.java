@@ -228,15 +228,16 @@ public class SessionTabPanel extends JPanel {
         if (show) {
             if (quickCmdPanel == null) {
                 quickCmdPanel = new QuickCommandPanel((cmd, sendEnter) -> {
-                    SSHSession session = terminalPanel.getSSHSession();
-                    if (session != null && session.isConnected()) {
-                        try {
+                    try {
+                        // Send command through JediTerm's TtyConnector
+                        com.jediterm.terminal.ui.JediTermWidget widget = terminalPanel.getTerminalWidget();
+                        if (widget != null && widget.getTtyConnector() != null) {
                             String command = sendEnter ? cmd + "\n" : cmd;
-                            session.getShellChannel().getOutputStream().write(command.getBytes());
-                            session.getShellChannel().getOutputStream().flush();
-                        } catch (Exception ex) {
-                            logger.error("Failed to send command", ex);
+                            widget.getTtyConnector().write(command.getBytes(
+                                java.nio.charset.Charset.forName(terminalPanel.getConfig().getCharset())));
                         }
+                    } catch (Exception ex) {
+                        logger.error("Failed to send command", ex);
                     }
                 });
             }
