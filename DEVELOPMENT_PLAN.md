@@ -495,11 +495,11 @@
     - OpenPanel: “全部/SSH/RDP”视图切换真实过滤并与搜索联动
     - FileTreePopupMenu: 新建/编辑RDP连接（RdpConfigDialog -> ConnectConfig(TYPE_RDP) -> ConfigManager.saveConnection）
     - MainWindow: 打开RDP类型连接时走RDPPanel/RDPSession（不再错误走SSH会话面板）
+    - ControlClient: 已对接 DesUtilPro 加密二进制请求（JSON->加密->POST->解密->JSON；支持maxRetries重试；可通过 -Dcontrol.server.url 配置服务端）
+    - FileSearchDialog: 已对接SSH远程find搜索并支持取消；SessionTabPanel工具栏增加“搜索”入口并复制路径
   - 待补齐/继续审计:
     - FileTree数据源: 目前仅实现基础的ConfigManager重建/重命名落盘，仍缺少节点编辑器等与3.8.3一致的细节
-    - ControlClient: 实际HTTP登录/授权校验仍为模拟实现（当前login/checkLicense固定模拟成功/失败）
     - SwingFXWebView: 仅占位组件（loadUrl/loadContent/导航/执行脚本未实现）
-    - FileSearchDialog: 当前为模拟搜索结果（未对接SSH/SFTP远程搜索）
     - SpeedTestDialog: 当前为模拟测速（未对接真实下载/上传测速逻辑）
     - MainWindow->检查更新: 已对接UpdateChecker真实请求；但UpdateChecker默认URL为example.com占位
     - 授权/账号体系: Pro/永久授权/过期判断（isExpired）仍为占位
