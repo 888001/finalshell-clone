@@ -168,4 +168,39 @@ public class EditorPanel extends JPanel {
     public String getFilePath() { return filePath; }
     public boolean isModified() { return modified; }
     public JTextArea getTextArea() { return textArea; }
+    
+    /**
+     * 查找文本
+     */
+    public boolean find(String text) {
+        if (text == null || text.isEmpty()) return false;
+        String content = textArea.getText();
+        int pos = content.indexOf(text, textArea.getCaretPosition());
+        if (pos < 0) {
+            pos = content.indexOf(text);
+        }
+        if (pos >= 0) {
+            textArea.setCaretPosition(pos);
+            textArea.select(pos, pos + text.length());
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * 替换文本
+     */
+    public boolean replace(String oldText, String newText) {
+        if (oldText == null || oldText.isEmpty()) return false;
+        String selected = textArea.getSelectedText();
+        if (selected != null && selected.equals(oldText)) {
+            textArea.replaceSelection(newText);
+            return true;
+        }
+        if (find(oldText)) {
+            textArea.replaceSelection(newText);
+            return true;
+        }
+        return false;
+    }
 }

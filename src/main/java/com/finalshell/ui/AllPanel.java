@@ -3,6 +3,7 @@ package com.finalshell.ui;
 import com.finalshell.config.ConnectConfig;
 
 import javax.swing.*;
+import javax.swing.tree.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -88,6 +89,19 @@ public class AllPanel extends JPanel {
     }
     
     private void refreshTree() {
-        // TODO: 刷新树形结构
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("连接");
+        
+        for (ConnectConfig config : filteredConfigs) {
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(config.getName());
+            root.add(node);
+        }
+        
+        DefaultTreeModel model = new DefaultTreeModel(root);
+        fileTree.setModel(model);
+        
+        // 展开所有节点
+        for (int i = 0; i < fileTree.getRowCount(); i++) {
+            fileTree.expandRow(i);
+        }
     }
 }

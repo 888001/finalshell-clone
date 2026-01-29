@@ -18,6 +18,7 @@ public class ConnectConfig implements Cloneable {
     private int type = 1; // 1=SSH, 2=RDP, 3=Port Forward
     private long createTime;
     private long updateTime;
+    private long lastConnectTime;
     
     // Connection settings
     private String host;
@@ -125,6 +126,14 @@ public class ConnectConfig implements Cloneable {
     
     public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
+    }
+    
+    public long getLastConnectTime() {
+        return lastConnectTime;
+    }
+    
+    public void setLastConnectTime(long lastConnectTime) {
+        this.lastConnectTime = lastConnectTime;
     }
     
     public String getHost() {

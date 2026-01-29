@@ -1,5 +1,7 @@
 package com.finalshell.ui.filetree;
 
+import com.finalshell.config.ConfigManager;
+import com.finalshell.config.ConnectConfig;
 import com.finalshell.ui.*;
 
 import javax.swing.*;
@@ -109,12 +111,24 @@ public class FloatPanel extends JPanel {
     }
     
     private void openSettings() {
-        // TODO: 打开设置对话框
+        if (currentFile != null) {
+            ConnectConfig config = ConfigManager.getInstance().getConnectionById(currentFile.getId());
+            if (config != null) {
+                ConnectionDialog dialog = new ConnectionDialog(
+                    (Frame) SwingUtilities.getWindowAncestor(this), config);
+                dialog.setVisible(true);
+                if (dialog.isConfirmed()) {
+                    fileTree.refreshTree();
+                }
+            }
+        }
         hide();
     }
     
     private void connect() {
-        // TODO: 连接
+        if (currentFile != null) {
+            fileTree.fireConnectEvent(currentFile);
+        }
         hide();
     }
     

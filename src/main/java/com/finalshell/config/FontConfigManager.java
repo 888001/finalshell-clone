@@ -10,7 +10,9 @@ public class FontConfigManager {
     private static FontConfigManager instance;
     private FontConfig fontConfig;
     
-    private FontConfigManager() {
+    public FontConfigManager() {
+        // Default font configuration
+        setFont("Consolas", "Microsoft YaHei", 14);
     }
     
     public static synchronized FontConfigManager getInstance() {

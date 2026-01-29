@@ -1,7 +1,15 @@
 package com.finalshell.ui;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.finalshell.config.ConfigManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -12,6 +20,7 @@ import java.util.*;
  */
 public class LayoutConfigManager {
     
+    private static final Logger logger = LoggerFactory.getLogger(LayoutConfigManager.class);
     private static LayoutConfigManager instance;
     private Map<String, LayoutConfig> layouts = new HashMap<>();
     private String currentLayout = "default";
@@ -38,19 +47,42 @@ public class LayoutConfigManager {
         
         // 加载保存的布局配置
         try {
-            ConfigManager configManager = ConfigManager.getInstance();
-            // TODO: 从配置文件加载布局
+            File layoutFile = new File(ConfigManager.getInstance().getConfigDir(), "layouts.json");
+            if (layoutFile.exists()) {
+                String content = new String(Files.readAllBytes(layoutFile.toPath()), StandardCharsets.UTF_8);
+                JSONArray jsonArray = JSON.parseArray(content);
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    LayoutConfig layout = new LayoutConfig();
+                    layout.setName(obj.getString("name"));
+                    layout.setShowTree(obj.getBooleanValue("showTree"));
+                    layout.setShowStatusBar(obj.getBooleanValue("showStatusBar"));
+                    layout.setTreeWidth(obj.getIntValue("treeWidth"));
+                    layouts.put(layout.getName(), layout);
+                }
+                logger.info("加载布局配置: {} 个", jsonArray.size());
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("加载布局配置失败", e);
         }
     }
     
     public void saveLayouts() {
         try {
-            ConfigManager configManager = ConfigManager.getInstance();
-            // TODO: 保存布局到配置文件
+            JSONArray jsonArray = new JSONArray();
+            for (LayoutConfig layout : layouts.values()) {
+                JSONObject obj = new JSONObject();
+                obj.put("name", layout.getName());
+                obj.put("showTree", layout.isShowTree());
+                obj.put("showStatusBar", layout.isShowStatusBar());
+                obj.put("treeWidth", layout.getTreeWidth());
+                jsonArray.add(obj);
+            }
+            File layoutFile = new File(ConfigManager.getInstance().getConfigDir(), "layouts.json");
+            Files.write(layoutFile.toPath(), JSON.toJSONString(jsonArray, true).getBytes(StandardCharsets.UTF_8));
+            logger.info("保存布局配置: {} 个", layouts.size());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("保存布局配置失败", e);
         }
     }
     

@@ -32,6 +32,11 @@ public class SystemTrayManager {
     
     private SystemTrayManager() {}
     
+    public SystemTrayManager(MainWindow window) {
+        this.mainWindow = window;
+        initialize(window);
+    }
+    
     public void initialize(MainWindow window) {
         this.mainWindow = window;
         
@@ -180,5 +185,12 @@ public class SystemTrayManager {
     
     public boolean isInitialized() {
         return initialized;
+    }
+    
+    /**
+     * 移除系统托盘图标（别名方法）
+     */
+    public void remove() {
+        removeTrayIcon();
     }
 }

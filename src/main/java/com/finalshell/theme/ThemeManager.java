@@ -21,9 +21,30 @@ public class ThemeManager {
     private ThemeConfig currentTheme;
     private final List<ThemeChangeListener> listeners = new ArrayList<>();
     
-    private ThemeManager() {
+    public ThemeManager() {
         registerBuiltinThemes();
-        currentTheme = themes.get("light");
+        currentTheme = themes.get("dark");
+    }
+    
+    /**
+     * 初始化主题管理器
+     */
+    public void init() {
+        logger.info("ThemeManager initialized with theme: {}", currentTheme.getName());
+    }
+    
+    /**
+     * 应用主题（通过名称）
+     */
+    public void applyTheme(String themeName) {
+        if (themeName == null) {
+            themeName = "dark";
+        }
+        ThemeConfig theme = themes.get(themeName.toLowerCase());
+        if (theme != null) {
+            currentTheme = theme;
+            applyTheme(theme);
+        }
     }
     
     public static synchronized ThemeManager getInstance() {

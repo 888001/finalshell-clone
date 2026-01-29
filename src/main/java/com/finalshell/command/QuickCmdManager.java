@@ -1,7 +1,15 @@
 package com.finalshell.command;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 /**
  * 快捷命令管理器
@@ -10,6 +18,7 @@ import java.io.*;
  */
 public class QuickCmdManager {
     
+    private static final Logger logger = LoggerFactory.getLogger(QuickCmdManager.class);
     private static QuickCmdManager instance;
     private List<QuickCmdGroup> groups;
     private Map<String, QuickCmd> commandMap;
@@ -128,10 +137,60 @@ public class QuickCmdManager {
     }
     
     public static void importFromFile(File file) {
-        // TODO: Implement import from file
+        try {
+            String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
+            JSONArray jsonArray = JSON.parseArray(content);
+            QuickCmdManager manager = getInstance();
+            
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject groupObj = jsonArray.getJSONObject(i);
+                String groupName = groupObj.getString("name");
+                QuickCmdGroup group = new QuickCmdGroup(groupName);
+                
+                JSONArray cmds = groupObj.getJSONArray("commands");
+                if (cmds != null) {
+                    for (int j = 0; j < cmds.size(); j++) {
+                        JSONObject cmdObj = cmds.getJSONObject(j);
+                        QuickCmd cmd = new QuickCmd(
+                            cmdObj.getString("name"),
+                            cmdObj.getString("command")
+                        );
+                        group.addCommand(cmd);
+                    }
+                }
+                manager.addGroup(group);
+            }
+            manager.saveCommands();
+            logger.info("导入快捷命令成功: {}", file.getName());
+        } catch (Exception e) {
+            logger.error("导入快捷命令失败", e);
+        }
     }
     
     public static void exportToFile(File file) {
-        // TODO: Implement export to file
+        try {
+            QuickCmdManager manager = getInstance();
+            JSONArray jsonArray = new JSONArray();
+            
+            for (QuickCmdGroup group : manager.getGroups()) {
+                JSONObject groupObj = new JSONObject();
+                groupObj.put("name", group.getName());
+                
+                JSONArray cmds = new JSONArray();
+                for (QuickCmd cmd : group.getCommands()) {
+                    JSONObject cmdObj = new JSONObject();
+                    cmdObj.put("name", cmd.getName());
+                    cmdObj.put("command", cmd.getCommand());
+                    cmds.add(cmdObj);
+                }
+                groupObj.put("commands", cmds);
+                jsonArray.add(groupObj);
+            }
+            
+            Files.write(file.toPath(), JSON.toJSONString(jsonArray, true).getBytes(StandardCharsets.UTF_8));
+            logger.info("导出快捷命令成功: {}", file.getName());
+        } catch (Exception e) {
+            logger.error("导出快捷命令失败", e);
+        }
     }
 }

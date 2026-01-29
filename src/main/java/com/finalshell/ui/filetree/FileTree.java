@@ -163,4 +163,33 @@ public class FileTree extends JTree {
     public boolean isSearchMode() {
         return isSearchMode;
     }
+    
+    // Alias method for compatibility
+    public void refreshTree() {
+        refresh();
+    }
+    
+    public void refreshNode(DefaultMutableTreeNode node) {
+        treeModel.reload(node);
+    }
+    
+    public void fireConnectEvent(VFile vfile) {
+        if (openPanel != null && vfile != null) {
+            openConnection(vfile);
+        }
+    }
+    
+    public void sortChildren(DefaultMutableTreeNode node, java.util.Comparator<Object> comparator) {
+        if (node == null) return;
+        java.util.List<DefaultMutableTreeNode> children = new java.util.ArrayList<>();
+        for (int i = 0; i < node.getChildCount(); i++) {
+            children.add((DefaultMutableTreeNode) node.getChildAt(i));
+        }
+        children.sort((n1, n2) -> comparator.compare(n1.getUserObject(), n2.getUserObject()));
+        node.removeAllChildren();
+        for (DefaultMutableTreeNode child : children) {
+            node.add(child);
+        }
+        treeModel.reload(node);
+    }
 }

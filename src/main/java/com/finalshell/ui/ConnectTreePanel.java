@@ -339,6 +339,10 @@ public class ConnectTreePanel extends JPanel {
         loadConnections();
     }
     
+    public void refreshTree() {
+        refresh();
+    }
+    
     /**
      * Custom cell renderer for connection tree
      */

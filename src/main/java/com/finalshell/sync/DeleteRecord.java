@@ -76,6 +76,13 @@ public class DeleteRecord {
         this.extra = extra;
     }
     
+    // Alias methods for compatibility
+    public String getPath() { return id; }
+    public void setPath(String path) { this.id = path; }
+    
+    public long getTimestamp() { return deleteTime; }
+    public void setTimestamp(long timestamp) { this.deleteTime = timestamp; }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,7 +1,14 @@
 package com.finalshell.theme;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.List;
 
@@ -13,6 +20,7 @@ import java.util.List;
  */
 public class ThemeTools {
     
+    private static final Logger logger = LoggerFactory.getLogger(ThemeTools.class);
     private static final String THEME_DIR = "themes";
     
     public static List<ShellTheme> loadThemes() {
@@ -48,12 +56,70 @@ public class ThemeTools {
     }
     
     public static ShellTheme loadThemeFromFile(File file) {
-        // TODO: 从JSON文件加载主题
-        return null;
+        try {
+            String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
+            JSONObject json = JSON.parseObject(content);
+            
+            ShellTheme theme = new ShellTheme(json.getString("name"));
+            theme.setBackground(parseColor(json.getString("background")));
+            theme.setForeground(parseColor(json.getString("foreground")));
+            theme.setCursorColor(parseColor(json.getString("cursorColor")));
+            theme.setSelectionBackground(parseColor(json.getString("selectionBackground")));
+            theme.setSelectionForeground(parseColor(json.getString("selectionForeground")));
+            
+            JSONObject colors = json.getJSONObject("colors");
+            if (colors != null) {
+                for (int i = 0; i < 8; i++) {
+                    String colorStr = colors.getString(String.valueOf(i));
+                    if (colorStr != null) {
+                        theme.setColor(i, parseColor(colorStr));
+                    }
+                }
+            }
+            
+            logger.info("加载主题: {}", theme.getName());
+            return theme;
+        } catch (Exception e) {
+            logger.error("加载主题文件失败: {}", file.getName(), e);
+            return null;
+        }
     }
     
     public static void saveThemeToFile(ShellTheme theme, File file) {
-        // TODO: 保存主题到JSON文件
+        try {
+            JSONObject json = new JSONObject();
+            json.put("name", theme.getName());
+            json.put("background", colorToHex(theme.getBackground()));
+            json.put("foreground", colorToHex(theme.getForeground()));
+            json.put("cursorColor", colorToHex(theme.getCursorColor()));
+            json.put("selectionBackground", colorToHex(theme.getSelectionBackground()));
+            json.put("selectionForeground", colorToHex(theme.getSelectionForeground()));
+            
+            JSONObject colors = new JSONObject();
+            for (int i = 0; i < 8; i++) {
+                Color c = theme.getColor(i);
+                if (c != null) {
+                    colors.put(String.valueOf(i), colorToHex(c));
+                }
+            }
+            json.put("colors", colors);
+            
+            Files.write(file.toPath(), JSON.toJSONString(json, true).getBytes(StandardCharsets.UTF_8));
+            logger.info("保存主题: {}", theme.getName());
+        } catch (Exception e) {
+            logger.error("保存主题文件失败: {}", file.getName(), e);
+        }
+    }
+    
+    private static Color parseColor(String hex) {
+        if (hex == null || hex.isEmpty()) return Color.BLACK;
+        if (hex.startsWith("#")) hex = hex.substring(1);
+        return new Color(Integer.parseInt(hex, 16));
+    }
+    
+    private static String colorToHex(Color color) {
+        if (color == null) return "#000000";
+        return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
     }
     
     public static ShellTheme createDefaultTheme() {

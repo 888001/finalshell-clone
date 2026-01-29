@@ -10,7 +10,9 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -36,7 +38,12 @@ public class ConfigManager {
     
     private AppConfig appConfig;
     private Map<String, ConnectConfig> connections = new HashMap<>();
+    private Map<String, ConnectConfig> connectionsByPath = new HashMap<>();
+    private Map<String, FolderConfig> foldersById = new HashMap<>();
     private List<FolderConfig> folders = new ArrayList<>();
+    
+    // Event listeners
+    private List<ConfigChangeListener> listeners = new ArrayList<>();
     
     public static ConfigManager getInstance() {
         if (instance == null) {
@@ -149,6 +156,37 @@ public class ConfigManager {
         }
     }
     
+    /**
+     * 初始化配置管理器（用于延迟初始化）
+     */
+    public void init() {
+        // Already initialized in constructor, but this method
+        // can be called to reinitialize if needed
+        logger.info("ConfigManager initialized");
+    }
+    
+    // Event listener management
+    
+    public void addConfigChangeListener(ConfigChangeListener listener) {
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+    
+    public void removeConfigChangeListener(ConfigChangeListener listener) {
+        listeners.remove(listener);
+    }
+    
+    private void fireConfigChanged(String type, String configId) {
+        for (ConfigChangeListener listener : listeners) {
+            try {
+                listener.onConfigChanged(type, configId);
+            } catch (Exception e) {
+                logger.error("Error notifying config listener", e);
+            }
+        }
+    }
+    
     public void saveAll() {
         saveAppConfig();
         saveAllConnections();
@@ -161,6 +199,24 @@ public class ConfigManager {
     
     public File getConfigDir() {
         return configDir.toFile();
+    }
+    
+    public String getBackupDir() {
+        return backupDir.toString();
+    }
+    
+    public void backupConfigs() throws IOException {
+        String timestamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+        Path backupFile = backupDir.resolve("backup_" + timestamp + ".json");
+        exportToFile(backupFile);
+    }
+    
+    public void exportConnection(String id, File file) throws IOException {
+        ConnectConfig config = connections.get(id);
+        if (config != null) {
+            String json = JSON.toJSONString(config, SerializerFeature.PrettyFormat);
+            Files.write(file.toPath(), json.getBytes(StandardCharsets.UTF_8));
+        }
     }
     
     public void saveAppConfig() {
@@ -251,21 +307,69 @@ public class ConfigManager {
         return connections.get(id);
     }
     
+    // Alias method for compatibility
+    public ConnectConfig getConnectionById(String id) {
+        return getConnection(id);
+    }
+    
     public List<FolderConfig> getFolders() {
         return folders;
+    }
+    
+    public FolderConfig getFolderById(String id) {
+        return foldersById.get(id);
     }
     
     public void addFolder(FolderConfig folder) {
         if (folder.getId() == null) {
             folder.setId(UUID.randomUUID().toString());
         }
+        folder.setCreateTime(System.currentTimeMillis());
+        folder.setUpdateTime(System.currentTimeMillis());
         folders.add(folder);
+        foldersById.put(folder.getId(), folder);
         saveFolders();
+        fireConfigChanged("folder_add", folder.getId());
+    }
+    
+    public FolderConfig createFolder(String parentId, String name) {
+        FolderConfig folder = new FolderConfig();
+        folder.setId(UUID.randomUUID().toString());
+        folder.setName(name);
+        folder.setParentId(parentId != null ? parentId : "root");
+        folder.setCreateTime(System.currentTimeMillis());
+        folder.setUpdateTime(System.currentTimeMillis());
+        
+        folders.add(folder);
+        foldersById.put(folder.getId(), folder);
+        saveFolders();
+        fireConfigChanged("folder_add", folder.getId());
+        
+        return folder;
+    }
+    
+    public void updateFolder(FolderConfig folder) {
+        folder.setUpdateTime(System.currentTimeMillis());
+        foldersById.put(folder.getId(), folder);
+        saveFolders();
+        fireConfigChanged("folder_update", folder.getId());
     }
     
     public void removeFolder(String id) {
         folders.removeIf(f -> id.equals(f.getId()));
+        foldersById.remove(id);
         saveFolders();
+        fireConfigChanged("folder_delete", id);
+    }
+    
+    public void moveFolder(String folderId, String newParentId) {
+        FolderConfig folder = foldersById.get(folderId);
+        if (folder != null) {
+            folder.setParentId(newParentId != null ? newParentId : "root");
+            folder.setUpdateTime(System.currentTimeMillis());
+            saveFolders();
+            fireConfigChanged("folder_move", folderId);
+        }
     }
     
     public void backup() {
@@ -315,5 +419,179 @@ public class ConfigManager {
         zos.putNextEntry(entry);
         Files.copy(file, zos);
         zos.closeEntry();
+    }
+    
+    // Recent connections
+    
+    public List<ConnectConfig> getRecentConnections(int limit) {
+        return connections.values().stream()
+            .sorted((a, b) -> Long.compare(b.getLastConnectTime(), a.getLastConnectTime()))
+            .limit(limit)
+            .collect(Collectors.toList());
+    }
+    
+    public List<ConnectConfig> getConnectionsSortedByCreateTime() {
+        return connections.values().stream()
+            .sorted((a, b) -> Long.compare(b.getCreateTime(), a.getCreateTime()))
+            .collect(Collectors.toList());
+    }
+    
+    public void updateConnectionTime(String id) {
+        ConnectConfig config = connections.get(id);
+        if (config != null) {
+            config.setLastConnectTime(System.currentTimeMillis());
+            saveConnection(config);
+        }
+    }
+    
+    // Connection by folder
+    
+    public List<ConnectConfig> getConnectionsByFolder(String folderId) {
+        String parentId = folderId != null ? folderId : "root";
+        return connections.values().stream()
+            .filter(c -> parentId.equals(c.getParentId()))
+            .collect(Collectors.toList());
+    }
+    
+    public List<FolderConfig> getChildFolders(String parentId) {
+        String pid = parentId != null ? parentId : "root";
+        return folders.stream()
+            .filter(f -> pid.equals(f.getParentId()))
+            .collect(Collectors.toList());
+    }
+    
+    public void moveConnection(String configId, String newParentId) {
+        ConnectConfig config = connections.get(configId);
+        if (config != null) {
+            config.setParentId(newParentId != null ? newParentId : "root");
+            config.setUpdateTime(System.currentTimeMillis());
+            saveConnection(config);
+            fireConfigChanged("connection_move", configId);
+        }
+    }
+    
+    // Import/Export
+    
+    public void importConnections(File file) throws IOException {
+        importFromFile(file.toPath(), false);
+    }
+    
+    public void exportConnections(File file) throws IOException {
+        exportToFile(file.toPath());
+    }
+    
+    public void exportToFile(Path exportFile) throws IOException {
+        Map<String, Object> exportData = new HashMap<>();
+        exportData.put("version", "1.0");
+        exportData.put("exportTime", System.currentTimeMillis());
+        exportData.put("connections", new ArrayList<>(connections.values()));
+        exportData.put("folders", folders);
+        
+        String json = JSON.toJSONString(exportData, SerializerFeature.PrettyFormat);
+        Files.write(exportFile, json.getBytes(StandardCharsets.UTF_8));
+        logger.info("Exported {} connections and {} folders to {}", 
+            connections.size(), folders.size(), exportFile);
+    }
+    
+    public int importFromFile(Path importFile, boolean overwrite) throws IOException {
+        String json = new String(Files.readAllBytes(importFile), StandardCharsets.UTF_8);
+        com.alibaba.fastjson.JSONObject data = JSON.parseObject(json);
+        
+        int imported = 0;
+        
+        // Import folders first
+        com.alibaba.fastjson.JSONArray foldersArray = data.getJSONArray("folders");
+        if (foldersArray != null) {
+            for (int i = 0; i < foldersArray.size(); i++) {
+                FolderConfig folder = foldersArray.getObject(i, FolderConfig.class);
+                if (folder != null && folder.getId() != null) {
+                    if (overwrite || !foldersById.containsKey(folder.getId())) {
+                        folders.add(folder);
+                        foldersById.put(folder.getId(), folder);
+                    }
+                }
+            }
+        }
+        
+        // Import connections
+        com.alibaba.fastjson.JSONArray connectionsArray = data.getJSONArray("connections");
+        if (connectionsArray != null) {
+            for (int i = 0; i < connectionsArray.size(); i++) {
+                ConnectConfig config = connectionsArray.getObject(i, ConnectConfig.class);
+                if (config != null && config.getId() != null) {
+                    if (overwrite || !connections.containsKey(config.getId())) {
+                        connections.put(config.getId(), config);
+                        saveConnection(config);
+                        imported++;
+                    }
+                }
+            }
+        }
+        
+        saveFolders();
+        fireConfigChanged("import", null);
+        logger.info("Imported {} connections from {}", imported, importFile);
+        return imported;
+    }
+    
+    // Restore from backup
+    
+    public void restoreFromBackup(Path backupFile) throws IOException {
+        try (ZipInputStream zis = new ZipInputStream(Files.newInputStream(backupFile))) {
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
+                Path targetPath = configDir.resolve(entry.getName());
+                if (!entry.isDirectory()) {
+                    Files.createDirectories(targetPath.getParent());
+                    Files.copy(zis, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                }
+                zis.closeEntry();
+            }
+        }
+        
+        // Reload all configs
+        connections.clear();
+        connectionsByPath.clear();
+        folders.clear();
+        foldersById.clear();
+        loadAllConfigs();
+        
+        fireConfigChanged("restore", null);
+        logger.info("Restored from backup: {}", backupFile);
+    }
+    
+    // List backups
+    
+    public List<Path> listBackups() throws IOException {
+        if (!Files.exists(backupDir)) {
+            return Collections.emptyList();
+        }
+        return Files.list(backupDir)
+            .filter(p -> p.toString().endsWith(".zip"))
+            .sorted((a, b) -> {
+                try {
+                    return Files.getLastModifiedTime(b).compareTo(Files.getLastModifiedTime(a));
+                } catch (IOException e) {
+                    return 0;
+                }
+            })
+            .collect(Collectors.toList());
+    }
+    
+    // Reload configs
+    
+    public void reload() {
+        connections.clear();
+        connectionsByPath.clear();
+        folders.clear();
+        foldersById.clear();
+        loadAllConfigs();
+        fireConfigChanged("reload", null);
+    }
+    
+    // Config change listener interface
+    
+    public interface ConfigChangeListener {
+        void onConfigChanged(String changeType, String configId);
     }
 }

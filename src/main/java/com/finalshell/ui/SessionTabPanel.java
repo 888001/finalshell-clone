@@ -28,6 +28,7 @@ public class SessionTabPanel extends JPanel {
     private static final Logger logger = LoggerFactory.getLogger(SessionTabPanel.class);
     
     private final ConnectConfig config;
+    private final MainWindow mainWindow;
     private final TerminalPanel terminalPanel;
     private SFTPPanel sftpPanel;
     private MonitorPanel monitorPanel;
@@ -41,11 +42,16 @@ public class SessionTabPanel extends JPanel {
     private boolean sftpVisible = false;
     private boolean monitorVisible = false;
     
-    public SessionTabPanel(ConnectConfig config) {
+    public SessionTabPanel(ConnectConfig config, MainWindow mainWindow) {
         this.config = config;
+        this.mainWindow = mainWindow;
         this.terminalPanel = new TerminalPanel(config);
         
         initLayout();
+    }
+    
+    public SessionTabPanel(ConnectConfig config) {
+        this(config, null);
     }
     
     private void initLayout() {
@@ -322,5 +328,35 @@ public class SessionTabPanel extends JPanel {
     
     public boolean isConnected() {
         return terminalPanel.isConnected();
+    }
+    
+    /**
+     * Reconnect session
+     */
+    public void reconnect() {
+        disconnect();
+        connect();
+    }
+    
+    /**
+     * Close session and release resources
+     */
+    public void close() {
+        disconnect();
+        terminalPanel.close();
+    }
+    
+    /**
+     * Update terminal font size
+     */
+    public void updateFontSize(int size) {
+        terminalPanel.setFontSize(size);
+    }
+    
+    /**
+     * Get main window reference
+     */
+    public MainWindow getMainWindow() {
+        return mainWindow;
     }
 }

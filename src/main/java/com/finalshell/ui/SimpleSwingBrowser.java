@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URI;
+import java.util.*;
 
 /**
  * 简单Swing浏览器
@@ -22,6 +23,8 @@ public class SimpleSwingBrowser extends JPanel {
     private JLabel statusLabel;
     
     private String currentUrl;
+    private java.util.List<String> history = new ArrayList<>();
+    private int historyIndex = -1;
     
     public SimpleSwingBrowser() {
         setLayout(new BorderLayout());
@@ -121,11 +124,50 @@ public class SimpleSwingBrowser extends JPanel {
     }
     
     public void goBack() {
-        // TODO: 实现历史记录后退
+        if (historyIndex > 0) {
+            historyIndex--;
+            String url = history.get(historyIndex);
+            urlField.setText(url);
+            loadUrlInternal(url);
+            updateNavigationButtons();
+        }
     }
     
     public void goForward() {
-        // TODO: 实现历史记录前进
+        if (historyIndex < history.size() - 1) {
+            historyIndex++;
+            String url = history.get(historyIndex);
+            urlField.setText(url);
+            loadUrlInternal(url);
+            updateNavigationButtons();
+        }
+    }
+    
+    private void loadUrlInternal(String url) {
+        currentUrl = url;
+        statusLabel.setText("加载中: " + url);
+        
+        SwingWorker<String, Void> worker = new SwingWorker<>() {
+            @Override
+            protected String doInBackground() throws Exception {
+                return "<html><body><h2>加载中...</h2><p>" + url + "</p></body></html>";
+            }
+            @Override
+            protected void done() {
+                try {
+                    contentPane.setText(get());
+                    statusLabel.setText("就绪");
+                } catch (Exception e) {
+                    statusLabel.setText("加载失败");
+                }
+            }
+        };
+        worker.execute();
+    }
+    
+    private void updateNavigationButtons() {
+        backButton.setEnabled(historyIndex > 0);
+        forwardButton.setEnabled(historyIndex < history.size() - 1);
     }
     
     public void refresh() {

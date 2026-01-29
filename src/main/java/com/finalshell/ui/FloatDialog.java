@@ -1,5 +1,9 @@
 package com.finalshell.ui;
 
+import com.finalshell.config.ConfigManager;
+import com.finalshell.config.ConnectConfig;
+import com.finalshell.ui.VFile;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -89,7 +93,14 @@ public class FloatDialog extends JFrame {
     }
     
     public void showConfig(Object file, Object node) {
-        // TODO: 显示配置对话框
+        if (file instanceof VFile) {
+            VFile vfile = (VFile) file;
+            ConnectConfig config = ConfigManager.getInstance().getConnectionById(vfile.getId());
+            if (config != null) {
+                ConnectionDialog dialog = new ConnectionDialog(mainWindow, config);
+                dialog.setVisible(true);
+            }
+        }
     }
     
     public void savePosition() {

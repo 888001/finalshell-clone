@@ -261,4 +261,29 @@ public class TerminalPanel extends JPanel implements SSHSession.SSHSessionListen
     public JediTermWidget getTerminalWidget() {
         return terminalWidget;
     }
+    
+    /**
+     * Close terminal and release resources
+     */
+    public void close() {
+        disconnect();
+        if (terminalWidget != null) {
+            terminalWidget.close();
+        }
+    }
+    
+    /**
+     * Set terminal font size
+     */
+    public void setFontSize(int size) {
+        if (terminalWidget != null) {
+            // JediTerm uses TerminalSettings to control font
+            Font currentFont = terminalWidget.getTerminalPanel().getFont();
+            if (currentFont != null) {
+                Font newFont = currentFont.deriveFont((float) size);
+                terminalWidget.getTerminalPanel().setFont(newFont);
+                terminalWidget.getTerminalPanel().repaint();
+            }
+        }
+    }
 }

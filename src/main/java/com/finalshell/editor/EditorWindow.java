@@ -238,11 +238,34 @@ public class EditorWindow extends JFrame {
     }
     
     private void showFindDialog() {
-        // TODO: 实现查找对话框
+        if (currentEditorPanel == null) return;
+        
+        String searchText = JOptionPane.showInputDialog(this, "查找内容:", "查找", JOptionPane.PLAIN_MESSAGE);
+        if (searchText != null && !searchText.isEmpty()) {
+            currentEditorPanel.find(searchText);
+        }
     }
     
     private void showReplaceDialog() {
-        // TODO: 实现替换对话框
+        if (currentEditorPanel == null) return;
+        
+        JPanel panel = new JPanel(new java.awt.GridLayout(2, 2, 5, 5));
+        JTextField findField = new JTextField(20);
+        JTextField replaceField = new JTextField(20);
+        panel.add(new JLabel("查找:"));
+        panel.add(findField);
+        panel.add(new JLabel("替换为:"));
+        panel.add(replaceField);
+        
+        int result = JOptionPane.showConfirmDialog(this, panel, "替换", 
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            String findText = findField.getText();
+            String replaceText = replaceField.getText();
+            if (!findText.isEmpty()) {
+                currentEditorPanel.replace(findText, replaceText);
+            }
+        }
     }
     
     private void zoomIn() {

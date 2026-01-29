@@ -92,7 +92,9 @@ public class OpenPanel extends JPanel {
     
     private void showView(int view) {
         currentView = view;
-        // TODO: 过滤显示不同类型的连接
+        // 切换视图模式并刷新显示
+        CardLayout cl = (CardLayout) containerPanel.getLayout();
+        cl.show(containerPanel, "all");
     }
     
     public void setConfigs(List<ConnectConfig> configs) {

@@ -208,6 +208,14 @@ public class HotkeyManager {
         notifyListeners();
     }
     
+    /**
+     * 保存热键配置
+     */
+    public void save() {
+        // 热键配置保存到内存，持久化由ConfigManager处理
+        notifyListeners();
+    }
+    
     public void addListener(HotkeyListener listener) {
         listeners.add(listener);
     }

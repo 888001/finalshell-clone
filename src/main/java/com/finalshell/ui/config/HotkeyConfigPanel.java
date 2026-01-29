@@ -1,6 +1,7 @@
 package com.finalshell.ui.config;
 
 import com.finalshell.hotkey.HotkeyConfig;
+import com.finalshell.hotkey.HotkeyManager;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -104,7 +105,11 @@ public class HotkeyConfigPanel extends ConfigPanel {
     
     @Override
     public void apply() {
-        // TODO: 保存快捷键配置
+        HotkeyManager manager = HotkeyManager.getInstance();
+        for (HotkeyConfig config : tableModel.getAllHotkeys()) {
+            manager.updateHotkey(config);
+        }
+        manager.save();
     }
     
     @Override
@@ -131,6 +136,10 @@ public class HotkeyConfigPanel extends ConfigPanel {
         public void clear() {
             hotkeys.clear();
             fireTableDataChanged();
+        }
+        
+        public java.util.List<HotkeyConfig> getAllHotkeys() {
+            return new ArrayList<>(hotkeys);
         }
         
         @Override

@@ -43,6 +43,9 @@ public class SyncConfig {
     private boolean syncSettings = true;
     private boolean syncHistory = false;
     
+    // Sync state
+    private long lastSyncTime = 0;
+    
     public SyncConfig() {}
     
     // Getters and Setters
@@ -104,6 +107,10 @@ public class SyncConfig {
     public String getUsername() { return webdavUsername; }
     public String getPassword() { return webdavPassword; }
     public String getSyncServerUrl() { return webdavUrl; }
+    public String getServerUrl() { return webdavUrl; }
+    public String getBackupPath() { return localPath; }
+    public long getLastSyncTime() { return lastSyncTime; }
+    public void setLastSyncTime(long lastSyncTime) { this.lastSyncTime = lastSyncTime; }
     
     /**
      * Validate configuration

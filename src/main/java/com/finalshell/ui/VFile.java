@@ -79,6 +79,13 @@ public class VFile implements Serializable {
     public int getType() { return type; }
     public void setType(int type) { this.type = type; }
     
+    // Alias method for compatibility
+    public String getId() { return String.valueOf(fileId); }
+    
+    public long getModifyTime() { 
+        return createTime != null ? createTime.getTime() : 0; 
+    }
+    
     @Override
     public String toString() {
         return name;

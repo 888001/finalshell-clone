@@ -71,6 +71,12 @@ public class AppConfig {
     private boolean autoLock = false;
     private int autoLockTime = 30;
     
+    // Additional settings
+    private boolean autoSelectTab = true;
+    private boolean autoStart = false;
+    private String defaultCharset = "UTF-8";
+    private boolean commandPrompt = true;
+    
     public AppConfig() {
     }
     
@@ -353,4 +359,17 @@ public class AppConfig {
     
     public int getAutoLockTime() { return autoLockTime; }
     public void setAutoLockTime(int autoLockTime) { this.autoLockTime = autoLockTime; }
+    
+    // Additional settings
+    public boolean isAutoSelectTab() { return autoSelectTab; }
+    public void setAutoSelectTab(boolean autoSelectTab) { this.autoSelectTab = autoSelectTab; }
+    
+    public boolean isAutoStart() { return autoStart; }
+    public void setAutoStart(boolean autoStart) { this.autoStart = autoStart; }
+    
+    public String getDefaultCharset() { return defaultCharset; }
+    public void setDefaultCharset(String defaultCharset) { this.defaultCharset = defaultCharset; }
+    
+    public boolean isCommandPrompt() { return commandPrompt; }
+    public void setCommandPrompt(boolean commandPrompt) { this.commandPrompt = commandPrompt; }
 }

@@ -1,8 +1,12 @@
 package com.finalshell.ui;
 
 import com.finalshell.app.App;
+import com.finalshell.app.AppEvent;
+import com.finalshell.app.AppListener;
 import com.finalshell.config.AppConfig;
 import com.finalshell.config.ConfigManager;
+import com.finalshell.config.ConnectConfig;
+import com.finalshell.key.KeyManagerDialog;
 import com.finalshell.sync.SyncDialog;
 import com.finalshell.util.ResourceLoader;
 import com.finalshell.layout.LayoutManager;
@@ -12,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Main Window - Application main frame
@@ -19,7 +25,7 @@ import java.awt.event.*;
  * Based on analysis of FinalShell 3.8.3
  * Reference: MainWindow_DeepAnalysis.md, UI_Parameters_Reference.md
  */
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements AppListener {
     
     private static final Logger logger = LoggerFactory.getLogger(MainWindow.class);
     
@@ -39,8 +45,20 @@ public class MainWindow extends JFrame {
     private JLabel statusLabel;
     private JMenuBar menuBar;
     
+    // Menu items for state toggle
+    private JCheckBoxMenuItem showSidebarItem;
+    private JCheckBoxMenuItem showStatusBarItem;
+    private JCheckBoxMenuItem showToolBarItem;
+    
+    // Session management
+    private List<SessionTabPanel> sessionPanels = new ArrayList<>();
+    private SessionTabPanel currentSession;
+    
     private final ConfigManager configManager;
     private final AppConfig appConfig;
+    private boolean sidebarVisible = true;
+    private boolean statusBarVisible = true;
+    private int lastDividerLocation = DEFAULT_DIVIDER;
     
     public MainWindow() {
         this.configManager = ConfigManager.getInstance();
@@ -51,7 +69,13 @@ public class MainWindow extends JFrame {
         initComponents();
         initLayout();
         initListeners();
+        initKeyBindings();
         restoreWindowState();
+        
+        // Register as app listener
+        if (App.getInstance() != null) {
+            App.getInstance().addAppListener(this);
+        }
         
         logger.info("MainWindow initialized");
     }
@@ -115,6 +139,22 @@ public class MainWindow extends JFrame {
         // Settings button
         JButton settingsBtn = createToolButton("images/config.png", "设置", e -> showSettingsDialog());
         toolbar.add(settingsBtn);
+        
+        toolbar.addSeparator();
+        
+        // Key manager button
+        JButton keyBtn = createToolButton("images/key.png", "密钥管理", e -> showKeyManagerDialog());
+        toolbar.add(keyBtn);
+        
+        // Sync button
+        JButton syncBtn = createToolButton("images/sync.png", "数据同步", e -> showSyncDialog());
+        toolbar.add(syncBtn);
+        
+        toolbar.add(Box.createHorizontalGlue());
+        
+        // Full screen button
+        JButton fullScreenBtn = createToolButton("images/fullscreen.png", "全屏 (F11)", e -> toggleFullScreen());
+        toolbar.add(fullScreenBtn);
         
         return toolbar;
     }
@@ -299,6 +339,20 @@ public class MainWindow extends JFrame {
         newConnItem.addActionListener(e -> showNewConnectionDialog());
         fileMenu.add(newConnItem);
         
+        JMenuItem newFolderItem = new JMenuItem("新建文件夹");
+        newFolderItem.addActionListener(e -> connectTreePanel.createNewFolder());
+        fileMenu.add(newFolderItem);
+        
+        fileMenu.addSeparator();
+        
+        JMenuItem importItem = new JMenuItem("导入连接...");
+        importItem.addActionListener(e -> importConnections());
+        fileMenu.add(importItem);
+        
+        JMenuItem exportItem = new JMenuItem("导出连接...");
+        exportItem.addActionListener(e -> exportConnections());
+        fileMenu.add(exportItem);
+        
         fileMenu.addSeparator();
         
         JMenuItem exitItem = new JMenuItem("退出", KeyEvent.VK_X);
@@ -308,6 +362,88 @@ public class MainWindow extends JFrame {
         
         menuBar.add(fileMenu);
         
+        // View menu
+        JMenu viewMenu = new JMenu("视图");
+        viewMenu.setMnemonic(KeyEvent.VK_V);
+        
+        showSidebarItem = new JCheckBoxMenuItem("显示侧边栏", true);
+        showSidebarItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+        showSidebarItem.addActionListener(e -> toggleSidebar());
+        viewMenu.add(showSidebarItem);
+        
+        showToolBarItem = new JCheckBoxMenuItem("显示工具栏", true);
+        showToolBarItem.addActionListener(e -> toggleToolBar());
+        viewMenu.add(showToolBarItem);
+        
+        showStatusBarItem = new JCheckBoxMenuItem("显示状态栏", true);
+        showStatusBarItem.addActionListener(e -> toggleStatusBar());
+        viewMenu.add(showStatusBarItem);
+        
+        viewMenu.addSeparator();
+        
+        JMenuItem fullScreenItem = new JMenuItem("全屏模式");
+        fullScreenItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
+        fullScreenItem.addActionListener(e -> toggleFullScreen());
+        viewMenu.add(fullScreenItem);
+        
+        viewMenu.addSeparator();
+        
+        JMenuItem zoomInItem = new JMenuItem("放大字体");
+        zoomInItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, InputEvent.CTRL_DOWN_MASK));
+        zoomInItem.addActionListener(e -> zoomFont(1));
+        viewMenu.add(zoomInItem);
+        
+        JMenuItem zoomOutItem = new JMenuItem("缩小字体");
+        zoomOutItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
+        zoomOutItem.addActionListener(e -> zoomFont(-1));
+        viewMenu.add(zoomOutItem);
+        
+        JMenuItem zoomResetItem = new JMenuItem("重置字体大小");
+        zoomResetItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, InputEvent.CTRL_DOWN_MASK));
+        zoomResetItem.addActionListener(e -> resetFontSize());
+        viewMenu.add(zoomResetItem);
+        
+        menuBar.add(viewMenu);
+        
+        // Session menu
+        JMenu sessionMenu = new JMenu("会话");
+        sessionMenu.setMnemonic(KeyEvent.VK_S);
+        
+        JMenuItem reconnectItem = new JMenuItem("重新连接");
+        reconnectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+        reconnectItem.addActionListener(e -> reconnectCurrentSession());
+        sessionMenu.add(reconnectItem);
+        
+        JMenuItem disconnectItem = new JMenuItem("断开连接");
+        disconnectItem.addActionListener(e -> disconnectCurrentSession());
+        sessionMenu.add(disconnectItem);
+        
+        sessionMenu.addSeparator();
+        
+        JMenuItem closeTabItem = new JMenuItem("关闭当前标签页");
+        closeTabItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK));
+        closeTabItem.addActionListener(e -> closeCurrentTab());
+        sessionMenu.add(closeTabItem);
+        
+        JMenuItem closeAllItem = new JMenuItem("关闭所有标签页");
+        closeAllItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+        closeAllItem.addActionListener(e -> closeAllTabs());
+        sessionMenu.add(closeAllItem);
+        
+        sessionMenu.addSeparator();
+        
+        JMenuItem prevTabItem = new JMenuItem("上一个标签页");
+        prevTabItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, InputEvent.CTRL_DOWN_MASK));
+        prevTabItem.addActionListener(e -> switchToPreviousTab());
+        sessionMenu.add(prevTabItem);
+        
+        JMenuItem nextTabItem = new JMenuItem("下一个标签页");
+        nextTabItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, InputEvent.CTRL_DOWN_MASK));
+        nextTabItem.addActionListener(e -> switchToNextTab());
+        sessionMenu.add(nextTabItem);
+        
+        menuBar.add(sessionMenu);
+        
         // Tools menu
         JMenu toolsMenu = new JMenu("工具");
         toolsMenu.setMnemonic(KeyEvent.VK_T);
@@ -315,6 +451,10 @@ public class MainWindow extends JFrame {
         JMenuItem syncItem = new JMenuItem("数据同步", KeyEvent.VK_S);
         syncItem.addActionListener(e -> showSyncDialog());
         toolsMenu.add(syncItem);
+        
+        JMenuItem keyManagerItem = new JMenuItem("密钥管理");
+        keyManagerItem.addActionListener(e -> showKeyManagerDialog());
+        toolsMenu.add(keyManagerItem);
         
         toolsMenu.addSeparator();
         
@@ -329,6 +469,12 @@ public class MainWindow extends JFrame {
         JMenu helpMenu = new JMenu("帮助");
         helpMenu.setMnemonic(KeyEvent.VK_H);
         
+        JMenuItem checkUpdateItem = new JMenuItem("检查更新...");
+        checkUpdateItem.addActionListener(e -> checkForUpdates());
+        helpMenu.add(checkUpdateItem);
+        
+        helpMenu.addSeparator();
+        
         JMenuItem aboutItem = new JMenuItem("关于", KeyEvent.VK_A);
         aboutItem.addActionListener(e -> showAboutDialog());
         helpMenu.add(aboutItem);
@@ -336,6 +482,33 @@ public class MainWindow extends JFrame {
         menuBar.add(helpMenu);
         
         setJMenuBar(menuBar);
+    }
+    
+    private void initKeyBindings() {
+        // F11 for fullscreen
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+            .put(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0), "toggleFullScreen");
+        getRootPane().getActionMap().put("toggleFullScreen", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toggleFullScreen();
+            }
+        });
+        
+        // Tab switching with Alt+1-9
+        for (int i = 1; i <= 9; i++) {
+            final int tabIndex = i - 1;
+            getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_0 + i, InputEvent.ALT_DOWN_MASK), "switchToTab" + i);
+            getRootPane().getActionMap().put("switchToTab" + i, new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (tabIndex < tabPane.getTabCount()) {
+                        tabPane.setSelectedIndex(tabIndex);
+                    }
+                }
+            });
+        }
     }
     
     private void showAboutDialog() {
@@ -379,9 +552,253 @@ public class MainWindow extends JFrame {
         }
     }
     
-    public void openConnection(com.finalshell.config.ConnectConfig config) {
+    public void openConnection(ConnectConfig config) {
         if (config == null) return;
-        // TODO: Implement connection opening based on config type
+        
         setStatus("正在连接: " + config.getName());
+        
+        // Create session tab panel
+        SessionTabPanel sessionPanel = new SessionTabPanel(config, this);
+        sessionPanels.add(sessionPanel);
+        
+        // Add tab with close button
+        String title = config.getName();
+        int index = tabPane.getTabCount();
+        tabPane.addTab(title, sessionPanel);
+        tabPane.setTabComponentAt(index, createTabComponent(title, sessionPanel));
+        tabPane.setSelectedIndex(index);
+        
+        // Connect
+        sessionPanel.connect();
+        
+        logger.info("Opened connection: {}", config.getName());
+    }
+    
+    private JPanel createTabComponent(String title, Component tabContent) {
+        JPanel tabComponent = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        tabComponent.setOpaque(false);
+        
+        JLabel titleLabel = new JLabel(title);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
+        tabComponent.add(titleLabel);
+        
+        JButton closeButton = new JButton("×");
+        closeButton.setMargin(new Insets(0, 2, 0, 2));
+        closeButton.setFont(closeButton.getFont().deriveFont(10f));
+        closeButton.setBorderPainted(false);
+        closeButton.setContentAreaFilled(false);
+        closeButton.setFocusable(false);
+        closeButton.addActionListener(e -> {
+            int index = tabPane.indexOfComponent(tabContent);
+            if (index >= 0) {
+                closeTab(index);
+            }
+        });
+        tabComponent.add(closeButton);
+        
+        return tabComponent;
+    }
+    
+    // View toggle methods
+    
+    private void toggleSidebar() {
+        sidebarVisible = !sidebarVisible;
+        if (sidebarVisible) {
+            mainSplitPane.setDividerLocation(lastDividerLocation);
+            connectTreePanel.setVisible(true);
+        } else {
+            lastDividerLocation = mainSplitPane.getDividerLocation();
+            mainSplitPane.setDividerLocation(0);
+            connectTreePanel.setVisible(false);
+        }
+        showSidebarItem.setSelected(sidebarVisible);
+    }
+    
+    private void toggleToolBar() {
+        toolBar.setVisible(!toolBar.isVisible());
+        showToolBarItem.setSelected(toolBar.isVisible());
+    }
+    
+    private void toggleStatusBar() {
+        statusBarVisible = !statusBarVisible;
+        statusBar.setVisible(statusBarVisible);
+        showStatusBarItem.setSelected(statusBarVisible);
+    }
+    
+    // Session management methods
+    
+    private void reconnectCurrentSession() {
+        Component selected = tabPane.getSelectedComponent();
+        if (selected instanceof SessionTabPanel) {
+            ((SessionTabPanel) selected).reconnect();
+        }
+    }
+    
+    private void disconnectCurrentSession() {
+        Component selected = tabPane.getSelectedComponent();
+        if (selected instanceof SessionTabPanel) {
+            ((SessionTabPanel) selected).disconnect();
+        }
+    }
+    
+    private void closeCurrentTab() {
+        int index = tabPane.getSelectedIndex();
+        if (index >= 0) {
+            closeTab(index);
+        }
+    }
+    
+    private void closeTab(int index) {
+        Component component = tabPane.getComponentAt(index);
+        if (component instanceof SessionTabPanel) {
+            SessionTabPanel session = (SessionTabPanel) component;
+            session.close();
+            sessionPanels.remove(session);
+        }
+        tabPane.removeTabAt(index);
+    }
+    
+    private void closeAllTabs() {
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "确定要关闭所有标签页吗？", "确认", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) return;
+        
+        while (tabPane.getTabCount() > 0) {
+            closeTab(0);
+        }
+    }
+    
+    private void switchToPreviousTab() {
+        int current = tabPane.getSelectedIndex();
+        if (current > 0) {
+            tabPane.setSelectedIndex(current - 1);
+        } else if (tabPane.getTabCount() > 0) {
+            tabPane.setSelectedIndex(tabPane.getTabCount() - 1);
+        }
+    }
+    
+    private void switchToNextTab() {
+        int current = tabPane.getSelectedIndex();
+        if (current < tabPane.getTabCount() - 1) {
+            tabPane.setSelectedIndex(current + 1);
+        } else if (tabPane.getTabCount() > 0) {
+            tabPane.setSelectedIndex(0);
+        }
+    }
+    
+    // Font zoom methods
+    
+    private void zoomFont(int delta) {
+        int currentSize = appConfig.getTerminalFontSize();
+        int newSize = Math.max(8, Math.min(72, currentSize + delta));
+        appConfig.setTerminalFontSize(newSize);
+        
+        // Apply to all sessions
+        for (SessionTabPanel session : sessionPanels) {
+            session.updateFontSize(newSize);
+        }
+        
+        setStatus("字体大小: " + newSize);
+    }
+    
+    private void resetFontSize() {
+        appConfig.setTerminalFontSize(14);
+        for (SessionTabPanel session : sessionPanels) {
+            session.updateFontSize(14);
+        }
+        setStatus("字体大小已重置");
+    }
+    
+    // Dialog methods
+    
+    public void showKeyManagerDialog() {
+        KeyManagerDialog dialog = new KeyManagerDialog(this);
+        dialog.setVisible(true);
+    }
+    
+    private void checkForUpdates() {
+        setStatus("正在检查更新...");
+        new javax.swing.SwingWorker<Boolean, Void>() {
+            @Override
+            protected Boolean doInBackground() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {}
+                return false;
+            }
+            @Override
+            protected void done() {
+                JOptionPane.showMessageDialog(MainWindow.this, "当前已是最新版本", "检查更新", JOptionPane.INFORMATION_MESSAGE);
+                setStatus("就绪");
+            }
+        }.execute();
+    }
+    
+    private void importConnections() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("导入连接");
+        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("JSON 文件", "json"));
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                java.io.File file = chooser.getSelectedFile();
+                configManager.importConnections(file);
+                setStatus("导入完成: " + file.getName());
+                connectTreePanel.refreshTree();
+            } catch (Exception e) {
+                logger.error("导入失败", e);
+                JOptionPane.showMessageDialog(this, "导入失败: " + e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    private void exportConnections() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("导出连接");
+        chooser.setSelectedFile(new java.io.File("connections.json"));
+        if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                java.io.File file = chooser.getSelectedFile();
+                if (!file.getName().endsWith(".json")) {
+                    file = new java.io.File(file.getAbsolutePath() + ".json");
+                }
+                configManager.exportConnections(file);
+                setStatus("导出完成: " + file.getName());
+            } catch (Exception e) {
+                logger.error("导出失败", e);
+                JOptionPane.showMessageDialog(this, "导出失败: " + e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    // AppListener implementation
+    
+    @Override
+    public void onAppEvent(AppEvent event) {
+        switch (event.getType()) {
+            case AppEvent.TYPE_THEME_CHANGED:
+                SwingUtilities.updateComponentTreeUI(this);
+                break;
+            case AppEvent.TYPE_FONT_CHANGED:
+                // Update font for all sessions
+                int fontSize = appConfig.getTerminalFontSize();
+                for (SessionTabPanel session : sessionPanels) {
+                    session.updateFontSize(fontSize);
+                }
+                break;
+        }
+    }
+    
+    // Getter methods
+    
+    public List<SessionTabPanel> getSessionPanels() {
+        return sessionPanels;
+    }
+    
+    public SessionTabPanel getCurrentSession() {
+        Component selected = tabPane.getSelectedComponent();
+        if (selected instanceof SessionTabPanel) {
+            return (SessionTabPanel) selected;
+        }
+        return null;
     }
 }

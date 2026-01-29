@@ -1,5 +1,8 @@
 package com.finalshell.ui.config;
 
+import com.finalshell.config.AppConfig;
+import com.finalshell.config.ConfigManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.nio.charset.Charset;
@@ -90,11 +93,22 @@ public class TerminalConfigPanel extends ConfigPanel {
     
     @Override
     public void apply() {
-        // TODO: 保存配置
+        AppConfig config = ConfigManager.getInstance().getAppConfig();
+        if (config != null) {
+            config.setDefaultCharset((String) charsetCombo.getSelectedItem());
+            config.setScrollbackLines((Integer) scrollbackSpinner.getValue());
+            config.setCommandPrompt(commandPrompt.isSelected());
+            ConfigManager.getInstance().saveConfig();
+        }
     }
     
     @Override
     public void reset() {
-        // TODO: 重置配置
+        AppConfig config = ConfigManager.getInstance().getAppConfig();
+        if (config != null) {
+            charsetCombo.setSelectedItem(config.getDefaultCharset());
+            scrollbackSpinner.setValue(config.getScrollbackLines());
+            commandPrompt.setSelected(config.isCommandPrompt());
+        }
     }
 }

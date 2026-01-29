@@ -1,5 +1,7 @@
 package com.finalshell.ui.config;
 
+import com.finalshell.config.AppConfig;
+import com.finalshell.config.ConfigManager;
 import com.finalshell.util.OSDetector;
 
 import javax.swing.*;
@@ -72,11 +74,32 @@ public class GeneralConfigPanel extends ConfigPanel {
     
     @Override
     public void apply() {
-        // TODO: 保存配置到ConfigManager
+        AppConfig config = ConfigManager.getInstance().getAppConfig();
+        if (config != null) {
+            config.setAutoSelectTab(autoSelectTab.isSelected());
+            config.setConfirmExit(confirmClose.isSelected());
+            if (closeToTray != null) {
+                config.setMinimizeToTray(closeToTray.isSelected());
+            }
+            if (autoStart != null) {
+                config.setAutoStart(autoStart.isSelected());
+            }
+            ConfigManager.getInstance().saveConfig();
+        }
     }
     
     @Override
     public void reset() {
-        // TODO: 从ConfigManager重新加载配置
+        AppConfig config = ConfigManager.getInstance().getAppConfig();
+        if (config != null) {
+            autoSelectTab.setSelected(config.isAutoSelectTab());
+            confirmClose.setSelected(config.isConfirmExit());
+            if (closeToTray != null) {
+                closeToTray.setSelected(config.isMinimizeToTray());
+            }
+            if (autoStart != null) {
+                autoStart.setSelected(config.isAutoStart());
+            }
+        }
     }
 }

@@ -148,6 +148,11 @@ public class FtpClient {
         upload(localPath, remotePath, null);
     }
     
+    public void download(String remotePath, String localPath) 
+            throws SftpException, JSchException, InterruptedException {
+        download(remotePath, localPath, null);
+    }
+    
     public void mkdir(String path) throws SftpException {
         mainChannel.mkdir(path);
     }

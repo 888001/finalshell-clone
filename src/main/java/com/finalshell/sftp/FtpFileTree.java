@@ -43,7 +43,7 @@ public class FtpFileTree extends JTree implements TreeWillExpandListener {
                         if (userObject instanceof RemoteFile) {
                             RemoteFile file = (RemoteFile) userObject;
                             if (!file.isDirectory()) {
-                                // TODO: 下载或打开文件
+                                openSelected();
                             }
                         }
                     }
@@ -156,55 +156,127 @@ public class FtpFileTree extends JTree implements TreeWillExpandListener {
     public void openSelected() {
         RemoteFile file = getSelectedFile();
         if (file != null && !file.isDirectory()) {
-            // TODO: Open file for editing
+            try {
+                java.io.File tempFile = java.io.File.createTempFile("ftp_", "_" + file.getName());
+                tempFile.deleteOnExit();
+                if (ftpClient != null) {
+                    ftpClient.download(file.getFullPath(), tempFile.getAbsolutePath());
+                    java.awt.Desktop.getDesktop().open(tempFile);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "打开文件失败: " + e.getMessage(), 
+                    "错误", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     
     public void downloadSelected() {
         List<RemoteFile> files = getSelectedFiles();
         if (!files.isEmpty()) {
-            // TODO: Implement download
+            JFileChooser chooser = new JFileChooser();
+            chooser.setDialogTitle("选择下载目录");
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                java.io.File destDir = chooser.getSelectedFile();
+                for (RemoteFile file : files) {
+                    try {
+                        String destPath = destDir.getAbsolutePath() + java.io.File.separator + file.getName();
+                        if (ftpClient != null) {
+                            ftpClient.download(file.getFullPath(), destPath);
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "下载失败: " + e.getMessage(), 
+                            "错误", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
         }
     }
     
     public void uploadFile() {
-        // TODO: Implement upload dialog
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("选择上传文件");
+        chooser.setMultiSelectionEnabled(true);
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            for (java.io.File file : chooser.getSelectedFiles()) {
+                uploadFile(file);
+            }
+        }
     }
     
     public void uploadFile(java.io.File file) {
         if (ftpClient != null && file != null && file.exists()) {
-            // TODO: Implement file upload
-            refresh();
+            try {
+                String remotePath = currentPath + "/" + file.getName();
+                ftpClient.upload(file.getAbsolutePath(), remotePath);
+                refresh();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "上传失败: " + e.getMessage(), 
+                    "错误", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     
     public void deleteSelected() {
         List<RemoteFile> files = getSelectedFiles();
         if (!files.isEmpty() && ftpClient != null) {
-            // TODO: Implement delete
-            refresh();
+            int result = JOptionPane.showConfirmDialog(this, 
+                "确定要删除选中的 " + files.size() + " 个文件？", 
+                "确认删除", JOptionPane.YES_NO_OPTION);
+            if (result == JOptionPane.YES_OPTION) {
+                for (RemoteFile file : files) {
+                    try {
+                        if (file.isDirectory()) {
+                            ftpClient.rmdir(file.getFullPath());
+                        } else {
+                            ftpClient.rm(file.getFullPath());
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "删除失败: " + e.getMessage(), 
+                            "错误", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+                refresh();
+            }
         }
     }
     
     public void renameSelected(String newName) {
         RemoteFile file = getSelectedFile();
         if (file != null && ftpClient != null && newName != null) {
-            // TODO: Implement rename
-            refresh();
+            try {
+                String newPath = currentPath + "/" + newName;
+                ftpClient.rename(file.getFullPath(), newPath);
+                refresh();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "重命名失败: " + e.getMessage(), 
+                    "错误", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     
     public void createFolder(String folderName) {
         if (ftpClient != null && folderName != null) {
-            // TODO: Implement create folder
-            refresh();
+            try {
+                String newPath = currentPath + "/" + folderName;
+                ftpClient.mkdir(newPath);
+                refresh();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "创建文件夹失败: " + e.getMessage(), 
+                    "错误", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     
     public void setPermissions(String permissions) {
         RemoteFile file = getSelectedFile();
         if (file != null && ftpClient != null) {
-            // TODO: Implement set permissions
+            try {
+                ftpClient.chmod(Integer.parseInt(permissions, 8), file.getFullPath());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "设置权限失败: " + e.getMessage(), 
+                    "错误", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     
