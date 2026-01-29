@@ -2,6 +2,8 @@ package com.finalshell.control;
 
 import com.alibaba.fastjson.JSONObject;
 import com.finalshell.util.DeviceUtils;
+import com.finalshell.util.DesUtilPro;
+import com.finalshell.update.UpdateChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +40,11 @@ public class ControlClient {
     private boolean isPro = false;
     private boolean isPermanent = false;
     private volatile boolean isLoginComplete = false;
+    private volatile String message = "";
+    private long expireTime = -1L;
+
+    private volatile String lastUsername;
+    private volatile String lastPassword;
     
     private ControlClient() {
         this.deviceId = DeviceUtils.getDeviceId();
@@ -61,6 +68,8 @@ public class ControlClient {
         loginThread = new Thread(() -> {
             isRunning = true;
             try {
+                lastUsername = username;
+                lastPassword = password;
                 boolean success = doLogin(username, password);
                 if (callback != null) {
                     callback.onLoginComplete(success, loginCode, isPro);
@@ -83,27 +92,45 @@ public class ControlClient {
         loginCode = 0;
         
         try {
-            // 模拟登录请求
             JSONObject request = new JSONObject();
+            request.put("ver_num", UpdateChecker.CURRENT_VERSION);
             request.put("command", "login");
             request.put("username", username);
             request.put("password", password);
             request.put("device_id", deviceId);
-            
-            // TODO: 实际HTTP请求
-            // JSONObject response = HttpTools.postRequest(request, loginUrl);
-            
-            // 模拟响应
-            loginCode = 0; // 成功
-            isPro = false;
-            isPermanent = false;
-            
-            isLoginComplete = true;
-            lastActiveTime = System.currentTimeMillis();
-            
-            return loginCode == 0;
+
+            JSONObject response = postEncryptedJson(request);
+
+            if (response == null) {
+                loginCode = -1;
+                message = "登录失败";
+                LoginDialog.message = message;
+                return false;
+            }
+
+            loginCode = response.getIntValue("code");
+            message = response.getString("msg");
+            LoginDialog.message = message != null ? message : "";
+            isPro = response.getBooleanValue("pro");
+            isPermanent = response.getBooleanValue("pf") || response.getBooleanValue("permanent");
+
+            long et = response.getLongValue("expire_time");
+            if (et <= 0) {
+                et = response.getLongValue("expire");
+            }
+            expireTime = et;
+
+            isLoginComplete = (loginCode == 1);
+            if (isLoginComplete) {
+                lastActiveTime = System.currentTimeMillis();
+            }
+
+            return isLoginComplete;
         } catch (Exception e) {
             logger.error("登录请求失败", e);
+            loginCode = -1;
+            message = "登录失败";
+            LoginDialog.message = message;
             return false;
         }
     }
@@ -114,10 +141,16 @@ public class ControlClient {
     public void checkLicense(LicenseCallback callback) {
         new Thread(() -> {
             try {
-                // 模拟检查
+                boolean refreshed = false;
+                String u = lastUsername;
+                String p = lastPassword;
+                if (u != null && !u.isEmpty() && p != null && !p.isEmpty()) {
+                    refreshed = doLogin(u, p);
+                }
+
                 boolean valid = isPro && (isPermanent || !isExpired());
                 if (callback != null) {
-                    callback.onLicenseChecked(valid, isPermanent);
+                    callback.onLicenseChecked(valid && (refreshed || isLoginComplete), isPermanent);
                 }
             } catch (Exception e) {
                 logger.error("检查授权失败", e);
@@ -130,7 +163,81 @@ public class ControlClient {
     
     private boolean isExpired() {
         // 检查过期逻辑
-        return false;
+        if (isPermanent) return false;
+        if (expireTime <= 0) return false;
+        return System.currentTimeMillis() > expireTime;
+    }
+
+    private String getServerUrl() {
+        String url = System.getProperty("control.server.url");
+        if (url != null && !url.trim().isEmpty()) {
+            return url.trim();
+        }
+        return "https://" + serverHost + ":" + serverPort + "/";
+    }
+
+    private JSONObject postEncryptedJson(JSONObject request) throws Exception {
+        Exception lastException = null;
+        int attempts = Math.max(1, maxRetries);
+        for (int i = 0; i < attempts; i++) {
+            HttpURLConnection conn = null;
+            try {
+                String urlStr = getServerUrl();
+                URL url = new URL(urlStr);
+                URLConnection connection = url.openConnection();
+
+                if (connection instanceof HttpsURLConnection) {
+                    SSLContext sslContext = createSSLContext();
+                    HttpsURLConnection https = (HttpsURLConnection) connection;
+                    https.setSSLSocketFactory(sslContext.getSocketFactory());
+                    https.setHostnameVerifier((hostname, session) -> true);
+                }
+
+                conn = (HttpURLConnection) connection;
+                conn.setRequestMethod("POST");
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(10000);
+                conn.setDoOutput(true);
+                conn.setRequestProperty("Content-Type", "application/octet-stream");
+
+                byte[] requestData = request.toJSONString().getBytes("UTF-8");
+                requestData = DesUtilPro.encryptBytes(requestData);
+
+                try (OutputStream os = conn.getOutputStream()) {
+                    os.write(requestData);
+                }
+
+                int code = conn.getResponseCode();
+                if (code != 200) {
+                    throw new IOException("HTTP Error: " + code);
+                }
+
+                byte[] responseData;
+                try (InputStream is = conn.getInputStream(); ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+                    byte[] buf = new byte[4096];
+                    int len;
+                    while ((len = is.read(buf)) > -1) {
+                        bos.write(buf, 0, len);
+                    }
+                    responseData = bos.toByteArray();
+                }
+
+                responseData = DesUtilPro.decryptBytes(responseData);
+                String text = new String(responseData, "UTF-8");
+                return JSONObject.parseObject(text);
+            } catch (Exception e) {
+                lastException = e;
+                try {
+                    Thread.sleep(100L);
+                } catch (InterruptedException ignored) {
+                }
+            } finally {
+                if (conn != null) {
+                    conn.disconnect();
+                }
+            }
+        }
+        throw lastException != null ? lastException : new Exception("request failed");
     }
     
     /**
