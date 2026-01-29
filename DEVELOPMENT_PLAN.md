@@ -490,8 +490,10 @@
     - FileTree: 增加从ConfigManager重建树、开启可编辑并将重命名持久化到ConfigManager（连接/文件夹）
     - FileTreePopupMenu/FloatPanel: 删除/新建文件夹/新建SSH等操作落盘到ConfigManager并刷新树
     - TreeWrap: 使用JLayeredPane将FloatPanel叠加到树上并随鼠标移动显示
+    - FileTree: 拖拽移动连接/文件夹后，落盘更新parentId（ConfigManager.moveConnection/moveFolder）
+    - FileTree: 文件夹展开/折叠状态记忆（FolderConfig.expanded）并在重建树后恢复
   - 待补齐/继续审计:
-    - FileTree数据源: 目前仅实现基础的ConfigManager重建/重命名落盘，仍缺少拖拽移动/展开状态记忆/节点编辑器等与3.8.3一致的细节
+    - FileTree数据源: 目前仅实现基础的ConfigManager重建/重命名落盘，仍缺少节点编辑器等与3.8.3一致的细节
     - ControlClient: 实际HTTP请求/授权校验仍为模拟实现（设计决策项，可选）
 
 ---

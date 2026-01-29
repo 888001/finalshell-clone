@@ -72,11 +72,38 @@ public class FileTree extends JTree {
         
         setDragEnabled(true);
         setDropMode(DropMode.ON_OR_INSERT);
+        setTransferHandler(new TreeTransferHandler(this));
 
         reloadFromConfigManager();
     }
     
     private void initListeners() {
+        addTreeExpansionListener(new TreeExpansionListener() {
+            @Override
+            public void treeExpanded(TreeExpansionEvent event) {
+                Object obj = ((DefaultMutableTreeNode) event.getPath().getLastPathComponent()).getUserObject();
+                if (obj instanceof VDir) {
+                    FolderConfig folder = ConfigManager.getInstance().getFolderById(((VDir) obj).getId());
+                    if (folder != null && !folder.isExpanded()) {
+                        folder.setExpanded(true);
+                        ConfigManager.getInstance().updateFolder(folder);
+                    }
+                }
+            }
+
+            @Override
+            public void treeCollapsed(TreeExpansionEvent event) {
+                Object obj = ((DefaultMutableTreeNode) event.getPath().getLastPathComponent()).getUserObject();
+                if (obj instanceof VDir) {
+                    FolderConfig folder = ConfigManager.getInstance().getFolderById(((VDir) obj).getId());
+                    if (folder != null && folder.isExpanded()) {
+                        folder.setExpanded(false);
+                        ConfigManager.getInstance().updateFolder(folder);
+                    }
+                }
+            }
+        });
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -221,6 +248,33 @@ public class FileTree extends JTree {
 
         treeModel.reload(connRootNode);
         expandPath(new TreePath(connRootNode.getPath()));
+
+        javax.swing.SwingUtilities.invokeLater(() -> applyFolderExpandedStates(connRootNode));
+    }
+
+    private void applyFolderExpandedStates(DefaultMutableTreeNode node) {
+        if (node == null) return;
+
+        Object obj = node.getUserObject();
+        if (obj instanceof VDir) {
+            FolderConfig folder = ConfigManager.getInstance().getFolderById(((VDir) obj).getId());
+            if (folder != null) {
+                TreePath path = new TreePath(node.getPath());
+                if (folder.isExpanded()) {
+                    expandPath(path);
+                } else {
+                    collapsePath(path);
+                }
+            }
+        }
+
+        java.util.Enumeration children = node.children();
+        while (children.hasMoreElements()) {
+            Object c = children.nextElement();
+            if (c instanceof DefaultMutableTreeNode) {
+                applyFolderExpandedStates((DefaultMutableTreeNode) c);
+            }
+        }
     }
 
     @Override

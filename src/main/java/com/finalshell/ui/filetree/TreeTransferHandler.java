@@ -1,9 +1,17 @@
 package com.finalshell.ui.filetree;
 
+import com.finalshell.config.ConfigManager;
+import com.finalshell.ui.VDir;
+import com.finalshell.ui.VFile;
+
 import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 树形节点拖拽处理器
@@ -15,9 +23,10 @@ public class TreeTransferHandler extends TransferHandler {
     
     private DataFlavor nodesFlavor;
     private DataFlavor[] flavors = new DataFlavor[1];
-    private DefaultMutableTreeNode[] nodesToRemove;
+    private final FileTree fileTree;
     
-    public TreeTransferHandler() {
+    public TreeTransferHandler(FileTree fileTree) {
+        this.fileTree = fileTree;
         try {
             String mimeType = DataFlavor.javaJVMLocalObjectMimeType +
                     ";class=\"" + DefaultMutableTreeNode[].class.getName() + "\"";
@@ -37,6 +46,10 @@ public class TreeTransferHandler extends TransferHandler {
         if (!support.isDataFlavorSupported(nodesFlavor)) {
             return false;
         }
+
+        if ((support.getDropAction() & MOVE) == 0) {
+            return false;
+        }
         
         JTree.DropLocation dl = (JTree.DropLocation) support.getDropLocation();
         JTree tree = (JTree) support.getComponent();
@@ -52,11 +65,32 @@ public class TreeTransferHandler extends TransferHandler {
         
         TreePath dest = dl.getPath();
         DefaultMutableTreeNode target = (DefaultMutableTreeNode) dest.getLastPathComponent();
-        TreePath path = tree.getSelectionPath();
-        if (path != null) {
-            DefaultMutableTreeNode firstNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-            if (firstNode.getChildCount() > 0 && target.getLevel() < firstNode.getLevel()) {
-                return false;
+        Object targetObject = target.getUserObject();
+        if (!(targetObject instanceof VDir) && target != fileTree.getConnRootNode()) {
+            return false;
+        }
+
+        TreePath[] selPaths = tree.getSelectionPaths();
+        if (selPaths != null) {
+            for (TreePath p : selPaths) {
+                Object comp = p.getLastPathComponent();
+                if (!(comp instanceof DefaultMutableTreeNode)) continue;
+                DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) comp;
+
+                Object selObject = selNode.getUserObject();
+                if (!(selObject instanceof VDir) && !(selObject instanceof VFile)) {
+                    return false;
+                }
+
+                if (selNode == target) {
+                    return false;
+                }
+                if (selNode.isNodeAncestor(target)) {
+                    return false;
+                }
+                if (selNode.getChildCount() > 0 && target.getLevel() < selNode.getLevel()) {
+                    return false;
+                }
             }
         }
         
@@ -68,50 +102,52 @@ public class TreeTransferHandler extends TransferHandler {
         JTree tree = (JTree) c;
         TreePath[] paths = tree.getSelectionPaths();
         if (paths != null) {
-            java.util.List<DefaultMutableTreeNode> copies = new java.util.ArrayList<>();
-            java.util.List<DefaultMutableTreeNode> toRemove = new java.util.ArrayList<>();
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode) paths[0].getLastPathComponent();
-            DefaultMutableTreeNode copy = copy(node);
-            copies.add(copy);
-            toRemove.add(node);
-            
-            for (int i = 1; i < paths.length; i++) {
-                DefaultMutableTreeNode next = (DefaultMutableTreeNode) paths[i].getLastPathComponent();
-                if (next.getLevel() < node.getLevel()) {
-                    break;
-                } else if (next.getLevel() > node.getLevel()) {
-                    copy.add(copy(next));
-                } else {
-                    copies.add(copy(next));
-                    toRemove.add(next);
+            List<DefaultMutableTreeNode> raw = new ArrayList<>();
+            Set<DefaultMutableTreeNode> set = new HashSet<>();
+            for (TreePath p : paths) {
+                Object cpt = p.getLastPathComponent();
+                if (!(cpt instanceof DefaultMutableTreeNode)) continue;
+                DefaultMutableTreeNode n = (DefaultMutableTreeNode) cpt;
+                Object uo = n.getUserObject();
+                if (!(uo instanceof VDir) && !(uo instanceof VFile)) continue;
+                raw.add(n);
+                set.add(n);
+            }
+
+            List<DefaultMutableTreeNode> selected = new ArrayList<>();
+            for (DefaultMutableTreeNode n : raw) {
+                boolean hasAncestorSelected = false;
+                TreeNode parent = n.getParent();
+                while (parent instanceof DefaultMutableTreeNode) {
+                    if (set.contains(parent)) {
+                        hasAncestorSelected = true;
+                        break;
+                    }
+                    parent = parent.getParent();
+                }
+                if (!hasAncestorSelected) {
+                    selected.add(n);
                 }
             }
-            
-            DefaultMutableTreeNode[] nodes = copies.toArray(new DefaultMutableTreeNode[0]);
-            nodesToRemove = toRemove.toArray(new DefaultMutableTreeNode[0]);
+
+            if (selected.isEmpty()) {
+                return null;
+            }
+
+            DefaultMutableTreeNode[] nodes = selected.toArray(new DefaultMutableTreeNode[0]);
             return new NodesTransferable(nodes);
         }
         return null;
     }
     
-    private DefaultMutableTreeNode copy(TreeNode node) {
-        return new DefaultMutableTreeNode(((DefaultMutableTreeNode) node).getUserObject());
-    }
-    
     @Override
     protected void exportDone(JComponent source, Transferable data, int action) {
-        if ((action & MOVE) == MOVE) {
-            JTree tree = (JTree) source;
-            DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-            for (DefaultMutableTreeNode node : nodesToRemove) {
-                model.removeNodeFromParent(node);
-            }
-        }
+        // 已在 importData 中完成节点移动，这里无需再次移除
     }
     
     @Override
     public int getSourceActions(JComponent c) {
-        return COPY_OR_MOVE;
+        return MOVE;
     }
     
     @Override
@@ -127,6 +163,10 @@ public class TreeTransferHandler extends TransferHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if (nodes == null || nodes.length == 0) {
+            return false;
+        }
         
         JTree.DropLocation dl = (JTree.DropLocation) support.getDropLocation();
         int childIndex = dl.getChildIndex();
@@ -139,10 +179,37 @@ public class TreeTransferHandler extends TransferHandler {
         if (childIndex == -1) {
             index = parent.getChildCount();
         }
-        
+
         for (DefaultMutableTreeNode node : nodes) {
+            MutableTreeNode oldParent = (MutableTreeNode) node.getParent();
+            int oldIndex = -1;
+            if (oldParent != null) {
+                oldIndex = ((DefaultMutableTreeNode) oldParent).getIndex(node);
+                model.removeNodeFromParent(node);
+            }
+
+            if (oldParent == parent && oldIndex >= 0 && oldIndex < index) {
+                index--;
+            }
+
             model.insertNodeInto(node, parent, index++);
         }
+
+        String newParentId = "root";
+        Object parentObject = parent.getUserObject();
+        if (parentObject instanceof VDir) {
+            newParentId = ((VDir) parentObject).getId();
+        }
+
+        for (DefaultMutableTreeNode node : nodes) {
+            Object obj = node.getUserObject();
+            if (obj instanceof VFile) {
+                ConfigManager.getInstance().moveConnection(((VFile) obj).getId(), newParentId);
+            } else if (obj instanceof VDir) {
+                ConfigManager.getInstance().moveFolder(((VDir) obj).getId(), newParentId);
+            }
+        }
+
         return true;
     }
     
