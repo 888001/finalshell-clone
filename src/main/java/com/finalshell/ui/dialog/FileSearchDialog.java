@@ -1,9 +1,15 @@
 package com.finalshell.ui.dialog;
 
+import com.finalshell.ssh.SSHException;
+import com.finalshell.ssh.SSHSession;
+
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -24,12 +30,19 @@ public class FileSearchDialog extends JDialog {
     private DefaultTableModel tableModel;
     private JLabel statusLabel;
     private volatile boolean searching = false;
+    private SSHSession sshSession;
+    private SwingWorker<Void, Object[]> searchWorker;
     
     private SearchCallback callback;
     
     public FileSearchDialog(Frame owner) {
         super(owner, "文件搜索", false);
         initUI();
+    }
+
+    public FileSearchDialog(Frame owner, SSHSession sshSession) {
+        this(owner);
+        this.sshSession = sshSession;
     }
     
     private void initUI() {
@@ -94,9 +107,8 @@ public class FileSearchDialog extends JDialog {
                 if (e.getClickCount() == 2) {
                     int row = resultTable.getSelectedRow();
                     if (row >= 0 && callback != null) {
-                        String path = (String) tableModel.getValueAt(row, 1);
-                        String name = (String) tableModel.getValueAt(row, 0);
-                        callback.onFileSelected(path + "/" + name);
+                        String fullPath = (String) tableModel.getValueAt(row, 1);
+                        callback.onFileSelected(fullPath);
                     }
                 }
             }
@@ -138,44 +150,131 @@ public class FileSearchDialog extends JDialog {
             JOptionPane.showMessageDialog(this, "请输入搜索关键词", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
+
+        if (sshSession == null || !sshSession.isConnected()) {
+            JOptionPane.showMessageDialog(this, "请先建立SSH连接后再搜索", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         
         searching = true;
         searchButton.setEnabled(false);
         stopButton.setEnabled(true);
         tableModel.setRowCount(0);
         statusLabel.setText("搜索中...");
-        
-        // 模拟搜索结果
-        new Thread(() -> {
-            try {
-                for (int i = 0; i < 20 && searching; i++) {
-                    final int index = i;
-                    SwingUtilities.invokeLater(() -> {
-                        tableModel.addRow(new Object[]{
-                            keyword + "_" + index + ".txt",
-                            pathField.getText(),
-                            String.format("%.1f KB", Math.random() * 100),
-                            "2026-01-21 15:00"
-                        });
-                        statusLabel.setText("找到 " + tableModel.getRowCount() + " 个文件");
-                    });
-                    Thread.sleep(200);
+
+        final String basePath = pathField.getText().trim().isEmpty() ? "/" : pathField.getText().trim();
+        final boolean recursive = recursiveCheck.isSelected();
+        final boolean caseSensitive = caseSensitiveCheck.isSelected();
+
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            .withZone(ZoneId.systemDefault());
+
+        searchWorker = new SwingWorker<Void, Object[]>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                String nameFlag = caseSensitive ? "-name" : "-iname";
+                String pattern = "*" + keyword + "*";
+
+                StringBuilder cmd = new StringBuilder();
+                cmd.append("find ");
+                cmd.append(quoteForSh(basePath));
+                if (!recursive) {
+                    cmd.append(" -maxdepth 1");
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                SwingUtilities.invokeLater(() -> {
-                    searching = false;
-                    searchButton.setEnabled(true);
-                    stopButton.setEnabled(false);
-                    statusLabel.setText("搜索完成，共找到 " + tableModel.getRowCount() + " 个文件");
-                });
+                cmd.append(" -type f ");
+                cmd.append(nameFlag);
+                cmd.append(" ");
+                cmd.append(quoteForSh(pattern));
+                cmd.append(" -printf ");
+                cmd.append(quoteForSh("%p|%s|%T@\\n"));
+
+                String output;
+                try {
+                    output = sshSession.exec(cmd.toString());
+                } catch (SSHException e) {
+                    throw e;
+                }
+
+                if (output == null || output.isEmpty()) {
+                    return null;
+                }
+
+                String[] lines = output.split("\\r?\\n");
+                for (String line : lines) {
+                    if (!searching || isCancelled()) {
+                        break;
+                    }
+                    if (line == null || line.isEmpty()) {
+                        continue;
+                    }
+
+                    String[] parts = line.split("\\|", 3);
+                    String fullPath = parts.length > 0 ? parts[0] : "";
+                    String size = parts.length > 1 ? parts[1] : "";
+                    String t = parts.length > 2 ? parts[2] : "";
+
+                    String name = fullPath;
+                    int idx = fullPath.lastIndexOf('/');
+                    if (idx >= 0 && idx < fullPath.length() - 1) {
+                        name = fullPath.substring(idx + 1);
+                    }
+
+                    String timeText = "";
+                    if (t != null && !t.isEmpty()) {
+                        try {
+                            double seconds = Double.parseDouble(t);
+                            long epochSecond = (long) seconds;
+                            timeText = formatter.format(Instant.ofEpochSecond(epochSecond));
+                        } catch (Exception ignored) {
+                        }
+                    }
+
+                    publish(new Object[]{name, fullPath, size, timeText});
+                }
+                return null;
             }
-        }).start();
+
+            @Override
+            protected void process(List<Object[]> chunks) {
+                for (Object[] row : chunks) {
+                    tableModel.addRow(row);
+                }
+                statusLabel.setText("找到 " + tableModel.getRowCount() + " 个文件");
+            }
+
+            @Override
+            protected void done() {
+                searching = false;
+                searchButton.setEnabled(true);
+                stopButton.setEnabled(false);
+                if (isCancelled()) {
+                    statusLabel.setText("已停止，共找到 " + tableModel.getRowCount() + " 个文件");
+                    return;
+                }
+                try {
+                    get();
+                    statusLabel.setText("搜索完成，共找到 " + tableModel.getRowCount() + " 个文件");
+                } catch (Exception e) {
+                    statusLabel.setText("搜索失败: " + e.getMessage());
+                }
+            }
+        };
+
+        searchWorker.execute();
     }
     
     private void stopSearch() {
         searching = false;
+        if (searchWorker != null) {
+            searchWorker.cancel(true);
+        }
+    }
+
+    private static String quoteForSh(String value) {
+        if (value == null) {
+            return "''";
+        }
+        return "'" + value.replace("'", "'\\''") + "'";
     }
     
     public void setCallback(SearchCallback callback) {
@@ -184,6 +283,10 @@ public class FileSearchDialog extends JDialog {
     
     public void setSearchPath(String path) {
         pathField.setText(path);
+    }
+
+    public void setSshSession(SSHSession sshSession) {
+        this.sshSession = sshSession;
     }
     
     public interface SearchCallback {
