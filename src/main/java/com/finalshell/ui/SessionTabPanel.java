@@ -10,6 +10,8 @@ import com.finalshell.terminal.TerminalPanel;
 import com.finalshell.terminal.QuickCommandPanel;
 import com.finalshell.terminal.ThemeManager;
 import com.finalshell.terminal.TerminalTheme;
+import com.finalshell.ui.dialog.FileSearchDialog;
+import com.finalshell.util.Tools;
 import com.finalshell.util.ResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,6 +105,30 @@ public class SessionTabPanel extends JPanel {
         rdpBtn.setToolTipText("远程桌面连接");
         rdpBtn.addActionListener(e -> showRDPDialog());
         toolbar.add(rdpBtn);
+
+        JButton searchBtn = new JButton("搜索");
+        searchBtn.setToolTipText("远程文件搜索");
+        searchBtn.addActionListener(e -> {
+            SSHSession sshSession = terminalPanel.getSSHSession();
+            if (sshSession == null || !sshSession.isConnected()) {
+                JOptionPane.showMessageDialog(SessionTabPanel.this,
+                    "请先连接SSH后再搜索文件", "提示", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            java.awt.Window w = SwingUtilities.getWindowAncestor(SessionTabPanel.this);
+            java.awt.Frame owner = (w instanceof java.awt.Frame) ? (java.awt.Frame) w : null;
+            FileSearchDialog dialog = new FileSearchDialog(owner, sshSession);
+            dialog.setSearchPath("/");
+            dialog.setCallback(filePath -> {
+                if (filePath == null) return;
+                Tools.copyToClipboard(filePath);
+                JOptionPane.showMessageDialog(SessionTabPanel.this,
+                    "已复制路径到剪贴板:\n" + filePath, "提示", JOptionPane.INFORMATION_MESSAGE);
+            });
+            dialog.setVisible(true);
+        });
+        toolbar.add(searchBtn);
         
         toolbar.addSeparator();
         
