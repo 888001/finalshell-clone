@@ -138,8 +138,16 @@ public class FloatPanel extends JPanel {
                 "确定要删除吗？", "确认删除",
                 JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
-                DefaultTreeModel model = fileTree.getTreeModel();
-                model.removeNodeFromParent(currentNode);
+                if (currentFile != null) {
+                    ConfigManager.getInstance().deleteConnection(currentFile.getId());
+                    fileTree.refreshTree();
+                } else if (currentDir != null) {
+                    ConfigManager.getInstance().removeFolder(currentDir.getId());
+                    fileTree.refreshTree();
+                } else {
+                    DefaultTreeModel model = fileTree.getTreeModel();
+                    model.removeNodeFromParent(currentNode);
+                }
             }
         }
         hide();

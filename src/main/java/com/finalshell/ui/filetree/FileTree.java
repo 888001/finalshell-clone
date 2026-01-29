@@ -2,6 +2,7 @@ package com.finalshell.ui.filetree;
 
 import com.finalshell.config.ConfigManager;
 import com.finalshell.config.ConnectConfig;
+import com.finalshell.config.FolderConfig;
 import com.finalshell.ui.*;
 import com.finalshell.util.FileSortConfig;
 
@@ -58,6 +59,7 @@ public class FileTree extends JTree {
         getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         setRootVisible(false);
         setShowsRootHandles(true);
+        setEditable(true);
         
         rootNode = (DefaultMutableTreeNode) getModel().getRoot();
         treeModel = (DefaultTreeModel) getModel();
@@ -70,6 +72,8 @@ public class FileTree extends JTree {
         
         setDragEnabled(true);
         setDropMode(DropMode.ON_OR_INSERT);
+
+        reloadFromConfigManager();
     }
     
     private void initListeners() {
@@ -141,8 +145,7 @@ public class FileTree extends JTree {
     }
     
     public void refresh() {
-        treeModel.reload();
-        expandPath(new TreePath(connRootNode.getPath()));
+        reloadFromConfigManager();
     }
     
     public void clear() {
@@ -164,6 +167,105 @@ public class FileTree extends JTree {
     
     public boolean isSearchMode() {
         return isSearchMode;
+    }
+
+    public void reloadFromConfigManager() {
+        connRootNode.removeAllChildren();
+
+        Map<String, DefaultMutableTreeNode> folderNodes = new HashMap<>();
+        java.util.List<FolderConfig> folders = ConfigManager.getInstance().getFolders();
+
+        for (FolderConfig folder : folders) {
+            VDir dir = new VDir(folder.getName());
+            dir.setId(folder.getId());
+            dir.setCreateTime(new java.sql.Timestamp(folder.getUpdateTime()));
+            DefaultMutableTreeNode folderNode = new DefaultMutableTreeNode(dir, true);
+            folderNodes.put(folder.getId(), folderNode);
+        }
+
+        for (FolderConfig folder : folders) {
+            DefaultMutableTreeNode folderNode = folderNodes.get(folder.getId());
+            String parentId = folder.getParentId();
+            if (parentId == null || parentId.isEmpty() || "root".equals(parentId)) {
+                connRootNode.add(folderNode);
+            } else {
+                DefaultMutableTreeNode parent = folderNodes.get(parentId);
+                if (parent != null) {
+                    parent.add(folderNode);
+                } else {
+                    connRootNode.add(folderNode);
+                }
+            }
+        }
+
+        for (ConnectConfig config : ConfigManager.getInstance().getConnections().values()) {
+            VFile vfile = new VFile();
+            vfile.setId(config.getId());
+            vfile.setName(config.getName());
+            vfile.setType(VFile.TYPE_FILE);
+            vfile.setCreateTime(new java.sql.Timestamp(config.getUpdateTime()));
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(vfile, false);
+
+            String folderId = config.getParentId();
+            if (folderId == null || folderId.isEmpty() || "root".equals(folderId)) {
+                connRootNode.add(node);
+            } else {
+                DefaultMutableTreeNode parent = folderNodes.get(folderId);
+                if (parent != null) {
+                    parent.add(node);
+                } else {
+                    connRootNode.add(node);
+                }
+            }
+        }
+
+        treeModel.reload(connRootNode);
+        expandPath(new TreePath(connRootNode.getPath()));
+    }
+
+    @Override
+    public void valueForPathChanged(TreePath path, Object newValue) {
+        if (path == null || !(path.getLastPathComponent() instanceof DefaultMutableTreeNode)) {
+            super.valueForPathChanged(path, newValue);
+            return;
+        }
+
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+        Object userObject = node.getUserObject();
+        String text = newValue != null ? newValue.toString().trim() : "";
+        if (text.isEmpty()) {
+            return;
+        }
+
+        if (userObject instanceof VDir) {
+            VDir dir = (VDir) userObject;
+            dir.setName(text);
+            node.setUserObject(dir);
+            treeModel.nodeChanged(node);
+
+            FolderConfig folder = ConfigManager.getInstance().getFolderById(dir.getId());
+            if (folder != null) {
+                folder.setName(text);
+                ConfigManager.getInstance().updateFolder(folder);
+            }
+            return;
+        }
+
+        if (userObject instanceof VFile) {
+            VFile vfile = (VFile) userObject;
+            vfile.setName(text);
+            node.setUserObject(vfile);
+            treeModel.nodeChanged(node);
+
+            ConnectConfig config = ConfigManager.getInstance().getConnectionById(vfile.getId());
+            if (config != null) {
+                config.setName(text);
+                ConfigManager.getInstance().saveConnection(config);
+            }
+            return;
+        }
+
+        super.valueForPathChanged(path, newValue);
     }
     
     // Alias method for compatibility

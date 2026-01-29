@@ -62,6 +62,18 @@ public class FileTreePopupMenu extends JPopupMenu {
             copyAddressItem.addActionListener(e -> copyAddress());
             add(copyAddressItem);
         }
+
+        if (userObject instanceof VDir && !isRoot) {
+            addSeparator();
+
+            JMenuItem renameItem = new JMenuItem("重命名");
+            renameItem.addActionListener(e -> rename());
+            add(renameItem);
+
+            JMenuItem deleteItem = new JMenuItem("删除");
+            deleteItem.addActionListener(e -> delete());
+            add(deleteItem);
+        }
         
         // 新建子菜单
         JMenu newMenu = new JMenu("新建");
@@ -148,6 +160,20 @@ public class FileTreePopupMenu extends JPopupMenu {
             "确定要删除吗？", "确认删除",
             JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
+            Object userObject = selectedNode.getUserObject();
+            if (userObject instanceof VFile) {
+                VFile vfile = (VFile) userObject;
+                ConfigManager.getInstance().deleteConnection(vfile.getId());
+                fileTree.refreshTree();
+                return;
+            }
+            if (userObject instanceof VDir) {
+                VDir dir = (VDir) userObject;
+                ConfigManager.getInstance().removeFolder(dir.getId());
+                fileTree.refreshTree();
+                return;
+            }
+
             DefaultTreeModel model = fileTree.getTreeModel();
             model.removeNodeFromParent(selectedNode);
         }
@@ -170,6 +196,12 @@ public class FileTreePopupMenu extends JPopupMenu {
             (java.awt.Frame) SwingUtilities.getWindowAncestor(fileTree), null);
         dialog.setVisible(true);
         if (dialog.isConfirmed()) {
+            Object userObject = selectedNode.getUserObject();
+            if (userObject instanceof VDir) {
+                ConnectConfig config = dialog.getConfig();
+                config.setParentId(((VDir) userObject).getId());
+                ConfigManager.getInstance().saveConnection(config);
+            }
             fileTree.refreshTree();
         }
     }
@@ -180,11 +212,13 @@ public class FileTreePopupMenu extends JPopupMenu {
     }
     
     private void createFolder() {
-        VDir dir = new VDir("新建文件夹");
-        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(dir);
-        DefaultTreeModel model = fileTree.getTreeModel();
-        model.insertNodeInto(newNode, selectedNode, selectedNode.getChildCount());
-        fileTree.startEditingAtPath(new TreePath(newNode.getPath()));
+        com.finalshell.config.FolderConfig folder = new com.finalshell.config.FolderConfig("新建文件夹");
+        Object userObject = selectedNode.getUserObject();
+        if (userObject instanceof VDir) {
+            folder.setParentId(((VDir) userObject).getId());
+        }
+        ConfigManager.getInstance().addFolder(folder);
+        fileTree.refreshTree();
     }
     
     private void sortByName() {

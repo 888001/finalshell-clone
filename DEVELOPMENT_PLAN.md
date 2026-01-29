@@ -487,9 +487,11 @@
     - VFile: id类型与ConnectConfig.id不匹配导致反查失败（已增加String id字段并提供setId）
     - FloatDialog/OpenPanel: 未设置listener且不刷新配置列表（已补齐listener并在show时刷新列表）
     - AllPanel: 节点仅存String导致无法打开连接（已改为存ConnectConfig并支持双击打开）
+    - FileTree: 增加从ConfigManager重建树、开启可编辑并将重命名持久化到ConfigManager（连接/文件夹）
+    - FileTreePopupMenu/FloatPanel: 删除/新建文件夹/新建SSH等操作落盘到ConfigManager并刷新树
+    - TreeWrap: 使用JLayeredPane将FloatPanel叠加到树上并随鼠标移动显示
   - 待补齐/继续审计:
-    - TreeWrap/FloatPanel: 浮动按钮面板尚未真正加入LayeredPane，UI效果可能不完整
-    - FileTree数据源: 目前未与ConfigManager真实连接/文件夹加载流程整合（addConnection等未发现调用点）
+    - FileTree数据源: 目前仅实现基础的ConfigManager重建/重命名落盘，仍缺少拖拽移动/展开状态记忆/节点编辑器等与3.8.3一致的细节
     - ControlClient: 实际HTTP请求/授权校验仍为模拟实现（设计决策项，可选）
 
 ---
