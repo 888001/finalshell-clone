@@ -7,6 +7,8 @@ import com.finalshell.config.AppConfig;
 import com.finalshell.config.ConfigManager;
 import com.finalshell.config.ConnectConfig;
 import com.finalshell.key.KeyManagerDialog;
+import com.finalshell.rdp.RDPConfig;
+import com.finalshell.rdp.RDPPanel;
 import com.finalshell.sync.SyncDialog;
 import com.finalshell.util.ResourceLoader;
 import com.finalshell.layout.LayoutManager;
@@ -556,6 +558,31 @@ public class MainWindow extends JFrame implements AppListener {
         if (config == null) return;
         
         setStatus("正在连接: " + config.getName());
+
+        if (config.getType() == ConnectConfig.TYPE_RDP) {
+            RDPConfig rdpConfig = new RDPConfig();
+            rdpConfig.setUseSshTunnel(false);
+            rdpConfig.setName(config.getName());
+            rdpConfig.setHost(config.getHost());
+            rdpConfig.setPort(config.getPort());
+            rdpConfig.setUsername(config.getUserName());
+            rdpConfig.setPassword(config.getPassword());
+            rdpConfig.setWidth(config.getRdpWidth());
+            rdpConfig.setHeight(config.getRdpHeight());
+            rdpConfig.setFullscreen(config.isRdpFullscreen());
+
+            RDPPanel rdpPanel = new RDPPanel(rdpConfig, null);
+
+            String title = config.getName();
+            int index = tabPane.getTabCount();
+            tabPane.addTab(title, rdpPanel);
+            tabPane.setTabComponentAt(index, createTabComponent(title, rdpPanel));
+            tabPane.setSelectedIndex(index);
+
+            rdpPanel.connect();
+            logger.info("Opened RDP connection: {}", config.getName());
+            return;
+        }
         
         // Create session tab panel
         SessionTabPanel sessionPanel = new SessionTabPanel(config, this);
@@ -654,8 +681,11 @@ public class MainWindow extends JFrame implements AppListener {
             SessionTabPanel session = (SessionTabPanel) component;
             session.close();
             sessionPanels.remove(session);
+        } else if (component instanceof RDPPanel) {
+            ((RDPPanel) component).close();
         }
         tabPane.removeTabAt(index);
+        logger.info("Tab closed: {}", index);
     }
     
     private void closeAllTabs() {

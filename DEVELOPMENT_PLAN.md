@@ -494,6 +494,7 @@
     - FileTree: 文件夹展开/折叠状态记忆（FolderConfig.expanded）并在重建树后恢复
     - OpenPanel: “全部/SSH/RDP”视图切换真实过滤并与搜索联动
     - FileTreePopupMenu: 新建/编辑RDP连接（RdpConfigDialog -> ConnectConfig(TYPE_RDP) -> ConfigManager.saveConnection）
+    - MainWindow: 打开RDP类型连接时走RDPPanel/RDPSession（不再错误走SSH会话面板）
   - 待补齐/继续审计:
     - FileTree数据源: 目前仅实现基础的ConfigManager重建/重命名落盘，仍缺少节点编辑器等与3.8.3一致的细节
     - ControlClient: 实际HTTP请求/授权校验仍为模拟实现（设计决策项，可选）
