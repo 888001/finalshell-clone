@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ public class OpenPanel extends JPanel {
     private JTextField searchField;
     private JToolBar toolbar;
     private OpenPanelListener listener;
+    private List<ConnectConfig> allConfigs = new ArrayList<>();
     
     public OpenPanel() {
         setLayout(new BorderLayout());
@@ -79,26 +81,48 @@ public class OpenPanel extends JPanel {
     }
     
     private void doSearch() {
-        String keyword = searchField.getText().trim();
-        if (keyword.isEmpty()) {
-            CardLayout cl = (CardLayout) containerPanel.getLayout();
-            cl.show(containerPanel, "all");
-        } else {
-            searchPanel.filter(keyword);
-            CardLayout cl = (CardLayout) containerPanel.getLayout();
-            cl.show(containerPanel, "search");
-        }
+        refreshDisplay();
     }
     
     private void showView(int view) {
         currentView = view;
-        // 切换视图模式并刷新显示
-        CardLayout cl = (CardLayout) containerPanel.getLayout();
-        cl.show(containerPanel, "all");
+        refreshDisplay();
     }
     
     public void setConfigs(List<ConnectConfig> configs) {
-        allPanel.setConfigs(configs);
+        this.allConfigs = configs != null ? new ArrayList<>(configs) : new ArrayList<>();
+        refreshDisplay();
+    }
+
+    private boolean acceptByView(ConnectConfig config) {
+        if (currentView == 2) {
+            return config != null && config.getType() == ConnectConfig.TYPE_RDP;
+        }
+        if (currentView == 1) {
+            return config != null && config.getType() != ConnectConfig.TYPE_RDP;
+        }
+        return config != null;
+    }
+
+    private void refreshDisplay() {
+        List<ConnectConfig> viewList = new ArrayList<>();
+        for (ConnectConfig config : allConfigs) {
+            if (acceptByView(config)) {
+                viewList.add(config);
+            }
+        }
+
+        allPanel.setConfigs(viewList);
+        searchPanel.setConfigs(viewList);
+
+        String keyword = searchField.getText().trim();
+        CardLayout cl = (CardLayout) containerPanel.getLayout();
+        if (keyword.isEmpty()) {
+            cl.show(containerPanel, "all");
+        } else {
+            searchPanel.filter(keyword);
+            cl.show(containerPanel, "search");
+        }
     }
     
     public void openConnection(ConnectConfig config) {

@@ -92,8 +92,10 @@ public class AllPanel extends JPanel {
         String lower = keyword.toLowerCase();
         
         for (ConnectConfig config : allConfigs) {
-            if (config.getName().toLowerCase().contains(lower) ||
-                config.getHost().toLowerCase().contains(lower)) {
+            String name = config.getName();
+            String host = config.getHost();
+            if ((name != null && name.toLowerCase().contains(lower)) ||
+                (host != null && host.toLowerCase().contains(lower))) {
                 filteredConfigs.add(config);
             }
         }

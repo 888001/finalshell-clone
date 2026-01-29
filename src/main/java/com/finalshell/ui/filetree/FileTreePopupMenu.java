@@ -2,7 +2,9 @@ package com.finalshell.ui.filetree;
 
 import com.finalshell.config.ConfigManager;
 import com.finalshell.config.ConnectConfig;
+import com.finalshell.rdp.RDPConfig;
 import com.finalshell.ui.*;
+import com.finalshell.ui.dialog.RdpConfigDialog;
 import com.finalshell.util.Tools;
 
 import javax.swing.*;
@@ -141,11 +143,40 @@ public class FileTreePopupMenu extends JPopupMenu {
             VFile vfile = (VFile) userObject;
             ConnectConfig config = ConfigManager.getInstance().getConnectionById(vfile.getId());
             if (config != null) {
-                ConnectionDialog dialog = new ConnectionDialog(
-                    (java.awt.Frame) SwingUtilities.getWindowAncestor(fileTree), config);
-                dialog.setVisible(true);
-                if (dialog.isConfirmed()) {
-                    fileTree.refreshNode(selectedNode);
+                if (config.getType() == ConnectConfig.TYPE_RDP) {
+                    java.awt.Frame owner = (java.awt.Frame) SwingUtilities.getWindowAncestor(fileTree);
+                    RDPConfig rdp = new RDPConfig();
+                    rdp.setName(config.getName());
+                    rdp.setHost(config.getHost());
+                    rdp.setPort(config.getPort());
+                    rdp.setUsername(config.getUserName());
+                    rdp.setPassword(config.getPassword());
+                    rdp.setFullScreen(config.isRdpFullscreen());
+                    rdp.setResolution(config.getRdpWidth() + "x" + config.getRdpHeight());
+                    RdpConfigDialog dialog = new RdpConfigDialog(owner, rdp);
+                    dialog.setVisible(true);
+                    if (dialog.isConfirmed()) {
+                        RDPConfig newCfg = dialog.getConfig();
+                        if (newCfg != null) {
+                            config.setName(newCfg.getName());
+                            config.setHost(newCfg.getHost());
+                            config.setPort(newCfg.getPort());
+                            config.setUserName(newCfg.getUsername());
+                            config.setPassword(newCfg.getPassword());
+                            config.setRdpWidth(newCfg.getWidth());
+                            config.setRdpHeight(newCfg.getHeight());
+                            config.setRdpFullscreen(newCfg.isFullScreen());
+                            ConfigManager.getInstance().saveConnection(config);
+                            fileTree.refreshNode(selectedNode);
+                        }
+                    }
+                } else {
+                    ConnectionDialog dialog = new ConnectionDialog(
+                        (java.awt.Frame) SwingUtilities.getWindowAncestor(fileTree), config);
+                    dialog.setVisible(true);
+                    if (dialog.isConfirmed()) {
+                        fileTree.refreshNode(selectedNode);
+                    }
                 }
             }
         }
@@ -207,8 +238,31 @@ public class FileTreePopupMenu extends JPopupMenu {
     }
     
     private void createRDP() {
-        JOptionPane.showMessageDialog(fileTree, 
-            "远程桌面功能待实现", "提示", JOptionPane.INFORMATION_MESSAGE);
+        java.awt.Frame owner = (java.awt.Frame) SwingUtilities.getWindowAncestor(fileTree);
+        RdpConfigDialog dialog = new RdpConfigDialog(owner);
+        dialog.setVisible(true);
+        if (dialog.isConfirmed()) {
+            RDPConfig rdp = dialog.getConfig();
+            if (rdp != null) {
+                ConnectConfig config = new ConnectConfig();
+                config.setType(ConnectConfig.TYPE_RDP);
+                config.setName(rdp.getName());
+                config.setHost(rdp.getHost());
+                config.setPort(rdp.getPort());
+                config.setUserName(rdp.getUsername());
+                config.setPassword(rdp.getPassword());
+                config.setRdpWidth(rdp.getWidth());
+                config.setRdpHeight(rdp.getHeight());
+                config.setRdpFullscreen(rdp.isFullScreen());
+
+                Object userObject = selectedNode.getUserObject();
+                if (userObject instanceof VDir) {
+                    config.setParentId(((VDir) userObject).getId());
+                }
+                ConfigManager.getInstance().saveConnection(config);
+            }
+            fileTree.refreshTree();
+        }
     }
     
     private void createFolder() {
