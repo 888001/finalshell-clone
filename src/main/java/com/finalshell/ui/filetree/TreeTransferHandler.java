@@ -145,7 +145,7 @@ public class TreeTransferHandler extends TransferHandler {
     
     @Override
     protected void exportDone(JComponent source, Transferable data, int action) {
-        // 已在 importData 中完成节点移动，这里无需再次移除
+        
     }
     
     @Override
