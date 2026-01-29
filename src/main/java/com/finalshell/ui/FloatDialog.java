@@ -42,6 +42,7 @@ public class FloatDialog extends JFrame {
         setLayout(new BorderLayout());
         
         openPanel = new OpenPanel();
+        openPanel.setListener(config -> mainWindow.openConnection(config));
         scrollPane = new JScrollPane(openPanel);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180)));
         add(scrollPane, BorderLayout.CENTER);
@@ -62,6 +63,7 @@ public class FloatDialog extends JFrame {
     }
     
     public void showAt(Component component, int x, int y) {
+        openPanel.setConfigs(new java.util.ArrayList<>(ConfigManager.getInstance().getConnections().values()));
         Point screenLocation = component.getLocationOnScreen();
         setLocation(screenLocation.x + x, screenLocation.y + y);
         setVisible(true);
@@ -69,6 +71,7 @@ public class FloatDialog extends JFrame {
     }
     
     public void showNearComponent(Component component) {
+        openPanel.setConfigs(new java.util.ArrayList<>(ConfigManager.getInstance().getConnections().values()));
         Point location = component.getLocationOnScreen();
         Dimension size = component.getSize();
         setLocation(location.x, location.y + size.height);

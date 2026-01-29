@@ -481,10 +481,21 @@
     - FloatDialog: 修复VFile导入路径
     - FileTreePopupMenu: 修复sortByName/sortByTime类型问题
 
+- 🔄 **P16 进行中**: 未完成功能审计与主流程补齐
+  - 已发现并开始修复:
+    - FileTree: 双击/菜单触发打开连接链路原为占位（已打通 VFile -> ConnectConfig -> OpenPanel.openConnection）
+    - VFile: id类型与ConnectConfig.id不匹配导致反查失败（已增加String id字段并提供setId）
+    - FloatDialog/OpenPanel: 未设置listener且不刷新配置列表（已补齐listener并在show时刷新列表）
+    - AllPanel: 节点仅存String导致无法打开连接（已改为存ConnectConfig并支持双击打开）
+  - 待补齐/继续审计:
+    - TreeWrap/FloatPanel: 浮动按钮面板尚未真正加入LayeredPane，UI效果可能不完整
+    - FileTree数据源: 目前未与ConfigManager真实连接/文件夹加载流程整合（addConnection等未发现调用点）
+    - ControlClient: 实际HTTP请求/授权校验仍为模拟实现（设计决策项，可选）
+
 ---
 ## 项目完成总结
 
-**FinalShell Clone 3.8.3 复刻项目已完成**
+**FinalShell Clone 3.8.3 复刻项目阶段性完成（仍有待补齐项，见P16）**
 
 ### 代码统计
 - Java源文件: 500+

@@ -14,6 +14,7 @@ public class VFile implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private long fileId;
+    private String id;
     private long parentDirId;
     private String md5;
     private long length;
@@ -80,7 +81,8 @@ public class VFile implements Serializable {
     public void setType(int type) { this.type = type; }
     
     // Alias method for compatibility
-    public String getId() { return String.valueOf(fileId); }
+    public String getId() { return id != null ? id : String.valueOf(fileId); }
+    public void setId(String id) { this.id = id; }
     
     public long getModifyTime() { 
         return createTime != null ? createTime.getTime() : 0; 

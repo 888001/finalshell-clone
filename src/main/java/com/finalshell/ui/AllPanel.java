@@ -35,6 +35,19 @@ public class AllPanel extends JPanel {
         // 文件树
         fileTree = new JTree();
         fileTree.setRootVisible(false);
+        fileTree.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() != 2) return;
+                TreePath path = fileTree.getSelectionPath();
+                if (path == null) return;
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+                Object userObject = node.getUserObject();
+                if (userObject instanceof ConnectConfig) {
+                    openPanel.openConnection((ConnectConfig) userObject);
+                }
+            }
+        });
         
         scrollPane = new JScrollPane(fileTree);
         add(scrollPane, BorderLayout.CENTER);
@@ -92,7 +105,7 @@ public class AllPanel extends JPanel {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("连接");
         
         for (ConnectConfig config : filteredConfigs) {
-            DefaultMutableTreeNode node = new DefaultMutableTreeNode(config.getName());
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(config);
             root.add(node);
         }
         

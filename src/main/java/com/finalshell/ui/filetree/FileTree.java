@@ -1,5 +1,6 @@
 package com.finalshell.ui.filetree;
 
+import com.finalshell.config.ConfigManager;
 import com.finalshell.config.ConnectConfig;
 import com.finalshell.ui.*;
 import com.finalshell.util.FileSortConfig;
@@ -115,18 +116,19 @@ public class FileTree extends JTree {
     }
     
     private void openConnection(VFile file) {
-        if (openPanel != null) {
-            File configFile = file.getFile();
-            if (configFile != null && configFile.exists()) {
-                // 通知OpenPanel打开连接
-                // openPanel.openConnection(configFile);
-            }
+        if (openPanel == null || file == null) return;
+        
+        ConnectConfig config = ConfigManager.getInstance().getConnectionById(file.getId());
+        if (config != null) {
+            openPanel.openConnection(config);
         }
     }
     
     public void addConnection(ConnectConfig config) {
         VFile vfile = new VFile();
         vfile.setName(config.getName());
+        vfile.setId(config.getId());
+        vfile.setCreateTime(new java.sql.Timestamp(config.getUpdateTime()));
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(vfile);
         connRootNode.add(node);
         treeModel.reload(connRootNode);
