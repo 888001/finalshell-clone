@@ -10,6 +10,7 @@ import com.finalshell.key.KeyManagerDialog;
 import com.finalshell.rdp.RDPConfig;
 import com.finalshell.rdp.RDPPanel;
 import com.finalshell.sync.SyncDialog;
+import com.finalshell.update.UpdateChecker;
 import com.finalshell.util.ResourceLoader;
 import com.finalshell.layout.LayoutManager;
 import org.slf4j.Logger;
@@ -748,20 +749,26 @@ public class MainWindow extends JFrame implements AppListener {
     
     private void checkForUpdates() {
         setStatus("正在检查更新...");
-        new javax.swing.SwingWorker<Boolean, Void>() {
+        UpdateChecker.getInstance().checkUpdateAsync(new UpdateChecker.UpdateCallback() {
             @Override
-            protected Boolean doInBackground() {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {}
-                return false;
+            public void onUpdateAvailable(UpdateChecker.UpdateInfo info) {
+                setStatus("发现新版本: " + info.getVersionName());
+                UpdateChecker.getInstance().showUpdateDialog(MainWindow.this, info);
+                setStatus("就绪");
             }
+
             @Override
-            protected void done() {
+            public void onNoUpdate() {
                 JOptionPane.showMessageDialog(MainWindow.this, "当前已是最新版本", "检查更新", JOptionPane.INFORMATION_MESSAGE);
                 setStatus("就绪");
             }
-        }.execute();
+
+            @Override
+            public void onError(String message) {
+                JOptionPane.showMessageDialog(MainWindow.this, "检查更新失败: " + message, "检查更新", JOptionPane.ERROR_MESSAGE);
+                setStatus("就绪");
+            }
+        });
     }
     
     private void importConnections() {
