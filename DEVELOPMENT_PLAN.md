@@ -501,7 +501,7 @@
     - SwingFXWebView: 仅占位组件（loadUrl/loadContent/导航/执行脚本未实现）
     - FileSearchDialog: 当前为模拟搜索结果（未对接SSH/SFTP远程搜索）
     - SpeedTestDialog: 当前为模拟测速（未对接真实下载/上传测速逻辑）
-    - MainWindow->检查更新: 目前为sleep模拟；UpdateChecker默认URL为example.com占位
+    - MainWindow->检查更新: 已对接UpdateChecker真实请求；但UpdateChecker默认URL为example.com占位
     - 授权/账号体系: Pro/永久授权/过期判断（isExpired）仍为占位
     - 对照3.8.3进一步核对: 连接编辑器细节、右键菜单完整性、同步/插件/更新/授权流程
 
