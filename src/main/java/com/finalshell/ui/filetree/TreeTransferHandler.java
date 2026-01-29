@@ -52,6 +52,9 @@ public class TreeTransferHandler extends TransferHandler {
         }
         
         JTree.DropLocation dl = (JTree.DropLocation) support.getDropLocation();
+        if (dl == null || dl.getPath() == null) {
+            return false;
+        }
         JTree tree = (JTree) support.getComponent();
         int dropRow = tree.getRowForPath(dl.getPath());
         int[] selRows = tree.getSelectionRows();
@@ -169,6 +172,9 @@ public class TreeTransferHandler extends TransferHandler {
         }
         
         JTree.DropLocation dl = (JTree.DropLocation) support.getDropLocation();
+        if (dl == null || dl.getPath() == null) {
+            return false;
+        }
         int childIndex = dl.getChildIndex();
         TreePath dest = dl.getPath();
         DefaultMutableTreeNode parent = (DefaultMutableTreeNode) dest.getLastPathComponent();
