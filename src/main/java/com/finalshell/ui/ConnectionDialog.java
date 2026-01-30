@@ -3,6 +3,7 @@ package com.finalshell.ui;
 import com.finalshell.config.ConfigManager;
 import com.finalshell.config.ConnectConfig;
 import com.finalshell.config.ProxyConfig;
+import com.finalshell.util.EncryptUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +40,8 @@ public class ConnectionDialog extends JDialog {
     private JLabel proxyLabel;
     private JButton proxyBtn;
     private ProxyConfig proxyConfig;
+
+    private String originalPassword;
     
     public ConnectionDialog(Frame owner, ConnectConfig config) {
         super(owner, config == null ? "新建连接" : "编辑连接", true);
@@ -210,7 +213,18 @@ public class ConnectionDialog extends JDialog {
             hostField.setText(config.getHost());
             portSpinner.setValue(config.getPort());
             userField.setText(config.getUserName());
-            passwordField.setText(config.getPassword());
+            originalPassword = config.getPassword();
+            if (originalPassword != null && !originalPassword.isEmpty()) {
+                savePasswordCheck.setSelected(true);
+                if (EncryptUtil.isDESEncrypted(originalPassword)) {
+                    passwordField.setText("");
+                } else {
+                    passwordField.setText(originalPassword);
+                }
+            } else {
+                savePasswordCheck.setSelected(false);
+                passwordField.setText("");
+            }
             privateKeyArea.setText(config.getPrivateKey());
             passphraseField.setText(config.getPassphrase());
             charsetCombo.setSelectedItem(config.getCharset());
@@ -279,7 +293,16 @@ public class ConnectionDialog extends JDialog {
         config.setUserName(user);
         
         if (savePasswordCheck.isSelected()) {
-            config.setPassword(new String(passwordField.getPassword()));
+            String newPwd = new String(passwordField.getPassword());
+            if (newPwd == null || newPwd.isEmpty()) {
+                if (isEdit) {
+                    config.setPassword(originalPassword != null ? originalPassword : "");
+                } else {
+                    config.setPassword("");
+                }
+            } else {
+                config.setPassword(newPwd);
+            }
         } else {
             config.setPassword("");
         }

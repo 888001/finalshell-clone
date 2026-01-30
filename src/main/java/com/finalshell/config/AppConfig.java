@@ -70,6 +70,10 @@ public class AppConfig {
     private boolean rememberPassword = true;
     private boolean autoLock = false;
     private int autoLockTime = 30;
+
+    private String controlLoginUsername = "";
+    private String controlLoginPassword = "";
+    private boolean controlLoginRememberPassword = false;
     
     // Additional settings
     private boolean autoSelectTab = true;
@@ -256,6 +260,30 @@ public class AppConfig {
     
     public void setProxyPort(int proxyPort) {
         this.proxyPort = proxyPort;
+    }
+
+    public String getControlLoginUsername() {
+        return controlLoginUsername;
+    }
+
+    public void setControlLoginUsername(String controlLoginUsername) {
+        this.controlLoginUsername = controlLoginUsername;
+    }
+
+    public String getControlLoginPassword() {
+        return controlLoginPassword;
+    }
+
+    public void setControlLoginPassword(String controlLoginPassword) {
+        this.controlLoginPassword = controlLoginPassword;
+    }
+
+    public boolean isControlLoginRememberPassword() {
+        return controlLoginRememberPassword;
+    }
+
+    public void setControlLoginRememberPassword(boolean controlLoginRememberPassword) {
+        this.controlLoginRememberPassword = controlLoginRememberPassword;
     }
     
     public String getProxyUser() {

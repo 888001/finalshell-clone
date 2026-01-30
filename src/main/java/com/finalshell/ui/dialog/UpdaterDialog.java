@@ -1,7 +1,10 @@
 package com.finalshell.ui.dialog;
 
+import com.finalshell.update.UpdateTools;
+
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 /**
  * 更新对话框
@@ -103,21 +106,58 @@ public class UpdaterDialog extends JDialog {
         laterButton.setEnabled(false);
         progressBar.setVisible(true);
         statusLabel.setText("正在下载更新...");
-        
+
+        if (downloadUrl == null || downloadUrl.trim().isEmpty()) {
+            statusLabel.setText("更新失败: 下载地址为空");
+            updateButton.setEnabled(true);
+            laterButton.setEnabled(true);
+            return;
+        }
+
         new Thread(() -> {
             try {
-                for (int i = 0; i <= 100; i += 2) {
-                    final int progress = i;
-                    SwingUtilities.invokeLater(() -> progressBar.setValue(progress));
-                    Thread.sleep(50);
-                }
-                
+                File destFile = File.createTempFile("finalshell_update_", ".bin");
+                destFile.deleteOnExit();
+
                 SwingUtilities.invokeLater(() -> {
-                    statusLabel.setText("下载完成，准备安装...");
-                    JOptionPane.showMessageDialog(this, 
-                        "更新下载完成，程序将重启以完成安装。", 
-                        "更新完成", JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
+                    progressBar.setValue(0);
+                    progressBar.setString("0%");
+                });
+
+                UpdateTools.downloadFile(downloadUrl, destFile, new UpdateTools.DownloadListener() {
+                    @Override
+                    public void onProgress(long downloaded, long total) {
+                        int percent = 0;
+                        if (total > 0) {
+                            percent = (int) Math.min(100, (downloaded * 100) / total);
+                        }
+                        final int p = percent;
+                        SwingUtilities.invokeLater(() -> {
+                            progressBar.setValue(p);
+                            progressBar.setString(p + "%");
+                            statusLabel.setText("正在下载更新..." + p + "%");
+                        });
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        SwingUtilities.invokeLater(() -> {
+                            statusLabel.setText("下载完成");
+                            JOptionPane.showMessageDialog(UpdaterDialog.this,
+                                "更新包已下载到: " + destFile.getAbsolutePath(),
+                                "下载完成", JOptionPane.INFORMATION_MESSAGE);
+                            dispose();
+                        });
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        SwingUtilities.invokeLater(() -> {
+                            statusLabel.setText("更新失败: " + e.getMessage());
+                            updateButton.setEnabled(true);
+                            laterButton.setEnabled(true);
+                        });
+                    }
                 });
             } catch (Exception e) {
                 SwingUtilities.invokeLater(() -> {

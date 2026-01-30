@@ -1,5 +1,10 @@
 package com.finalshell.control;
 
+import com.finalshell.app.App;
+import com.finalshell.config.AppConfig;
+import com.finalshell.config.ConfigManager;
+import com.finalshell.util.DesUtil;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -90,6 +95,88 @@ public class LoginDialog extends JDialog {
         
         // 回车登录
         getRootPane().setDefaultButton(loginButton);
+
+        loadRemembered();
+    }
+
+    private AppConfig getAppConfigSafe() {
+        try {
+            App app = App.getInstance();
+            if (app != null) {
+                AppConfig cfg = app.getAppConfig();
+                if (cfg != null) {
+                    return cfg;
+                }
+            }
+        } catch (Exception ignored) {
+        }
+
+        try {
+            return ConfigManager.getInstance().getAppConfig();
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    private void saveConfigSafe() {
+        try {
+            App app = App.getInstance();
+            if (app != null) {
+                app.saveConfig();
+                return;
+            }
+        } catch (Exception ignored) {
+        }
+
+        try {
+            ConfigManager.getInstance().saveAppConfig();
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void loadRemembered() {
+        AppConfig cfg = getAppConfigSafe();
+        if (cfg == null) {
+            return;
+        }
+
+        String u = cfg.getControlLoginUsername();
+        if (u != null && !u.trim().isEmpty()) {
+            usernameField.setText(u.trim());
+        }
+
+        boolean remember = cfg.isControlLoginRememberPassword();
+        rememberCheckBox.setSelected(remember);
+
+        if (remember) {
+            String enc = cfg.getControlLoginPassword();
+            if (enc != null && !enc.isEmpty()) {
+                String p = DesUtil.decrypt(enc);
+                if (p != null) {
+                    passwordField.setText(p);
+                }
+            }
+        }
+    }
+
+    private void persistRemembered(String username, String password) {
+        AppConfig cfg = getAppConfigSafe();
+        if (cfg == null) {
+            return;
+        }
+
+        boolean remember = rememberCheckBox.isSelected();
+
+        cfg.setControlLoginUsername(username);
+        cfg.setControlLoginRememberPassword(remember);
+        if (remember) {
+            String enc = DesUtil.encrypt(password);
+            cfg.setControlLoginPassword(enc != null ? enc : "");
+        } else {
+            cfg.setControlLoginPassword("");
+        }
+
+        saveConfigSafe();
     }
     
     private void doLogin() {
@@ -114,6 +201,7 @@ public class LoginDialog extends JDialog {
                 loginButton.setEnabled(true);
                 if (success) {
                     loggedIn = true;
+                    persistRemembered(username, password);
                     if (callback != null) {
                         callback.onLogin(username, isPro);
                     }

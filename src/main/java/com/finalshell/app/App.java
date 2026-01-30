@@ -4,6 +4,7 @@ import com.finalshell.config.AppConfig;
 import com.finalshell.config.ClientConfig;
 import com.finalshell.config.ConfigManager;
 import com.finalshell.config.FontConfigManager;
+import com.finalshell.control.CheckThread;
 import com.finalshell.history.HistoryManager;
 import com.finalshell.hotkey.HotkeyManager;
 import com.finalshell.key.SecretKeyManager;
@@ -18,6 +19,7 @@ import com.finalshell.ui.ImageManager;
 import com.finalshell.ui.LayoutConfigManager;
 import com.finalshell.ui.MainWindow;
 import com.finalshell.ui.SystemTrayManager;
+import com.finalshell.util.DesUtil;
 import com.finalshell.util.OSDetector;
 import com.finalshell.util.ResourceLoader;
 import org.slf4j.Logger;
@@ -74,6 +76,7 @@ public class App {
     private LayoutConfigManager layoutConfigManager;
     private QuickCommandManager quickCommandManager;
     private SystemTrayManager systemTrayManager;
+    private Thread controlCheckThread;
     
     // Process detection
     private DatagramSocket monitorSocket;
@@ -179,6 +182,14 @@ public class App {
                 
                 // Create main window
                 mainWindow = new MainWindow();
+
+                autoLoginControlClient();
+
+                if (controlCheckThread == null) {
+                    controlCheckThread = new Thread(new CheckThread(), "ControlCheckThread");
+                    controlCheckThread.setDaemon(true);
+                    controlCheckThread.start();
+                }
                 
                 // Initialize system tray
                 initSystemTray();
@@ -204,6 +215,33 @@ public class App {
                 System.exit(1);
             }
         });
+    }
+
+    private void autoLoginControlClient() {
+        try {
+            if (appConfig == null) {
+                return;
+            }
+            if (!appConfig.isControlLoginRememberPassword()) {
+                return;
+            }
+            String username = appConfig.getControlLoginUsername();
+            String encrypted = appConfig.getControlLoginPassword();
+            if (username == null || username.trim().isEmpty()) {
+                return;
+            }
+            if (encrypted == null || encrypted.trim().isEmpty()) {
+                return;
+            }
+            String password = DesUtil.decrypt(encrypted);
+            if (password == null || password.isEmpty()) {
+                return;
+            }
+
+            com.finalshell.control.ControlClient.getInstance().login(username.trim(), password, null);
+        } catch (Exception e) {
+            logger.debug("Auto login failed", e);
+        }
     }
     
     /**

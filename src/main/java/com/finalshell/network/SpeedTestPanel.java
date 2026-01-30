@@ -177,8 +177,18 @@ public class SpeedTestPanel extends JPanel {
                 if (!running) return;
                 
                 // 上传测试（简化版）
-                log("\n上传速度测试暂不支持");
-                SwingUtilities.invokeLater(() -> uploadSpeedLabel.setText("N/A"));
+                try {
+                    String uploadUrl = getUploadUrl(url, serverCombo.getSelectedIndex());
+                    log("\n测试上传速度...\n" + uploadUrl);
+                    SwingUtilities.invokeLater(() -> progressBar.setString("测试上传..."));
+                    double uploadSpeed = testUpload(uploadUrl);
+                    final String uploadStr = String.format("%.2f Mbps", uploadSpeed);
+                    SwingUtilities.invokeLater(() -> uploadSpeedLabel.setText(uploadStr));
+                    log("上传速度: " + uploadStr);
+                } catch (Exception e) {
+                    log("上传测速失败: " + e.getMessage());
+                    SwingUtilities.invokeLater(() -> uploadSpeedLabel.setText("N/A"));
+                }
                 
                 log("\n测试完成!");
                 
@@ -252,6 +262,77 @@ public class SpeedTestPanel extends JPanel {
             conn.disconnect();
         }
         
+        long elapsed = System.currentTimeMillis() - startTime;
+        return (totalBytes * 8.0 / 1000000) / (elapsed / 1000.0);
+    }
+
+    private String getUploadUrl(String downloadUrl, int serverIndex) {
+        if (serverIndex == 0) {
+            return "https://speed.cloudflare.com/__up";
+        }
+        if (downloadUrl != null && downloadUrl.contains("speed.cloudflare.com") && downloadUrl.contains("__down")) {
+            return "https://speed.cloudflare.com/__up";
+        }
+        return downloadUrl;
+    }
+
+    private double testUpload(String urlStr) throws Exception {
+        URL url = new URL(urlStr);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setDoOutput(true);
+        conn.setConnectTimeout(10000);
+        conn.setReadTimeout(60000);
+        conn.setRequestProperty("Content-Type", "application/octet-stream");
+        conn.setRequestProperty("User-Agent", "FinalShell SpeedTest/1.0");
+        conn.setChunkedStreamingMode(64 * 1024);
+
+        byte[] buffer = new byte[64 * 1024];
+        java.util.Random r = new java.util.Random();
+        r.nextBytes(buffer);
+
+        long startTime = System.currentTimeMillis();
+        long totalBytes = 0;
+        long lastUpdate = startTime;
+        long bytesInInterval = 0;
+
+        try (OutputStream out = conn.getOutputStream()) {
+            while (running) {
+                out.write(buffer);
+                totalBytes += buffer.length;
+                bytesInInterval += buffer.length;
+
+                long now = System.currentTimeMillis();
+                long elapsed = now - lastUpdate;
+                if (elapsed >= 500) {
+                    double speed = (bytesInInterval * 8.0 / 1000000) / (elapsed / 1000.0);
+                    final int progress = 50 + Math.min(49, (int) ((now - startTime) / 200));
+                    final String speedStr = String.format("%.2f Mbps", speed);
+                    SwingUtilities.invokeLater(() -> {
+                        progressBar.setValue(progress);
+                        uploadSpeedLabel.setText(speedStr);
+                    });
+                    lastUpdate = now;
+                    bytesInInterval = 0;
+                }
+
+                if (now - startTime > 10000) {
+                    break;
+                }
+            }
+            out.flush();
+        }
+
+        try {
+            InputStream in = conn.getInputStream();
+            if (in != null) {
+                in.close();
+            }
+        } catch (Exception ignored) {
+        } finally {
+            conn.disconnect();
+        }
+
         long elapsed = System.currentTimeMillis() - startTime;
         return (totalBytes * 8.0 / 1000000) / (elapsed / 1000.0);
     }

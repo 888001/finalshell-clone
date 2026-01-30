@@ -12,6 +12,11 @@ import java.io.*;
 import java.net.*;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Random;
 
 /**
@@ -32,6 +37,8 @@ public class ControlClient {
     private int loginCode = -1;
     private final Object syncLock = new Object();
     private long lastActiveTime = 0L;
+    private volatile long lastLicenseCheckTime = 0L;
+    private long licenseCheckIntervalMs = 10 * 60 * 1000L;
     
     private String serverHost = "localhost";
     private int serverPort = 8080;
@@ -42,6 +49,7 @@ public class ControlClient {
     private volatile boolean isLoginComplete = false;
     private volatile String message = "";
     private long expireTime = -1L;
+    private volatile SetProListener setProListener;
 
     private volatile String lastUsername;
     private volatile String lastPassword;
@@ -114,16 +122,14 @@ public class ControlClient {
             isPro = response.getBooleanValue("pro");
             isPermanent = response.getBooleanValue("pf") || response.getBooleanValue("permanent");
 
-            long et = response.getLongValue("expire_time");
-            if (et <= 0) {
-                et = response.getLongValue("expire");
-            }
-            expireTime = et;
+            expireTime = parseExpireTime(response);
 
             isLoginComplete = (loginCode == 1);
             if (isLoginComplete) {
                 lastActiveTime = System.currentTimeMillis();
             }
+
+            notifyProStatus();
 
             return isLoginComplete;
         } catch (Exception e) {
@@ -149,11 +155,13 @@ public class ControlClient {
                 }
 
                 boolean valid = isPro && (isPermanent || !isExpired());
+                notifyProStatus();
                 if (callback != null) {
                     callback.onLicenseChecked(valid && (refreshed || isLoginComplete), isPermanent);
                 }
             } catch (Exception e) {
                 logger.error("检查授权失败", e);
+                notifyProStatus();
                 if (callback != null) {
                     callback.onLicenseChecked(false, false);
                 }
@@ -164,8 +172,78 @@ public class ControlClient {
     private boolean isExpired() {
         // 检查过期逻辑
         if (isPermanent) return false;
-        if (expireTime <= 0) return false;
-        return System.currentTimeMillis() > expireTime;
+        long et = normalizeExpireTime(expireTime);
+        if (et <= 0) return false;
+        return System.currentTimeMillis() > et;
+    }
+
+    private void notifyProStatus() {
+        SetProListener listener = this.setProListener;
+        if (listener == null) {
+            return;
+        }
+        boolean valid = isPro && (isPermanent || !isExpired());
+        try {
+            listener.setProStatus(isPro, valid);
+        } catch (Exception e) {
+            logger.warn("SetProListener callback failed", e);
+        }
+    }
+
+    private long normalizeExpireTime(long et) {
+        if (et <= 0) return et;
+        if (et < 100000000000L) {
+            return et * 1000L;
+        }
+        return et;
+    }
+
+    private long parseExpireTime(JSONObject response) {
+        if (response == null) {
+            return -1L;
+        }
+
+        Object v = response.get("expire_time");
+        if (v == null) {
+            v = response.get("expire");
+        }
+        if (v == null) {
+            return -1L;
+        }
+
+        if (v instanceof Number) {
+            return normalizeExpireTime(((Number) v).longValue());
+        }
+
+        String s = String.valueOf(v).trim();
+        if (s.isEmpty() || "0".equals(s) || "-1".equals(s) || "null".equalsIgnoreCase(s)) {
+            return -1L;
+        }
+
+        try {
+            long n = Long.parseLong(s);
+            return normalizeExpireTime(n);
+        } catch (NumberFormatException ignored) {
+        }
+
+        long parsed = parseDateTimeMillis(s);
+        return parsed > 0 ? parsed : -1L;
+    }
+
+    private long parseDateTimeMillis(String s) {
+        ZoneId zone = ZoneId.systemDefault();
+        for (String pattern : new String[]{"yyyy-MM-dd HH:mm:ss", "yyyy/MM/dd HH:mm:ss", "yyyy-MM-dd" , "yyyy/MM/dd"}) {
+            try {
+                if (pattern.contains("HH")) {
+                    LocalDateTime dt = LocalDateTime.parse(s, DateTimeFormatter.ofPattern(pattern));
+                    return dt.atZone(zone).toInstant().toEpochMilli();
+                }
+                LocalDate d = LocalDate.parse(s, DateTimeFormatter.ofPattern(pattern));
+                return d.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli() - 1L;
+            } catch (DateTimeParseException ignored) {
+            }
+        }
+        return -1L;
     }
 
     private String getServerUrl() {
@@ -275,11 +353,20 @@ public class ControlClient {
     public String getDeviceId() { return deviceId; }
     
     public boolean isConnected() { return isLoginComplete; }
+
+    public void setSetProListener(SetProListener listener) {
+        this.setProListener = listener;
+        notifyProStatus();
+    }
     
     public void checkStatus() {
-        // Check status periodically
         if (isLoginComplete) {
             lastActiveTime = System.currentTimeMillis();
+            long now = lastActiveTime;
+            if (now - lastLicenseCheckTime >= licenseCheckIntervalMs) {
+                lastLicenseCheckTime = now;
+                checkLicense(null);
+            }
         }
     }
     

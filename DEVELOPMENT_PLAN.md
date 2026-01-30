@@ -497,13 +497,28 @@
     - MainWindow: 打开RDP类型连接时走RDPPanel/RDPSession（不再错误走SSH会话面板）
     - ControlClient: 已对接 DesUtilPro 加密二进制请求（JSON->加密->POST->解密->JSON；支持maxRetries重试；可通过 -Dcontrol.server.url 配置服务端）
     - FileSearchDialog: 已对接SSH远程find搜索并支持取消；SessionTabPanel工具栏增加“搜索”入口并复制路径
+    - SwingFXWebView: 已从占位组件替换为可用嵌入式浏览器（基于JEditorPane，可加载URL/HTML并支持前进后退/停止；executeScript暂不支持）
+    - 连接密码加密链路: 修复“编辑连接后直接保存导致密码二次加密/连接失败”的风险（引入 `enc:` 前缀标记并兼容旧密文识别）
   - 待补齐/继续审计:
     - FileTree数据源: 目前仅实现基础的ConfigManager重建/重命名落盘，仍缺少节点编辑器等与3.8.3一致的细节
-    - SwingFXWebView: 仅占位组件（loadUrl/loadContent/导航/执行脚本未实现）
-    - SpeedTestDialog: 当前为模拟测速（未对接真实下载/上传测速逻辑）
-    - MainWindow->检查更新: 已对接UpdateChecker真实请求；但UpdateChecker默认URL为example.com占位
-    - 授权/账号体系: Pro/永久授权/过期判断（isExpired）仍为占位
+    - ConfigManager.backup: 已修正备份清单与实际落盘不一致问题（纳入config.json/folders.json/conn目录）；仍需后续对齐3.8.3完整备份/恢复策略
+    - SwingFXWebView: 仍需对齐3.8.3的JavaFX WebView实现（JFXPanel/WebEngine，支持JavaScript对话框/执行脚本等能力）
+      - executeScript: 当前返回null，需补齐脚本执行能力
+      - onTitleChanged: 当前无触发路径，需补齐title变化回调
+    - SpeedTestDialog/SpeedTestPanel: 已替换为真实测速（HTTP Ping/下载/上传简化版）
+    - SpeedTestDialog: 仍需对齐3.8.3的实现路径（3.8.3通过ConnectConfig + SpeedTestTask/TransEventListener进行测速，UI结构为SpeedTestPanl/SpeedTestCanvas等）
+    - MainWindow->检查更新: UpdateChecker已去除example.com占位；未配置update.check.url时会提示通过-Dupdate.check.url设置
+    - 更新链路: UpdateTools.parseUpdateConfig已补齐JSON解析；UpdaterDialog已接入UpdateTools.downloadFile进行真实下载；仍需对齐3.8.3的安装/重启/平台差异处理
+    - 授权/账号体系: 已补齐expire_time多格式解析（秒/毫秒/日期字符串）与过期判断，并增加SetProListener回调注入点；App启动后已启动CheckThread守护线程，CheckThread->checkStatus会定时触发checkLicense刷新授权状态；MainWindow已注册SetProListener并在状态栏展示Pro状态；仍需对齐3.8.3的完整Pro/试用/UI联动
+      - ProIntroDialog: com.finalshell.control.ProIntroDialog已改为兼容包装器（复用com.finalshell.ui.dialog.ProIntroDialog）；后续仍需明确是否统一入口或移除重复类
+      - LoginDialog: rememberCheckBox已落地持久化（账号回填；勾选后使用DesUtil加密保存密码到AppConfig）
+      - MainWindow: 工具菜单新增“账号登录.../Pro/升级...”入口；登录成功后触发checkLicense刷新授权状态
+      - App: 若已勾选记住密码且存在保存的控制端账号，则启动后后台自动登录ControlClient（不弹窗）以恢复授权状态刷新
     - 对照3.8.3进一步核对: 连接编辑器细节、右键菜单完整性、同步/插件/更新/授权流程
+
+  - 下一步计划:
+    - 优先对齐授权/账号体系: 对照3.8.3控制与授权模块，补齐Pro/试用/UI联动入口与定时检查（CheckThread触发checkLicense、ProIntroDialog入口等）
+    - 修复连接密码加密链路: 统一前缀/避免二次加密/保证编辑-保存-连接闭环
 
 ---
 ## 项目完成总结

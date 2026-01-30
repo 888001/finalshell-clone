@@ -63,7 +63,7 @@ public class KeyChooseDialog extends JDialog {
     }
     
     private void loadKeys() {
-        List<KeyInfo> keys = com.finalshell.key.KeyManager.getInstance().getAllKeys();
+        List<KeyInfo> keys = KeyManager.getInstance().getAllKeys();
         tableModel.setKeys(keys);
     }
     

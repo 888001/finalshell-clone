@@ -107,7 +107,7 @@ public class SSHSession {
         String password = config.getPassword();
         if (password != null && !password.isEmpty()) {
             // Decrypt if encrypted
-            if (EncryptUtil.isEncrypted(password)) {
+            if (EncryptUtil.isDESEncrypted(password)) {
                 password = EncryptUtil.decryptDES(password);
             }
             session.setPassword(password);

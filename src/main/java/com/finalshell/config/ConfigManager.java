@@ -382,17 +382,37 @@ public class ConfigManager {
             if (Files.exists(connectFile)) {
                 addToZip(zos, connectFile, "connect.json");
             }
+
+            if (Files.exists(connectDir)) {
+                try (DirectoryStream<Path> stream = Files.newDirectoryStream(connectDir, "*.json")) {
+                    for (Path file : stream) {
+                        if (Files.isRegularFile(file)) {
+                            addToZip(zos, file, "conn/" + file.getFileName().toString());
+                        }
+                    }
+                }
+            }
             
             // 备份文件夹配置
             Path folderFile = configDir.resolve("folder.json");
             if (Files.exists(folderFile)) {
                 addToZip(zos, folderFile, "folder.json");
             }
+
+            Path foldersFile = configDir.resolve("folders.json");
+            if (Files.exists(foldersFile)) {
+                addToZip(zos, foldersFile, "folders.json");
+            }
             
             // 备份应用配置
             Path appFile = configDir.resolve("app.json");
             if (Files.exists(appFile)) {
                 addToZip(zos, appFile, "app.json");
+            }
+
+            Path configFile = configDir.resolve("config.json");
+            if (Files.exists(configFile)) {
+                addToZip(zos, configFile, "config.json");
             }
             
             // 备份快捷命令

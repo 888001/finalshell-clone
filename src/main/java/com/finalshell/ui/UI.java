@@ -67,8 +67,7 @@ public class UI {
     }
     
     void initMainWindowManager() {
-        mainWindowManager = new MainWindowManager();
-        mainWindowManager.initialize();
+        mainWindowManager = MainWindowManager.getInstance();
     }
     
     public static void initFonts() {

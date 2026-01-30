@@ -2,6 +2,7 @@ package com.finalshell.update;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.finalshell.ui.dialog.UpdaterDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,12 +40,20 @@ public class UpdateChecker {
     
     private UpdateChecker() {
         // 可配置的更新检查URL
-        this.updateUrl = System.getProperty("update.check.url", 
-            "https://example.com/updates/check.json");
+        String url = System.getProperty("update.check.url");
+        if (url != null && !url.trim().isEmpty()) {
+            this.updateUrl = url.trim();
+        } else {
+            this.updateUrl = null;
+        }
     }
     
     public void setUpdateUrl(String url) {
-        this.updateUrl = url;
+        if (url == null || url.trim().isEmpty()) {
+            this.updateUrl = null;
+        } else {
+            this.updateUrl = url.trim();
+        }
     }
     
     /**
@@ -80,6 +89,9 @@ public class UpdateChecker {
      * 同步检查更新
      */
     public UpdateInfo checkUpdate() throws IOException {
+        if (updateUrl == null || updateUrl.trim().isEmpty()) {
+            throw new IOException("未配置 update.check.url，请通过 -Dupdate.check.url=<更新配置URL> 设置");
+        }
         HttpURLConnection conn = null;
         try {
             URL url = new URL(updateUrl);
@@ -126,6 +138,12 @@ public class UpdateChecker {
      * 显示更新对话框
      */
     public void showUpdateDialog(Component parent, UpdateInfo info) {
+        if (parent instanceof Frame) {
+            UpdaterDialog dialog = new UpdaterDialog((Frame) parent);
+            dialog.setUpdateInfo(info.getVersionName(), info.getChangelog(), info.getDownloadUrl());
+            dialog.setVisible(true);
+            return;
+        }
         String message = String.format(
             "发现新版本: %s\n\n更新内容:\n%s\n\n是否现在下载?",
             info.getVersionName(),

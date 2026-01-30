@@ -277,10 +277,11 @@ public class FileTree extends JTree {
         }
     }
 
-    @Override
-    public void valueForPathChanged(TreePath path, Object newValue) {
+    /**
+     * Handle tree node value changes (for inline editing)
+     */
+    public void handleNodeValueChange(TreePath path, Object newValue) {
         if (path == null || !(path.getLastPathComponent() instanceof DefaultMutableTreeNode)) {
-            super.valueForPathChanged(path, newValue);
             return;
         }
 
@@ -316,10 +317,7 @@ public class FileTree extends JTree {
                 config.setName(text);
                 ConfigManager.getInstance().saveConnection(config);
             }
-            return;
         }
-
-        super.valueForPathChanged(path, newValue);
     }
     
     // Alias method for compatibility

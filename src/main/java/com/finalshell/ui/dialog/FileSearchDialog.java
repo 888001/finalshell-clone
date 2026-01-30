@@ -235,7 +235,7 @@ public class FileSearchDialog extends JDialog {
             }
 
             @Override
-            protected void process(List<Object[]> chunks) {
+            protected void process(java.util.List<Object[]> chunks) {
                 for (Object[] row : chunks) {
                     tableModel.addRow(row);
                 }

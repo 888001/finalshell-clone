@@ -1,5 +1,9 @@
 package com.finalshell.update;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -35,7 +39,101 @@ public class UpdateTools {
     
     private static UpdateConfig parseUpdateConfig(String json) {
         UpdateConfig config = new UpdateConfig();
-        // 简单解析JSON（实际应使用JSON库）
+
+        if (json == null || json.trim().isEmpty()) {
+            return config;
+        }
+
+        JSONObject root;
+        try {
+            root = JSON.parseObject(json);
+        } catch (Exception e) {
+            return config;
+        }
+
+        if (root == null) {
+            return config;
+        }
+
+        String version = root.getString("version");
+        if (version == null || version.isEmpty()) {
+            version = root.getString("version_name");
+        }
+        config.setVersion(version);
+
+        String updateUrl = root.getString("updateUrl");
+        if (updateUrl == null || updateUrl.isEmpty()) {
+            updateUrl = root.getString("update_url");
+        }
+        if (updateUrl == null || updateUrl.isEmpty()) {
+            updateUrl = root.getString("download_url");
+        }
+        config.setUpdateUrl(updateUrl);
+
+        String releaseNotes = root.getString("releaseNotes");
+        if (releaseNotes == null || releaseNotes.isEmpty()) {
+            releaseNotes = root.getString("release_notes");
+        }
+        if (releaseNotes == null || releaseNotes.isEmpty()) {
+            releaseNotes = root.getString("changelog");
+        }
+        config.setReleaseNotes(releaseNotes);
+
+        long releaseDate = root.getLongValue("releaseDate");
+        if (releaseDate <= 0) {
+            releaseDate = root.getLongValue("release_date");
+        }
+        config.setReleaseDate(releaseDate);
+
+        boolean forceUpdate = root.getBooleanValue("forceUpdate") || root.getBooleanValue("force_update");
+        config.setForceUpdate(forceUpdate);
+
+        JSONArray items = root.getJSONArray("downloadItems");
+        if (items == null) {
+            items = root.getJSONArray("download_items");
+        }
+        if (items == null) {
+            items = root.getJSONArray("files");
+        }
+        if (items != null) {
+            for (int i = 0; i < items.size(); i++) {
+                JSONObject obj = items.getJSONObject(i);
+                if (obj == null) {
+                    continue;
+                }
+
+                DownloadItem item = new DownloadItem();
+                String url = obj.getString("url");
+                item.setUrl(url);
+
+                String fileName = obj.getString("fileName");
+                if (fileName == null || fileName.isEmpty()) {
+                    fileName = obj.getString("file_name");
+                }
+                if ((fileName == null || fileName.isEmpty()) && url != null) {
+                    int idx = url.lastIndexOf('/');
+                    if (idx >= 0 && idx < url.length() - 1) {
+                        fileName = url.substring(idx + 1);
+                    }
+                }
+                item.setFileName(fileName);
+
+                String targetPath = obj.getString("targetPath");
+                if (targetPath == null || targetPath.isEmpty()) {
+                    targetPath = obj.getString("target_path");
+                }
+                item.setTargetPath(targetPath);
+
+                long size = obj.getLongValue("size");
+                item.setSize(size);
+
+                String md5 = obj.getString("md5");
+                item.setMd5(md5);
+
+                config.addDownloadItem(item);
+            }
+        }
+
         return config;
     }
     

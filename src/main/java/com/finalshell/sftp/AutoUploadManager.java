@@ -130,7 +130,7 @@ public class AutoUploadManager {
             FtpClient client = config.getFtpClient();
             if (client != null && client.isConnected()) {
                 String remotePath = config.getRemotePath() + "/" + file.getName();
-                client.upload(file.getAbsolutePath(), remotePath);
+                client.upload(file.getAbsolutePath(), remotePath, null);
                 
                 notifyUploaded(file, remotePath);
             }

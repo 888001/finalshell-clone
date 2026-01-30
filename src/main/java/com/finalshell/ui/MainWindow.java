@@ -6,10 +6,14 @@ import com.finalshell.app.AppListener;
 import com.finalshell.config.AppConfig;
 import com.finalshell.config.ConfigManager;
 import com.finalshell.config.ConnectConfig;
+import com.finalshell.control.ControlClient;
+import com.finalshell.control.LoginDialog;
+import com.finalshell.control.SetProListener;
 import com.finalshell.key.KeyManagerDialog;
 import com.finalshell.rdp.RDPConfig;
 import com.finalshell.rdp.RDPPanel;
 import com.finalshell.sync.SyncDialog;
+import com.finalshell.ui.dialog.ProIntroDialog;
 import com.finalshell.update.UpdateChecker;
 import com.finalshell.util.ResourceLoader;
 import com.finalshell.layout.LayoutManager;
@@ -46,6 +50,7 @@ public class MainWindow extends JFrame implements AppListener {
     private JToolBar toolBar;
     private JPanel statusBar;
     private JLabel statusLabel;
+    private JLabel proLabel;
     private JMenuBar menuBar;
     
     // Menu items for state toggle
@@ -70,6 +75,7 @@ public class MainWindow extends JFrame implements AppListener {
         initFrame();
         initMenuBar();
         initComponents();
+        initProStatusListener();
         initLayout();
         initListeners();
         initKeyBindings();
@@ -208,11 +214,49 @@ public class MainWindow extends JFrame implements AppListener {
         
         statusLabel = new JLabel("就绪");
         statusPanel.add(statusLabel, BorderLayout.WEST);
+
+        proLabel = new JLabel(" ");
+        proLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        statusPanel.add(proLabel, BorderLayout.CENTER);
         
         JLabel versionLabel = new JLabel("v1.0.0");
         statusPanel.add(versionLabel, BorderLayout.EAST);
         
         return statusPanel;
+    }
+
+    private void initProStatusListener() {
+        ControlClient.getInstance().setSetProListener(new SetProListener() {
+            private volatile boolean pro;
+            private volatile boolean valid;
+
+            @Override
+            public void setProStatus(boolean isPro, boolean isValid) {
+                this.pro = isPro;
+                this.valid = isValid;
+                SwingUtilities.invokeLater(() -> {
+                    if (proLabel != null) {
+                        if (!pro) {
+                            proLabel.setText("Free");
+                        } else if (valid) {
+                            proLabel.setText("Pro");
+                        } else {
+                            proLabel.setText("Pro(无效)");
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public boolean isPro() {
+                return pro;
+            }
+
+            @Override
+            public boolean isProValid() {
+                return valid;
+            }
+        });
     }
     
     private void initLayout() {
@@ -327,6 +371,17 @@ public class MainWindow extends JFrame implements AppListener {
     
     public void showSyncDialog() {
         SyncDialog dialog = new SyncDialog(this);
+        dialog.setVisible(true);
+    }
+
+    public void showLoginDialog() {
+        LoginDialog dialog = new LoginDialog(this);
+        dialog.setCallback((username, isPro) -> ControlClient.getInstance().checkLicense(null));
+        dialog.setVisible(true);
+    }
+
+    public void showProIntroDialog() {
+        ProIntroDialog dialog = new ProIntroDialog(this);
         dialog.setVisible(true);
     }
     
@@ -458,6 +513,16 @@ public class MainWindow extends JFrame implements AppListener {
         JMenuItem keyManagerItem = new JMenuItem("密钥管理");
         keyManagerItem.addActionListener(e -> showKeyManagerDialog());
         toolsMenu.add(keyManagerItem);
+
+        toolsMenu.addSeparator();
+
+        JMenuItem loginItem = new JMenuItem("账号登录...");
+        loginItem.addActionListener(e -> showLoginDialog());
+        toolsMenu.add(loginItem);
+
+        JMenuItem proItem = new JMenuItem("Pro/升级...");
+        proItem.addActionListener(e -> showProIntroDialog());
+        toolsMenu.add(proItem);
         
         toolsMenu.addSeparator();
         

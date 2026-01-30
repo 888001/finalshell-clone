@@ -33,7 +33,7 @@ public class TopTable extends JTable {
     }
     
     public TopRow getSelectedTopRow() {
-        int row = super.getSelectedRow();
+        int row = getSelectedRow();
         if (row >= 0) {
             int modelRow = convertRowIndexToModel(row);
             return tableModel.getRowAt(modelRow);
