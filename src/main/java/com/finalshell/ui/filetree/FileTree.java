@@ -45,7 +45,14 @@ public class FileTree extends JTree {
     private HashSet<VDir> expandedDirs = new HashSet<>();
     
     public FileTree(OpenPanel openPanel, boolean forSearch) {
-        super(new DefaultMutableTreeNode("treeroot", true));
+        treeModel = new DefaultTreeModel(new DefaultMutableTreeNode("treeroot", true)) {
+            @Override
+            public void valueForPathChanged(TreePath path, Object newValue) {
+                handleNodeValueChange(path, newValue);
+            }
+        };
+        setModel(treeModel);
+        
         this.isSearchMode = forSearch;
         this.openPanel = openPanel;
         
@@ -60,9 +67,8 @@ public class FileTree extends JTree {
         setRootVisible(false);
         setShowsRootHandles(true);
         setEditable(true);
-        
-        rootNode = (DefaultMutableTreeNode) getModel().getRoot();
-        treeModel = (DefaultTreeModel) getModel();
+
+        rootNode = (DefaultMutableTreeNode) treeModel.getRoot();
         
         connRootNode = new DefaultMutableTreeNode("连接", true);
         rootNode.add(connRootNode);

@@ -47,6 +47,7 @@ public class TreeTransferHandler extends TransferHandler {
             return false;
         }
 
+        // 检查拖拽动作
         if ((support.getDropAction() & MOVE) == 0) {
             return false;
         }

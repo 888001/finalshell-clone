@@ -1,21 +1,34 @@
 package com.finalshell.util;
 
-import java.io.Serializable;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.JOptionPane;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * 文件排序配置
+ * 文件排序配置 - 对齐原版myssh实现
  * 
- * Based on analysis of FinalShell 3.8.3
- * Reference: Browser_Theme_IP_Analysis.md - FileSortConfig
+ * Based on analysis of myssh/FileSortConfig.java (136行)
+ * 支持JSON持久化和文件顺序管理
  */
-public class FileSortConfig implements Serializable {
+public class FileSortConfig {
     
-    private static final long serialVersionUID = 1L;
+    private static final Logger logger = LoggerFactory.getLogger(FileSortConfig.class);
     
     public static final int SORT_BY_NAME = 0;
     public static final int SORT_BY_SIZE = 1;
     public static final int SORT_BY_TIME = 2;
     public static final int SORT_BY_TYPE = 3;
+    
+    private String configFilePath;
+    private Map<String, Integer> fileOrderMap = new HashMap<>();
     
     private int sortBy = SORT_BY_NAME;
     private boolean ascending = true;
@@ -25,9 +38,131 @@ public class FileSortConfig implements Serializable {
     
     public FileSortConfig() {}
     
+    public FileSortConfig(String configFilePath) {
+        this.configFilePath = configFilePath;
+    }
+    
     public FileSortConfig(int sortBy, boolean ascending) {
         this.sortBy = sortBy;
         this.ascending = ascending;
+    }
+    
+    /**
+     * 从JSON文件加载配置 - 对齐原版myssh
+     */
+    public void loadConfig() throws Exception {
+        if (configFilePath == null) return;
+        
+        String content = readFileContent(configFilePath);
+        JSONObject json = JSONObject.parseObject(content);
+        JSONArray fileList = json.getJSONArray("file_list");
+        
+        if (fileList != null) {
+            for (int i = 0; i < fileList.size(); i++) {
+                JSONObject fileInfo = fileList.getJSONObject(i);
+                String path = fileInfo.getString("path");
+                int order = fileInfo.getIntValue("order");
+                
+                // 验证文件是否存在（对齐原版逻辑）
+                File file = new File(path);
+                if (file.exists()) {
+                    fileOrderMap.put(path, order);
+                }
+            }
+        }
+        logger.info("已加载文件排序配置: {} 个文件", fileOrderMap.size());
+    }
+    
+    /**
+     * 保存配置到JSON文件 - 对齐原版myssh
+     */
+    public void saveConfig() throws Exception {
+        if (configFilePath == null) return;
+        
+        JSONObject json = new JSONObject();
+        JSONArray fileList = new JSONArray();
+        json.put("file_list", fileList);
+        
+        for (Map.Entry<String, Integer> entry : fileOrderMap.entrySet()) {
+            JSONObject fileInfo = new JSONObject();
+            fileInfo.put("path", entry.getKey());
+            fileInfo.put("order", entry.getValue());
+            fileList.add(fileInfo);
+        }
+        
+        writeFileContent(json.toJSONString().getBytes(StandardCharsets.UTF_8), configFilePath);
+        logger.info("已保存文件排序配置: {} 个文件", fileOrderMap.size());
+    }
+    
+    /**
+     * 设置文件顺序
+     */
+    public void setFileOrder(String path, int order) {
+        fileOrderMap.put(path, order);
+    }
+    
+    /**
+     * 获取文件顺序
+     */
+    public int getFileOrder(File file) {
+        String path = file.getAbsolutePath();
+        return fileOrderMap.getOrDefault(path, 0);
+    }
+    
+    /**
+     * 写入文件内容 - 对齐原版myssh实现
+     */
+    private void writeFileContent(byte[] data, String path) throws Exception {
+        File dir = new File(path).getParentFile();
+        if (dir != null && !dir.exists()) {
+            dir.mkdirs();
+        }
+        
+        String systemName = System.getProperty("os.name").toLowerCase();
+        try (FileOutputStream fos = new FileOutputStream(path)) {
+            fos.write(data);
+        } catch (Exception e) {
+            if (systemName.contains("windows")) {
+                JOptionPane.showMessageDialog(null, 
+                    "保存配置文件失败,请以管理员身份运行! " + path);
+            }
+            throw e;
+        }
+    }
+    
+    /**
+     * 读取文件内容 - 对齐原版myssh实现
+     */
+    public static String readFileContent(String path) throws Exception {
+        String str = null;
+        FileInputStream fis = null;
+        DataInputStream dis = null;
+        
+        try {
+            File file = new File(path);
+            int length = (int) file.length();
+            byte[] data = new byte[length];
+            fis = new FileInputStream(file);
+            dis = new DataInputStream(fis);
+            dis.readFully(data);
+            str = new String(data, StandardCharsets.UTF_8);
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    logger.error("关闭文件流失败", e);
+                }
+            }
+            if (dis != null) {
+                try {
+                    dis.close();
+                } catch (IOException e) {
+                    logger.error("关闭数据流失败", e);
+                }
+            }
+        }
+        return str;
     }
     
     public int compare(String name1, long size1, long time1, boolean isDir1,
@@ -102,5 +237,30 @@ public class FileSortConfig implements Serializable {
             case SORT_BY_TYPE: return "类型";
             default: return "名称";
         }
+    }
+    
+    // 对齐原版myssh的getter/setter方法
+    public String getConfigFilePath() {
+        return configFilePath;
+    }
+    
+    public void setConfigFilePath(String configFilePath) {
+        this.configFilePath = configFilePath;
+    }
+    
+    public Map<String, Integer> getFileOrderMap() {
+        return new HashMap<>(fileOrderMap);
+    }
+    
+    public void clearFileOrder() {
+        fileOrderMap.clear();
+    }
+    
+    public boolean hasFileOrder(String path) {
+        return fileOrderMap.containsKey(path);
+    }
+    
+    public int getFileOrderCount() {
+        return fileOrderMap.size();
     }
 }

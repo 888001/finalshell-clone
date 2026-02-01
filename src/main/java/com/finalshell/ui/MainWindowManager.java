@@ -82,12 +82,48 @@ public class MainWindowManager {
     }
     
     /**
-     * 批量执行操作
+     * 批量执行操作 - 对齐原版myssh
      */
     public void batchExecute(BatchExecutable executable) {
-        for (MainWindow window : windowList) {
+        // 创建窗口副本以避免并发修改
+        Map<Integer, MainWindow> windowCopy = new HashMap<>(windowMap);
+        for (MainWindow window : windowCopy.values()) {
             executable.execute(window);
         }
+    }
+    
+    /**
+     * 批量执行操作（使用原版myssh的接口名称）
+     */
+    public void executeOnAllWindows(BatchExecutable executable) {
+        batchExecute(executable);
+    }
+    
+    /**
+     * 刷新指定名称的窗口
+     */
+    public void refreshWindowByName(String name) {
+        batchExecute(new BatchExecutable() {
+            @Override
+            public void execute(MainWindow window) {
+                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        window.repaint();
+                        window.revalidate();
+                    }
+                });
+            }
+        });
+    }
+    
+    /**
+     * 刷新所有窗口标题栏
+     */
+    public void refreshAllWindowTitles() {
+        batchExecute(window -> {
+            window.updateTitle();
+        });
     }
     
     /**
@@ -177,6 +213,60 @@ public class MainWindowManager {
             window.toFront();
             setCurrentWindow(window);
         }
+    }
+    
+    /**
+     * 获取窗口映射表副本 - 对齐原版myssh
+     */
+    public Map<Integer, MainWindow> getWindowMapCopy() {
+        synchronized (windowMap) {
+            return new HashMap<>(windowMap);
+        }
+    }
+    
+    /**
+     * 获取最近访问的窗口 - 对齐原版myssh
+     */
+    public MainWindow getMostRecentWindow() {
+        if (!windowList.isEmpty()) {
+            currentWindow = windowList.get(windowList.size() - 1);
+        }
+        return currentWindow;
+    }
+    
+    /**
+     * 将窗口移动到最前 - 对齐原版myssh
+     */
+    public void moveWindowToFront(MainWindow window) {
+        windowList.remove(window);
+        windowList.add(window);
+        currentWindow = window;
+    }
+    
+    /**
+     * 检查窗口是否已注册
+     */
+    public boolean isWindowRegistered(MainWindow window) {
+        return windowList.contains(window);
+    }
+    
+    /**
+     * 获取窗口ID
+     */
+    public Integer getWindowId(MainWindow window) {
+        for (Map.Entry<Integer, MainWindow> entry : windowMap.entrySet()) {
+            if (entry.getValue() == window) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * 根据ID获取窗口
+     */
+    public MainWindow getWindowById(Integer id) {
+        return windowMap.get(id);
     }
     
     /**

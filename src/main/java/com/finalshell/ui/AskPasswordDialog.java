@@ -48,66 +48,117 @@ public class AskPasswordDialog extends JDialog {
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         String host = connectConfig != null ? connectConfig.getHost() : "服务器";
         JLabel infoLabel = new JLabel("请输入 " + host + " 的密码:");
+        infoLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         mainPanel.add(infoLabel, gbc);
         
-        // 密码标签
+        // 密码输入框标签
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 1;
-        mainPanel.add(new JLabel("密码:"), gbc);
+        gbc.fill = GridBagConstraints.NONE;
+        JLabel passwordLabel = new JLabel("输入密码:");
+        mainPanel.add(passwordLabel, gbc);
         
         // 密码输入框
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1;
+        gbc.gridx = 1; gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
         passwordField = new JPasswordField(20);
-        passwordField.addActionListener(e -> confirm());
+        passwordField.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+        passwordField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    confirmPassword();
+                }
+            }
+        });
         mainPanel.add(passwordField, gbc);
         
-        // 记住密码
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2; gbc.weightx = 0;
-        rememberCheckbox = new JCheckBox("记住密码", true);
+        // 记住密码复选框
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0.0;
+        rememberCheckbox = new JCheckBox("记住密码", false);
+        rememberCheckbox.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
         mainPanel.add(rememberCheckbox, gbc);
         
-        setLayout(new BorderLayout());
-        add(mainPanel, BorderLayout.CENTER);
-        
         // 按钮面板
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         
-        JButton okBtn = new JButton("确定");
-        okBtn.addActionListener(e -> confirm());
-        buttonPanel.add(okBtn);
+        JButton okButton = new JButton("确定");
+        okButton.setPreferredSize(new Dimension(80, 30));
+        okButton.addActionListener(e -> confirmPassword());
         
-        JButton cancelBtn = new JButton("取消");
-        cancelBtn.addActionListener(e -> {
+        JButton cancelButton = new JButton("取消");
+        cancelButton.setPreferredSize(new Dimension(80, 30));
+        cancelButton.addActionListener(e -> {
             confirmed = false;
-            dispose();
+            setVisible(false);
         });
-        buttonPanel.add(cancelBtn);
         
-        add(buttonPanel, BorderLayout.SOUTH);
+        buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
+        mainPanel.add(buttonPanel, gbc);
         
-        // ESC关闭
-        getRootPane().registerKeyboardAction(
-            e -> dispose(),
-            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-            JComponent.WHEN_IN_FOCUSED_WINDOW
-        );
+        add(mainPanel, BorderLayout.CENTER);
     }
     
-    private void confirm() {
-        password = new String(passwordField.getPassword());
+    public AskPasswordDialog(Window owner, ConnectConfig config, int command) {
+        this(owner, config);
         
-        if (password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "请输入密码", "错误", JOptionPane.ERROR_MESSAGE);
+        // 根据命令显示不同的提示信息
+        String message = "";
+        switch (command) {
+            case CMD_INPUT_PASSWORD:
+                message = "输入密码";
+                break;
+            case CMD_LOGIN_DENIED:
+                message = "禁止登录!";
+                break;
+            case CMD_CHANGE_PASSWORD:
+                message = "需要修改密码";
+                break;
+            default:
+                message = "输入密码";
+                break;
+        }
+        
+        if (command != CMD_INPUT_PASSWORD) {
+            JLabel msgLabel = new JLabel(message);
+            msgLabel.setForeground(new Color(200, 50, 50));
+            msgLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+            add(msgLabel, BorderLayout.NORTH);
+        }
+    }
+    
+    private void confirmPassword() {
+        char[] passwordChars = passwordField.getPassword();
+        password = new String(passwordChars);
+        
+        if (password.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "密码不能为空!", 
+                "错误", 
+                JOptionPane.ERROR_MESSAGE);
+            passwordField.requestFocus();
             return;
         }
         
-        // 如果选择记住密码，加密保存
+        // 如果选择记住密码，加密存储
         if (rememberCheckbox.isSelected() && connectConfig != null) {
-            String encrypted = DesUtil.encrypt(password);
-            connectConfig.setEncryptedPassword(encrypted);
+            try {
+                String encryptedPassword = DesUtil.encrypt(password);
+                connectConfig.setPassword(encryptedPassword);
+                connectConfig.save();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         
         confirmed = true;
-        dispose();
+        setVisible(false);
     }
     
     public String getPassword() {

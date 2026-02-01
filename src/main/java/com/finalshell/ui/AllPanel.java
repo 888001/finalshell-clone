@@ -88,19 +88,51 @@ public class AllPanel extends JPanel {
     }
     
     public void filter(String keyword) {
+        filter(keyword, 0);
+    }
+
+    public void filter(String keyword, int filterType) {
         filteredConfigs.clear();
         String lower = keyword.toLowerCase();
         
         for (ConnectConfig config : allConfigs) {
-            String name = config.getName();
-            String host = config.getHost();
-            if ((name != null && name.toLowerCase().contains(lower)) ||
-                (host != null && host.toLowerCase().contains(lower))) {
+            if (match(config, lower, filterType)) {
                 filteredConfigs.add(config);
             }
         }
         
         refreshTree();
+    }
+
+    private boolean match(ConnectConfig config, String lower, int filterType) {
+        if (config == null) {
+            return false;
+        }
+
+        String name = config.getName();
+        String host = config.getHost();
+        String port = String.valueOf(config.getPort());
+        String userName = config.getUserName();
+        String memo = config.getMemo();
+
+        switch (filterType) {
+            case 1:
+                return name != null && name.toLowerCase().contains(lower);
+            case 2:
+                return host != null && host.toLowerCase().contains(lower);
+            case 3:
+                return port.toLowerCase().contains(lower);
+            case 4:
+                return userName != null && userName.toLowerCase().contains(lower);
+            case 5:
+                return memo != null && memo.toLowerCase().contains(lower);
+            default:
+                return (name != null && name.toLowerCase().contains(lower))
+                    || (host != null && host.toLowerCase().contains(lower))
+                    || port.toLowerCase().contains(lower)
+                    || (userName != null && userName.toLowerCase().contains(lower))
+                    || (memo != null && memo.toLowerCase().contains(lower));
+        }
     }
     
     private void refreshTree() {

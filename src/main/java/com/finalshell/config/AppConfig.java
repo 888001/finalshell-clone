@@ -74,6 +74,9 @@ public class AppConfig {
     private String controlLoginUsername = "";
     private String controlLoginPassword = "";
     private boolean controlLoginRememberPassword = false;
+
+    private boolean closeWindowAfterConnect = false;
+    private int openPanelSearchFilterType = 0;
     
     // Additional settings
     private boolean autoSelectTab = true;
@@ -387,6 +390,12 @@ public class AppConfig {
     
     public int getAutoLockTime() { return autoLockTime; }
     public void setAutoLockTime(int autoLockTime) { this.autoLockTime = autoLockTime; }
+    
+    public boolean isCloseWindowAfterConnect() { return closeWindowAfterConnect; }
+    public void setCloseWindowAfterConnect(boolean closeWindowAfterConnect) { this.closeWindowAfterConnect = closeWindowAfterConnect; }
+    
+    public int getOpenPanelSearchFilterType() { return openPanelSearchFilterType; }
+    public void setOpenPanelSearchFilterType(int openPanelSearchFilterType) { this.openPanelSearchFilterType = openPanelSearchFilterType; }
     
     // Additional settings
     public boolean isAutoSelectTab() { return autoSelectTab; }

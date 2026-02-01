@@ -1,86 +1,88 @@
 package com.finalshell.network;
 
 /**
- * IP地理位置信息
+ * IP地理位置信息 - 对齐原版myssh实现
  * 
- * Based on analysis of FinalShell 3.8.3
- * Reference: MysshRoot_Classes_DeepAnalysis.md - IPInfo
+ * Based on analysis of myssh/IPInfo.java (66行)
+ * 包含地理位置解析和字符串处理功能
  */
 public class IPInfo {
     
-    private String ip;
-    private String country;
-    private String province;
-    private String city;
-    private String isp;
-    private String locationInfo;
+    private String country;     // 国家
+    private String province;    // 省份/地区  
+    private String city;        // 城市
+    private String isp;         // 运营商
+    private String locationInfo; // 位置信息字符串
     
     public IPInfo() {}
     
-    public IPInfo(String ip) {
-        this.ip = ip;
-    }
-    
     /**
-     * 获取完整位置信息
+     * 获取完整位置信息字符串 - 对齐原版myssh逻辑
      */
+    public String getLocationString() {
+        StringBuilder newS = new StringBuilder();
+        
+        if (this.country != null) {
+            String pc = "";
+            if (!this.province.equals(this.city)) {
+                pc = this.province + this.city;
+            } else {
+                pc = this.city;
+            }
+            newS.append(this.country).append(pc);
+            
+            if (this.locationInfo != null) {
+                newS.append(this.locationInfo);
+            }
+        }
+        
+        // 清理字符串 - 对齐原版myssh逻辑
+        String result = newS.toString();
+        result = result.replaceAll("中国", "");
+        result = result.replaceAll("ipip.net", "");
+        result = result.replaceAll("ipip", "");
+        
+        return result;
+    }
+    
+    // Getter and Setter methods - 对齐原版myssh
+    public String getCountry() {
+        return country;
+    }
+    
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    
+    public String getProvince() {
+        return province;
+    }
+    
+    public void setProvince(String province) {
+        this.province = province;
+    }
+    
+    public String getCity() {
+        return city;
+    }
+    
+    public void setCity(String city) {
+        this.city = city;
+    }
+    
+    public String getIsp() {
+        return isp;
+    }
+    
+    public void setIsp(String isp) {
+        this.isp = isp;
+    }
+    
     public String getLocationInfo() {
-        if (locationInfo != null && !locationInfo.isEmpty()) {
-            return locationInfo;
-        }
-        
-        StringBuilder sb = new StringBuilder();
-        if (country != null && !country.isEmpty()) {
-            sb.append(country);
-        }
-        if (province != null && !province.isEmpty()) {
-            if (sb.length() > 0) sb.append(" ");
-            sb.append(province);
-        }
-        if (city != null && !city.isEmpty()) {
-            if (sb.length() > 0) sb.append(" ");
-            sb.append(city);
-        }
-        if (isp != null && !isp.isEmpty()) {
-            if (sb.length() > 0) sb.append(" ");
-            sb.append(isp);
-        }
-        
-        return sb.length() > 0 ? sb.toString() : "未知位置";
+        return locationInfo;
     }
     
-    // Getters and Setters
-    public String getIp() { return ip; }
-    public void setIp(String ip) { this.ip = ip; }
-    
-    public String getCountry() { return country; }
-    public void setCountry(String country) { this.country = country; }
-    
-    public String getProvince() { return province; }
-    public void setProvince(String province) { this.province = province; }
-    
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
-    
-    public String getIsp() { return isp; }
-    public void setIsp(String isp) { this.isp = isp; }
-    
-    public void setLocationInfo(String locationInfo) { 
-        this.locationInfo = locationInfo; 
-    }
-    
-    public String getRegion() {
-        StringBuilder sb = new StringBuilder();
-        if (province != null && !province.isEmpty()) sb.append(province);
-        if (city != null && !city.isEmpty()) {
-            if (sb.length() > 0) sb.append(" ");
-            sb.append(city);
-        }
-        return sb.length() > 0 ? sb.toString() : "";
-    }
-    
-    @Override
-    public String toString() {
-        return String.format("IPInfo[ip=%s, location=%s]", ip, getLocationInfo());
+    public void setLocationInfo(String locationInfo) {
+        this.locationInfo = locationInfo;
     }
 }

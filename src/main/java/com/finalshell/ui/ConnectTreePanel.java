@@ -155,22 +155,8 @@ public class ConnectTreePanel extends JPanel {
         
         if (userObject instanceof ConnectConfig) {
             ConnectConfig config = (ConnectConfig) userObject;
-            openConnection(config);
+            mainWindow.openConnection(config);
         }
-    }
-    
-    private void openConnection(ConnectConfig config) {
-        logger.info("Opening connection: {}", config.getName());
-        mainWindow.setStatus("正在连接: " + config.getName());
-        
-        // Create session tab panel with terminal + SFTP support
-        SessionTabPanel sessionPanel = new SessionTabPanel(config);
-        
-        Icon icon = ResourceLoader.getInstance().getIcon("images/terminal.png", 16, 16);
-        mainWindow.addTab(config.getName(), icon, sessionPanel);
-        
-        // Start connection in background
-        sessionPanel.connect();
     }
     
     private void showPopupMenu(MouseEvent e) {

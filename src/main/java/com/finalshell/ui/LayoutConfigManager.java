@@ -1,7 +1,6 @@
 package com.finalshell.ui;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.finalshell.config.ConfigManager;
 import org.slf4j.Logger;
@@ -13,20 +12,55 @@ import java.nio.file.Files;
 import java.util.*;
 
 /**
- * 布局配置管理器
+ * 布局配置管理器 - 对齐原版myssh复杂实现
  * 
- * Based on analysis of FinalShell 3.8.3
- * Reference: Core_UI_Components_DeepAnalysis.md - LayoutConfigManager
+ * Based on analysis of myssh/ui/LayoutConfigManager.java (82行)
+ * 管理多种标签页的布局配置
  */
 public class LayoutConfigManager {
     
     private static final Logger logger = LoggerFactory.getLogger(LayoutConfigManager.class);
     private static LayoutConfigManager instance;
-    private Map<String, LayoutConfig> layouts = new HashMap<>();
-    private String currentLayout = "default";
+    
+    // 各类标签页的布局配置 - 对齐原版myssh
+    private LayoutConfig tabTerminal = new LayoutConfig();       // 终端标签
+    private LayoutConfig tabNewTab = new LayoutConfig();         // 新标签页
+    private LayoutConfig tabTaskTab = new LayoutConfig();        // 任务标签页  
+    private LayoutConfig tabNetManagerTab = new LayoutConfig();  // 网络管理标签页
+    private LayoutConfig tabHostDetectTab = new LayoutConfig();  // 主机检测标签页
+    private LayoutConfig tabSysInfoTab = new LayoutConfig();     // 系统信息标签页
     
     private LayoutConfigManager() {
+        // 初始化各标签页配置 - 对齐原版myssh逻辑
+        initTabConfigs();
         loadLayouts();
+    }
+    
+    /**
+     * 初始化各标签页配置 - 对齐原版myssh
+     */
+    private void initTabConfigs() {
+        // 终端标签配置
+        tabTerminal.setVisible(true);
+        tabTerminal.setWidth(250);
+        
+        // 新标签页配置
+        tabNewTab.setVisible(false);
+        
+        // 任务标签页配置
+        tabTaskTab.setVisible(true);
+        tabTaskTab.setWidth(300);
+        
+        // 网络管理标签页配置
+        tabNetManagerTab.setVisible(true);
+        tabNetManagerTab.setWidth(300);
+        
+        // 主机检测标签页配置
+        tabHostDetectTab.setVisible(true);
+        tabHostDetectTab.setWidth(300);
+        
+        // 系统信息标签页配置
+        tabSysInfoTab.setVisible(false);
     }
     
     public static synchronized LayoutConfigManager getInstance() {
@@ -37,82 +71,108 @@ public class LayoutConfigManager {
     }
     
     private void loadLayouts() {
-        // 加载默认布局
-        LayoutConfig defaultLayout = new LayoutConfig();
-        defaultLayout.setName("default");
-        defaultLayout.setShowTree(true);
-        defaultLayout.setShowStatusBar(true);
-        defaultLayout.setTreeWidth(250);
-        layouts.put("default", defaultLayout);
-        
-        // 加载保存的布局配置
         try {
-            File layoutFile = new File(ConfigManager.getInstance().getConfigDir(), "layouts.json");
+            File layoutFile = new File(ConfigManager.getInstance().getConfigDir(), "layout.json");
             if (layoutFile.exists()) {
                 String content = new String(Files.readAllBytes(layoutFile.toPath()), StandardCharsets.UTF_8);
-                JSONArray jsonArray = JSON.parseArray(content);
-                for (int i = 0; i < jsonArray.size(); i++) {
-                    JSONObject obj = jsonArray.getJSONObject(i);
-                    LayoutConfig layout = new LayoutConfig();
-                    layout.setName(obj.getString("name"));
-                    layout.setShowTree(obj.getBooleanValue("showTree"));
-                    layout.setShowStatusBar(obj.getBooleanValue("showStatusBar"));
-                    layout.setTreeWidth(obj.getIntValue("treeWidth"));
-                    layouts.put(layout.getName(), layout);
-                }
-                logger.info("加载布局配置: {} 个", jsonArray.size());
+                JSONObject json = JSON.parseObject(content);
+                
+                // 加载各标签页配置 - 对齐原版myssh
+                loadTabConfig(json.getJSONObject("tab_terminal"), tabTerminal);
+                loadTabConfig(json.getJSONObject("tab_newtab"), tabNewTab);
+                loadTabConfig(json.getJSONObject("tab_tasktab"), tabTaskTab);
+                loadTabConfig(json.getJSONObject("tab_net_mananagertab"), tabNetManagerTab);
+                loadTabConfig(json.getJSONObject("tab_host_detect_tab"), tabHostDetectTab);
+                
+                logger.info("已加载布局配置");
             }
         } catch (Exception e) {
             logger.error("加载布局配置失败", e);
         }
     }
     
+    /**
+     * 加载单个标签配置
+     */
+    private void loadTabConfig(JSONObject json, LayoutConfig config) {
+        if (json != null && config != null) {
+            config.setVisible(json.getBooleanValue("visible"));
+            config.setWidth(json.getIntValue("width"));
+        }
+    }
+    
+    /**
+     * 保存布局配置到JSON文件 - 对齐原版myssh
+     */
     public void saveLayouts() {
         try {
-            JSONArray jsonArray = new JSONArray();
-            for (LayoutConfig layout : layouts.values()) {
-                JSONObject obj = new JSONObject();
-                obj.put("name", layout.getName());
-                obj.put("showTree", layout.isShowTree());
-                obj.put("showStatusBar", layout.isShowStatusBar());
-                obj.put("treeWidth", layout.getTreeWidth());
-                jsonArray.add(obj);
-            }
-            File layoutFile = new File(ConfigManager.getInstance().getConfigDir(), "layouts.json");
-            Files.write(layoutFile.toPath(), JSON.toJSONString(jsonArray, true).getBytes(StandardCharsets.UTF_8));
-            logger.info("保存布局配置: {} 个", layouts.size());
+            JSONObject json = new JSONObject();
+            
+            // 保存各标签页配置 - 对齐原版myssh
+            json.put("tab_terminal", tabTerminal.toJSON());
+            json.put("tab_newtab", tabNewTab.toJSON());
+            json.put("tab_tasktab", tabTaskTab.toJSON());
+            json.put("tab_net_mananagertab", tabNetManagerTab.toJSON());
+            json.put("tab_host_detect_tab", tabHostDetectTab.toJSON());
+            
+            File layoutFile = new File(ConfigManager.getInstance().getConfigDir(), "layout.json");
+            Files.write(layoutFile.toPath(), JSON.toJSONString(json, true).getBytes(StandardCharsets.UTF_8));
+            logger.info("已保存布局配置");
         } catch (Exception e) {
             logger.error("保存布局配置失败", e);
         }
     }
     
-    public LayoutConfig getLayout(String name) {
-        return layouts.get(name);
+    /**
+     * 从JSON加载配置 - 对齐原版myssh
+     */
+    public void loadFromJSON(JSONObject json) {
+        loadTabConfig(json.getJSONObject("tab_terminal"), tabTerminal);
+        loadTabConfig(json.getJSONObject("tab_newtab"), tabNewTab);
+        loadTabConfig(json.getJSONObject("tab_tasktab"), tabTaskTab);
+        loadTabConfig(json.getJSONObject("tab_net_mananagertab"), tabNetManagerTab);
+        loadTabConfig(json.getJSONObject("tab_host_detect_tab"), tabHostDetectTab);
     }
     
-    public LayoutConfig getCurrentLayout() {
-        return layouts.get(currentLayout);
+    /**
+     * 导出到JSON - 对齐原版myssh
+     */
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("tab_terminal", tabTerminal.toJSON());
+        json.put("tab_newtab", tabNewTab.toJSON());
+        json.put("tab_tasktab", tabTaskTab.toJSON());
+        json.put("tab_net_mananagertab", tabNetManagerTab.toJSON());
+        json.put("tab_host_detect_tab", tabHostDetectTab.toJSON());
+        return json;
     }
     
-    public void setCurrentLayout(String name) {
-        if (layouts.containsKey(name)) {
-            this.currentLayout = name;
-        }
+    // Getter方法 - 对齐原版myssh的所有布局配置访问
+    public LayoutConfig getTabTerminal() {
+        return tabTerminal;
     }
     
-    public void addLayout(LayoutConfig layout) {
-        layouts.put(layout.getName(), layout);
-        saveLayouts();
+    public LayoutConfig getTabNewTab() {
+        return tabNewTab;
     }
     
-    public void removeLayout(String name) {
-        if (!"default".equals(name)) {
-            layouts.remove(name);
-            saveLayouts();
-        }
+    public LayoutConfig getTabTaskTab() {
+        return tabTaskTab;
     }
     
-    public List<String> getLayoutNames() {
-        return new ArrayList<>(layouts.keySet());
+    public LayoutConfig getTabNetManagerTab() {
+        return tabNetManagerTab;
+    }
+    
+    public LayoutConfig getTabHostDetectTab() {
+        return tabHostDetectTab;
+    }
+    
+    public LayoutConfig getTabSysInfoTab() {
+        return tabSysInfoTab;
+    }
+    
+    public void setTabSysInfoTab(LayoutConfig tabSysInfoTab) {
+        this.tabSysInfoTab = tabSysInfoTab;
     }
 }
