@@ -35,8 +35,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * FinalShell Clone - Application Entry Point
@@ -149,22 +152,53 @@ public class App {
         // Load system fonts
         loadSystemFonts();
         
-        // Initialize core managers
+        // Initialize core managers first (must be synchronous)
         threadManager = ThreadManager.getInstance();
-        imageManager = ImageManager.getInstance();
         configManager = ConfigManager.getInstance();
         configManager.init();
         appConfig = configManager.getAppConfig();
         
-        // Initialize feature managers
-        themeManager = new ThemeManager();
-        themeManager.init();
-        fontConfigManager = new FontConfigManager();
-        proxyManager = ProxyManager.getInstance();
-        secretKeyManager = SecretKeyManager.getInstance();
-        hotkeyManager = HotkeyManager.getInstance();
-        transTaskManager = TransTaskManager.getInstance();
-        quickCommandManager = QuickCommandManager.getInstance();
+        // Initialize other managers in parallel for faster startup
+        ExecutorService initExecutor = Executors.newFixedThreadPool(4);
+        List<Future<?>> initTasks = new ArrayList<>();
+        
+        // Image manager (used by UI)
+        Future<?> imageTask = initExecutor.submit(() -> {
+            imageManager = ImageManager.getInstance();
+            return null;
+        });
+        initTasks.add(imageTask);
+        
+        // Theme manager
+        Future<?> themeTask = initExecutor.submit(() -> {
+            themeManager = new ThemeManager();
+            themeManager.init();
+            return null;
+        });
+        initTasks.add(themeTask);
+        
+        // Feature managers
+        Future<?> featuresTask = initExecutor.submit(() -> {
+            fontConfigManager = new FontConfigManager();
+            proxyManager = ProxyManager.getInstance();
+            secretKeyManager = SecretKeyManager.getInstance();
+            hotkeyManager = HotkeyManager.getInstance();
+            transTaskManager = TransTaskManager.getInstance();
+            quickCommandManager = QuickCommandManager.getInstance();
+            return null;
+        });
+        initTasks.add(featuresTask);
+        
+        // Wait for critical initialization tasks
+        try {
+            for (Future<?> task : initTasks) {
+                task.get(5, TimeUnit.SECONDS);
+            }
+        } catch (Exception e) {
+            logger.warn("Manager initialization timeout or error", e);
+        } finally {
+            initExecutor.shutdown();
+        }
         
         logger.info("Configuration loaded from: {}", configManager.getConfigDir());
         

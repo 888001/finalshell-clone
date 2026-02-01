@@ -91,7 +91,7 @@ public class SpeedTestTask implements Runnable {
             long lastUpdate = System.currentTimeMillis();
             long bytesInInterval = 0;
             
-            while ((bytesRead = is.read(buffer)) != -1 && !cancelled.get()) {
+            while ((bytesRead = is.read(buffer)) != -1 && !cancelled.get() && !Thread.currentThread().isInterrupted()) {
                 totalBytes += bytesRead;
                 bytesInInterval += bytesRead;
                 

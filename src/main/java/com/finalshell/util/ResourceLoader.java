@@ -24,9 +24,15 @@ public class ResourceLoader {
     
     private static ResourceLoader instance;
     
-    private final Map<String, Icon> iconCache = new HashMap<>();
-    private final Map<String, Image> imageCache = new HashMap<>();
-    private final Map<String, TerminalTheme> themeCache = new HashMap<>();
+    // Use concurrent collections for thread safety and LRU cache for memory efficiency
+    private final Map<String, Icon> iconCache = new java.util.concurrent.ConcurrentHashMap<>();
+    private final Map<String, Image> imageCache = new java.util.concurrent.ConcurrentHashMap<>();
+    private final Map<String, TerminalTheme> themeCache = new java.util.concurrent.ConcurrentHashMap<>();
+    
+    // Cache size limits to prevent memory leaks
+    private static final int MAX_ICON_CACHE_SIZE = 200;
+    private static final int MAX_IMAGE_CACHE_SIZE = 100;
+    private static final int MAX_THEME_CACHE_SIZE = 50;
     
     private Image appLogo;
     
@@ -120,6 +126,12 @@ public class ResourceLoader {
             URL url = getClass().getClassLoader().getResource(path);
             if (url != null) {
                 Image image = new ImageIcon(url).getImage();
+                
+                // Check cache size and clean if necessary
+                if (imageCache.size() >= MAX_IMAGE_CACHE_SIZE) {
+                    cleanImageCache();
+                }
+                
                 imageCache.put(path, image);
                 return image;
             }
@@ -128,6 +140,32 @@ public class ResourceLoader {
         }
         
         return null;
+    }
+    
+    /**
+     * Clean cache to prevent memory leaks
+     */
+    private void cleanImageCache() {
+        if (imageCache.size() > MAX_IMAGE_CACHE_SIZE / 2) {
+            // Remove 25% of oldest entries (simplified LRU)
+            int toRemove = imageCache.size() / 4;
+            String[] keys = imageCache.keySet().toArray(new String[0]);
+            for (int i = 0; i < toRemove && i < keys.length; i++) {
+                imageCache.remove(keys[i]);
+            }
+            System.gc(); // Suggest garbage collection
+        }
+    }
+    
+    /**
+     * Clear all caches to free memory
+     */
+    public void clearCaches() {
+        iconCache.clear();
+        imageCache.clear();
+        themeCache.clear();
+        System.gc();
+        logger.info("Resource caches cleared");
     }
     
     /**

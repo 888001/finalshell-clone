@@ -1,5 +1,7 @@
 package com.finalshell.ui;
 
+import com.finalshell.ui.browser.SwingFXWebView;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,7 +17,7 @@ import java.util.*;
 public class SimpleSwingBrowser extends JPanel {
     
     private JTextField urlField;
-    private JEditorPane contentPane;
+    private SwingFXWebView webView;
     private JButton goButton;
     private JButton backButton;
     private JButton forwardButton;
@@ -61,19 +63,67 @@ public class SimpleSwingBrowser extends JPanel {
         toolbar.add(goButton);
         
         add(toolbar, BorderLayout.NORTH);
-        
-        // 内容区域
-        contentPane = new JEditorPane();
-        contentPane.setEditable(false);
-        contentPane.setContentType("text/html");
-        
-        JScrollPane scrollPane = new JScrollPane(contentPane);
-        add(scrollPane, BorderLayout.CENTER);
-        
+
         // 状态栏
         statusLabel = new JLabel("就绪");
         statusLabel.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
         add(statusLabel, BorderLayout.SOUTH);
+        
+        // 内容区域
+        webView = new SwingFXWebView();
+        String ua = System.getProperty("embedded.browser.userAgent");
+        if (ua != null && !ua.trim().isEmpty()) {
+            webView.setUserAgent(ua);
+        }
+        webView.setListener(new SwingFXWebView.ExtendedWebViewListener() {
+            @Override
+            public void onLoadStart(String url) {
+                SwingUtilities.invokeLater(() -> {
+                    statusLabel.setText("正在加载: " + url);
+                    updateNavigationButtons();
+                });
+            }
+
+            @Override
+            public void onLoadFinished(String url) {
+                SwingUtilities.invokeLater(() -> {
+                    statusLabel.setText("完成");
+                    updateNavigationButtons();
+                });
+            }
+
+            @Override
+            public void onLoadError(String url, String error) {
+                SwingUtilities.invokeLater(() -> {
+                    statusLabel.setText("加载失败: " + error);
+                    updateNavigationButtons();
+                });
+            }
+
+            @Override
+            public void onTitleChanged(String title) {
+            }
+
+            @Override
+            public void onLocationChanged(String url) {
+                SwingUtilities.invokeLater(() -> {
+                    if (url != null) {
+                        currentUrl = url;
+                        urlField.setText(url);
+                    }
+                    updateNavigationButtons();
+                });
+            }
+
+            @Override
+            public void onProgressChanged(double progress) {
+            }
+
+            @Override
+            public void onStatusChanged(String status) {
+            }
+        });
+        add(webView, BorderLayout.CENTER);
     }
     
     public void loadUrl(String url) {
@@ -85,94 +135,40 @@ public class SimpleSwingBrowser extends JPanel {
             url = "http://" + url;
         }
         
-        final String finalUrl = url;
         currentUrl = url;
         urlField.setText(url);
         statusLabel.setText("正在加载: " + url);
-        
-        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
-            @Override
-            protected String doInBackground() throws Exception {
-                java.net.URL urlObj = new java.net.URL(finalUrl);
-                java.io.InputStream is = urlObj.openStream();
-                java.io.BufferedReader reader = new java.io.BufferedReader(
-                    new java.io.InputStreamReader(is, "UTF-8"));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line).append("\n");
-                }
-                reader.close();
-                return sb.toString();
-            }
-            
-            @Override
-            protected void done() {
-                try {
-                    String content = get();
-                    contentPane.setText(content);
-                    contentPane.setCaretPosition(0);
-                    statusLabel.setText("完成");
-                } catch (Exception e) {
-                    statusLabel.setText("加载失败: " + e.getMessage());
-                    contentPane.setText("<html><body><h2>加载失败</h2><p>" + 
-                        e.getMessage() + "</p></body></html>");
-                }
-            }
-        };
-        worker.execute();
+        if (webView != null) {
+            webView.loadUrl(url);
+        }
     }
     
     public void goBack() {
-        if (historyIndex > 0) {
-            historyIndex--;
-            String url = history.get(historyIndex);
-            urlField.setText(url);
-            loadUrlInternal(url);
+        if (webView != null) {
+            webView.goBack();
             updateNavigationButtons();
         }
     }
     
     public void goForward() {
-        if (historyIndex < history.size() - 1) {
-            historyIndex++;
-            String url = history.get(historyIndex);
-            urlField.setText(url);
-            loadUrlInternal(url);
+        if (webView != null) {
+            webView.goForward();
             updateNavigationButtons();
         }
     }
     
-    private void loadUrlInternal(String url) {
-        currentUrl = url;
-        statusLabel.setText("加载中: " + url);
-        
-        SwingWorker<String, Void> worker = new SwingWorker<>() {
-            @Override
-            protected String doInBackground() throws Exception {
-                return "<html><body><h2>加载中...</h2><p>" + url + "</p></body></html>";
-            }
-            @Override
-            protected void done() {
-                try {
-                    contentPane.setText(get());
-                    statusLabel.setText("就绪");
-                } catch (Exception e) {
-                    statusLabel.setText("加载失败");
-                }
-            }
-        };
-        worker.execute();
-    }
-    
     private void updateNavigationButtons() {
-        backButton.setEnabled(historyIndex > 0);
-        forwardButton.setEnabled(historyIndex < history.size() - 1);
+        backButton.setEnabled(webView != null && webView.canGoBack());
+        forwardButton.setEnabled(webView != null && webView.canGoForward());
     }
     
     public void refresh() {
         if (currentUrl != null) {
-            loadUrl(currentUrl);
+            if (webView != null) {
+                webView.reload();
+            } else {
+                loadUrl(currentUrl);
+            }
         }
     }
     

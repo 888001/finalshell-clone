@@ -185,6 +185,144 @@ public class UpdateTools {
         return compareVersion(currentVersion, newVersion) < 0;
     }
     
+    /**
+     * 执行更新安装
+     * @param updateFile 更新文件
+     * @param restartApp 是否重启应用
+     */
+    public static void installUpdate(File updateFile, boolean restartApp) throws Exception {
+        if (!updateFile.exists()) {
+            throw new Exception("更新文件不存在: " + updateFile.getPath());
+        }
+        
+        String osName = System.getProperty("os.name").toLowerCase();
+        
+        if (osName.contains("windows")) {
+            installUpdateWindows(updateFile, restartApp);
+        } else if (osName.contains("mac")) {
+            installUpdateMac(updateFile, restartApp);
+        } else {
+            installUpdateLinux(updateFile, restartApp);
+        }
+    }
+    
+    private static void installUpdateWindows(File updateFile, boolean restartApp) throws Exception {
+        // Windows: 使用批处理脚本延迟替换
+        File batchFile = new File(System.getProperty("java.io.tmpdir"), "finalshell_update.bat");
+        String currentJar = getCurrentJarPath();
+        
+        try (FileWriter writer = new FileWriter(batchFile)) {
+            writer.write("@echo off\n");
+            writer.write("echo Updating FinalShell...\n");
+            writer.write("timeout /t 3 /nobreak >nul\n");
+            writer.write("copy /y \"" + updateFile.getAbsolutePath() + "\" \"" + currentJar + "\"\n");
+            writer.write("del \"" + updateFile.getAbsolutePath() + "\"\n");
+            if (restartApp) {
+                writer.write("start \"\" \"" + getJavaExecutable() + "\" -jar \"" + currentJar + "\"\n");
+            }
+            writer.write("del \"%~f0\"\n");
+        }
+        
+        ProcessBuilder pb = new ProcessBuilder("cmd", "/c", batchFile.getAbsolutePath());
+        pb.start();
+        
+        System.exit(0);
+    }
+    
+    private static void installUpdateMac(File updateFile, boolean restartApp) throws Exception {
+        // macOS: 使用shell脚本
+        File scriptFile = new File(System.getProperty("java.io.tmpdir"), "finalshell_update.sh");
+        String currentJar = getCurrentJarPath();
+        
+        try (FileWriter writer = new FileWriter(scriptFile)) {
+            writer.write("#!/bin/bash\n");
+            writer.write("echo \"Updating FinalShell...\"\n");
+            writer.write("sleep 3\n");
+            writer.write("cp \"" + updateFile.getAbsolutePath() + "\" \"" + currentJar + "\"\n");
+            writer.write("rm \"" + updateFile.getAbsolutePath() + "\"\n");
+            if (restartApp) {
+                writer.write("nohup \"" + getJavaExecutable() + "\" -jar \"" + currentJar + "\" > /dev/null 2>&1 &\n");
+            }
+            writer.write("rm \"$0\"\n");
+        }
+        
+        scriptFile.setExecutable(true);
+        ProcessBuilder pb = new ProcessBuilder("/bin/bash", scriptFile.getAbsolutePath());
+        pb.start();
+        
+        System.exit(0);
+    }
+    
+    private static void installUpdateLinux(File updateFile, boolean restartApp) throws Exception {
+        // Linux: 使用shell脚本
+        File scriptFile = new File(System.getProperty("java.io.tmpdir"), "finalshell_update.sh");
+        String currentJar = getCurrentJarPath();
+        
+        try (FileWriter writer = new FileWriter(scriptFile)) {
+            writer.write("#!/bin/bash\n");
+            writer.write("echo \"Updating FinalShell...\"\n");
+            writer.write("sleep 3\n");
+            writer.write("cp \"" + updateFile.getAbsolutePath() + "\" \"" + currentJar + "\"\n");
+            writer.write("rm \"" + updateFile.getAbsolutePath() + "\"\n");
+            if (restartApp) {
+                writer.write("nohup \"" + getJavaExecutable() + "\" -jar \"" + currentJar + "\" > /dev/null 2>&1 &\n");
+            }
+            writer.write("rm \"$0\"\n");
+        }
+        
+        scriptFile.setExecutable(true);
+        ProcessBuilder pb = new ProcessBuilder("/bin/bash", scriptFile.getAbsolutePath());
+        pb.start();
+        
+        System.exit(0);
+    }
+    
+    private static String getCurrentJarPath() {
+        try {
+            return new File(UpdateTools.class.getProtectionDomain()
+                .getCodeSource().getLocation().toURI()).getAbsolutePath();
+        } catch (Exception e) {
+            return "finalshell.jar";
+        }
+    }
+    
+    private static String getJavaExecutable() {
+        String javaHome = System.getProperty("java.home");
+        String osName = System.getProperty("os.name").toLowerCase();
+        String executable = osName.contains("windows") ? "javaw.exe" : "java";
+        return new File(javaHome, "bin" + File.separator + executable).getAbsolutePath();
+    }
+    
+    /**
+     * 验证文件MD5
+     */
+    public static boolean verifyFileMD5(File file, String expectedMD5) {
+        if (expectedMD5 == null || expectedMD5.trim().isEmpty()) {
+            return true; // 如果没有提供MD5，跳过验证
+        }
+        
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            try (FileInputStream fis = new FileInputStream(file)) {
+                byte[] buffer = new byte[8192];
+                int read;
+                while ((read = fis.read(buffer)) != -1) {
+                    md.update(buffer, 0, read);
+                }
+            }
+            
+            byte[] digest = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            
+            return sb.toString().equalsIgnoreCase(expectedMD5.trim());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
     public interface DownloadListener {
         void onProgress(long downloaded, long total);
         void onComplete();

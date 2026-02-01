@@ -48,7 +48,7 @@ public class ControlClient {
     private boolean isPermanent = false;
     private volatile boolean isLoginComplete = false;
     private volatile String message = "";
-    private long expireTime = -1L;
+    private volatile long expireTime = -1L;
     private volatile SetProListener setProListener;
 
     private volatile String lastUsername;
@@ -326,6 +326,9 @@ public class ControlClient {
         isPermanent = false;
         isLoginComplete = false;
         loginCode = -1;
+        lastUsername = null;
+        lastPassword = null;
+        notifyProStatus();
     }
     
     /**
@@ -351,6 +354,10 @@ public class ControlClient {
     public boolean isLoginComplete() { return isLoginComplete; }
     public int getLoginCode() { return loginCode; }
     public String getDeviceId() { return deviceId; }
+    public String getMessage() { return message; }
+    public long getExpireTimeMillis() { return normalizeExpireTime(expireTime); }
+    public boolean isExpiredNow() { return isExpired(); }
+    public boolean isProValid() { return isPro && (isPermanent || !isExpired()); }
     
     public boolean isConnected() { return isLoginComplete; }
 

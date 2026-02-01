@@ -31,6 +31,10 @@ public class SpeedTestPanel extends JPanel {
     private JLabel pingLabel;
     private JProgressBar progressBar;
     private JTextArea logArea;
+
+    private SpeedTestCanvas canvas;
+    private volatile SpeedTestTask speedTask;
+    private final int testDurationSeconds = 10;
     
     private ExecutorService executor;
     private volatile boolean running = false;
@@ -67,10 +71,10 @@ public class SpeedTestPanel extends JPanel {
         urlField = new JTextField(TEST_URLS[0]);
         urlField.setEnabled(false);
         
-        JPanel topPanel = new JPanel(new GridLayout(2, 1, 5, 5));
-        topPanel.add(urlPanel);
-        topPanel.add(urlField);
-        configPanel.add(topPanel, BorderLayout.CENTER);
+        JPanel urlTopPanel = new JPanel(new BorderLayout(5, 5));
+        urlTopPanel.add(urlPanel, BorderLayout.NORTH);
+        urlTopPanel.add(urlField, BorderLayout.CENTER);
+        configPanel.add(urlTopPanel, BorderLayout.CENTER);
         
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         startBtn = new JButton("开始测试");
@@ -92,7 +96,7 @@ public class SpeedTestPanel extends JPanel {
         // 下载速度
         JPanel downloadPanel = new JPanel(new BorderLayout());
         downloadPanel.add(new JLabel("下载速度", SwingConstants.CENTER), BorderLayout.NORTH);
-        downloadSpeedLabel = new JLabel("-- Mbps", SwingConstants.CENTER);
+        downloadSpeedLabel = new JLabel("-- MB/s", SwingConstants.CENTER);
         downloadSpeedLabel.setFont(downloadSpeedLabel.getFont().deriveFont(24f));
         downloadSpeedLabel.setForeground(new Color(0, 128, 0));
         downloadPanel.add(downloadSpeedLabel, BorderLayout.CENTER);
@@ -110,7 +114,7 @@ public class SpeedTestPanel extends JPanel {
         // 上传速度
         JPanel uploadPanel = new JPanel(new BorderLayout());
         uploadPanel.add(new JLabel("上传速度", SwingConstants.CENTER), BorderLayout.NORTH);
-        uploadSpeedLabel = new JLabel("-- Mbps", SwingConstants.CENTER);
+        uploadSpeedLabel = new JLabel("-- MB/s", SwingConstants.CENTER);
         uploadSpeedLabel.setFont(uploadSpeedLabel.getFont().deriveFont(24f));
         uploadSpeedLabel.setForeground(new Color(128, 0, 0));
         uploadPanel.add(uploadSpeedLabel, BorderLayout.CENTER);
@@ -118,7 +122,12 @@ public class SpeedTestPanel extends JPanel {
         
         // 中间面板
         JPanel centerPanel = new JPanel(new BorderLayout(5, 5));
-        centerPanel.add(resultPanel, BorderLayout.NORTH);
+
+        JPanel resultTopPanel = new JPanel(new BorderLayout(5, 5));
+        resultTopPanel.add(resultPanel, BorderLayout.NORTH);
+        canvas = new SpeedTestCanvas();
+        resultTopPanel.add(canvas, BorderLayout.CENTER);
+        centerPanel.add(resultTopPanel, BorderLayout.NORTH);
         
         // 日志
         logArea = new JTextArea();
@@ -147,12 +156,30 @@ public class SpeedTestPanel extends JPanel {
         running = true;
         startBtn.setEnabled(false);
         stopBtn.setEnabled(true);
-        downloadSpeedLabel.setText("-- Mbps");
-        uploadSpeedLabel.setText("-- Mbps");
+        downloadSpeedLabel.setText("-- MB/s");
+        uploadSpeedLabel.setText("-- MB/s");
         pingLabel.setText("-- ms");
         logArea.setText("");
         progressBar.setValue(0);
         progressBar.setString("正在测试...");
+
+        if (canvas != null) {
+            canvas.reset();
+        }
+
+        SpeedTestTask prev = speedTask;
+        if (prev != null) {
+            try {
+                prev.cancel();
+            } catch (Exception ignored) {
+            }
+            speedTask = null;
+        }
+
+        if (executor != null) {
+            executor.shutdownNow();
+            executor = null;
+        }
         
         executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
@@ -168,11 +195,58 @@ public class SpeedTestPanel extends JPanel {
                 
                 // 测试下载速度
                 log("\n测试下载速度...");
-                SwingUtilities.invokeLater(() -> progressBar.setString("测试下载..."));
-                double downloadSpeed = testDownload(url);
-                final String downloadStr = String.format("%.2f Mbps", downloadSpeed);
-                SwingUtilities.invokeLater(() -> downloadSpeedLabel.setText(downloadStr));
-                log("下载速度: " + downloadStr);
+                SwingUtilities.invokeLater(() -> {
+                    progressBar.setString("测试下载...");
+                    progressBar.setValue(0);
+                });
+
+                SpeedTestTask task = new SpeedTestTask(url, testDurationSeconds);
+                speedTask = task;
+
+                final long[] dlStart = new long[]{0L};
+                task.addListener(new SpeedTestTask.SpeedTestListener() {
+                    @Override
+                    public void onTestStarted() {
+                        dlStart[0] = System.currentTimeMillis();
+                    }
+
+                    @Override
+                    public void onSpeedUpdated(double currentSpeed, double avgSpeed, double maxSpeed) {
+                        if (!running) {
+                            return;
+                        }
+                        String speedStr = String.format("%.2f MB/s", currentSpeed);
+                        SwingUtilities.invokeLater(() -> {
+                            downloadSpeedLabel.setText(speedStr);
+                            if (canvas != null) {
+                                canvas.setCurrentSpeed(currentSpeed);
+                            }
+                            long elapsed = System.currentTimeMillis() - dlStart[0];
+                            int progress = 0;
+                            if (elapsed > 0) {
+                                progress = Math.min(49, (int) (elapsed * 50 / (testDurationSeconds * 1000L)));
+                            }
+                            progressBar.setValue(progress);
+                        });
+                    }
+
+                    @Override
+                    public void onTestCompleted(SpeedTestTask.SpeedTestResult result) {
+                        if (!running) {
+                            return;
+                        }
+                        SwingUtilities.invokeLater(() -> progressBar.setValue(50));
+                        log("下载平均: " + result.getAvgSpeedStr());
+                        log("下载峰值: " + result.getMaxSpeedStr());
+                    }
+
+                    @Override
+                    public void onTestError(Exception e) {
+                        log("下载测速失败: " + (e == null ? "" : e.getMessage()));
+                    }
+                });
+
+                task.run();
                 
                 if (!running) return;
                 
@@ -182,7 +256,7 @@ public class SpeedTestPanel extends JPanel {
                     log("\n测试上传速度...\n" + uploadUrl);
                     SwingUtilities.invokeLater(() -> progressBar.setString("测试上传..."));
                     double uploadSpeed = testUpload(uploadUrl);
-                    final String uploadStr = String.format("%.2f Mbps", uploadSpeed);
+                    final String uploadStr = String.format("%.2f MB/s", uploadSpeed);
                     SwingUtilities.invokeLater(() -> uploadSpeedLabel.setText(uploadStr));
                     log("上传速度: " + uploadStr);
                 } catch (Exception e) {
@@ -195,19 +269,33 @@ public class SpeedTestPanel extends JPanel {
             } catch (Exception e) {
                 log("错误: " + e.getMessage());
             } finally {
+                boolean stopped = !running;
                 SwingUtilities.invokeLater(() -> {
                     running = false;
                     startBtn.setEnabled(true);
                     stopBtn.setEnabled(false);
                     progressBar.setValue(100);
-                    progressBar.setString("完成");
+                    progressBar.setString(stopped ? "已停止" : "完成");
                 });
+                speedTask = null;
             }
         });
     }
     
     private void stopTest() {
         running = false;
+        SwingUtilities.invokeLater(() -> {
+            startBtn.setEnabled(true);
+            stopBtn.setEnabled(false);
+            progressBar.setString("已停止");
+        });
+        SpeedTestTask t = speedTask;
+        if (t != null) {
+            try {
+                t.cancel();
+            } catch (Exception ignored) {
+            }
+        }
         if (executor != null) {
             executor.shutdownNow();
         }
@@ -246,9 +334,9 @@ public class SpeedTestPanel extends JPanel {
                 
                 long elapsed = System.currentTimeMillis() - startTime;
                 if (elapsed > 0) {
-                    double speed = (totalBytes * 8.0 / 1000000) / (elapsed / 1000.0);
+                    double speed = (totalBytes * 1000.0) / elapsed / 1024 / 1024;
                     final int progress = Math.min(99, (int) (elapsed / 100));
-                    final String speedStr = String.format("%.2f Mbps", speed);
+                    final String speedStr = String.format("%.2f MB/s", speed);
                     SwingUtilities.invokeLater(() -> {
                         progressBar.setValue(progress);
                         downloadSpeedLabel.setText(speedStr);
@@ -263,7 +351,7 @@ public class SpeedTestPanel extends JPanel {
         }
         
         long elapsed = System.currentTimeMillis() - startTime;
-        return (totalBytes * 8.0 / 1000000) / (elapsed / 1000.0);
+        return (totalBytes * 1000.0) / elapsed / 1024 / 1024;
     }
 
     private String getUploadUrl(String downloadUrl, int serverIndex) {
@@ -305,9 +393,9 @@ public class SpeedTestPanel extends JPanel {
                 long now = System.currentTimeMillis();
                 long elapsed = now - lastUpdate;
                 if (elapsed >= 500) {
-                    double speed = (bytesInInterval * 8.0 / 1000000) / (elapsed / 1000.0);
+                    double speed = (bytesInInterval * 1000.0) / elapsed / 1024 / 1024;
                     final int progress = 50 + Math.min(49, (int) ((now - startTime) / 200));
-                    final String speedStr = String.format("%.2f Mbps", speed);
+                    final String speedStr = String.format("%.2f MB/s", speed);
                     SwingUtilities.invokeLater(() -> {
                         progressBar.setValue(progress);
                         uploadSpeedLabel.setText(speedStr);
@@ -334,7 +422,7 @@ public class SpeedTestPanel extends JPanel {
         }
 
         long elapsed = System.currentTimeMillis() - startTime;
-        return (totalBytes * 8.0 / 1000000) / (elapsed / 1000.0);
+        return (totalBytes * 1000.0) / elapsed / 1024 / 1024;
     }
     
     private void log(String message) {

@@ -13,7 +13,7 @@ import com.finalshell.key.KeyManagerDialog;
 import com.finalshell.rdp.RDPConfig;
 import com.finalshell.rdp.RDPPanel;
 import com.finalshell.sync.SyncDialog;
-import com.finalshell.ui.dialog.ProIntroDialog;
+import com.finalshell.control.ProIntroDialog;
 import com.finalshell.update.UpdateChecker;
 import com.finalshell.util.ResourceLoader;
 import com.finalshell.layout.LayoutManager;
@@ -67,6 +67,10 @@ public class MainWindow extends JFrame implements AppListener {
     private boolean sidebarVisible = true;
     private boolean statusBarVisible = true;
     private int lastDividerLocation = DEFAULT_DIVIDER;
+
+    private volatile boolean proStatusPro;
+    private volatile boolean proStatusValid;
+    private volatile boolean proInvalidHintShown;
     
     public MainWindow() {
         this.configManager = ConfigManager.getInstance();
@@ -217,6 +221,32 @@ public class MainWindow extends JFrame implements AppListener {
 
         proLabel = new JLabel(" ");
         proLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        proLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        proLabel.setToolTipText("单击：Pro说明；右键：登录/刷新授权/升级/注销");
+        proLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                maybeShowProMenu(e);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                maybeShowProMenu(e);
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() >= 1) {
+                    handleProLabelClick();
+                }
+            }
+
+            private void maybeShowProMenu(MouseEvent e) {
+                if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
+                    showProStatusMenu(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
         statusPanel.add(proLabel, BorderLayout.CENTER);
         
         JLabel versionLabel = new JLabel("v1.0.0");
@@ -232,18 +262,17 @@ public class MainWindow extends JFrame implements AppListener {
 
             @Override
             public void setProStatus(boolean isPro, boolean isValid) {
+                boolean oldPro = proStatusPro;
+                boolean oldValid = proStatusValid;
                 this.pro = isPro;
                 this.valid = isValid;
+                proStatusPro = isPro;
+                proStatusValid = isValid;
                 SwingUtilities.invokeLater(() -> {
                     if (proLabel != null) {
-                        if (!pro) {
-                            proLabel.setText("Free");
-                        } else if (valid) {
-                            proLabel.setText("Pro");
-                        } else {
-                            proLabel.setText("Pro(无效)");
-                        }
+                        updateProLabelUi(pro, valid);
                     }
+                    onProStatusUpdated(oldPro, oldValid, pro, valid);
                 });
             }
 
@@ -257,6 +286,161 @@ public class MainWindow extends JFrame implements AppListener {
                 return valid;
             }
         });
+    }
+
+    private void showProStatusMenu(Component invoker, int x, int y) {
+        JPopupMenu menu = new JPopupMenu();
+
+        boolean connected = false;
+        try {
+            connected = ControlClient.getInstance().isConnected();
+        } catch (Exception ignored) {
+        }
+
+        JMenuItem loginItem = new JMenuItem("账号登录...");
+        loginItem.addActionListener(e -> showLoginDialog());
+        menu.add(loginItem);
+
+        JMenuItem refreshItem = new JMenuItem("刷新授权");
+        refreshItem.addActionListener(e -> {
+            try {
+                ControlClient.getInstance().checkLicense(null);
+            } catch (Exception ignored) {
+            }
+        });
+        refreshItem.setEnabled(connected);
+        menu.add(refreshItem);
+
+        JMenuItem proItem = new JMenuItem("Pro/升级...");
+        proItem.addActionListener(e -> showProIntroDialog());
+        menu.add(proItem);
+
+        menu.addSeparator();
+
+        JMenuItem logoutItem = new JMenuItem("注销");
+        logoutItem.addActionListener(e -> {
+            try {
+                ControlClient.getInstance().logout();
+            } catch (Exception ignored) {
+            }
+        });
+        logoutItem.setEnabled(connected);
+        menu.add(logoutItem);
+
+        JMenuItem statusItem = new JMenuItem(getProStatusText());
+        statusItem.setEnabled(false);
+        menu.add(statusItem);
+
+        menu.show(invoker, x, y);
+    }
+
+    private String getProStatusText() {
+        boolean pro = this.proStatusPro;
+        boolean valid = this.proStatusValid;
+        if (!pro) {
+            return "当前：Free";
+        }
+        if (valid) {
+            return "当前：Pro(有效)";
+        }
+        return "当前：Pro(无效/已过期)";
+    }
+
+    private void handleProLabelClick() {
+        boolean pro = this.proStatusPro;
+        boolean valid = this.proStatusValid;
+
+        if (pro && !valid) {
+            String exp = getExpireText();
+            String expLine = (exp == null || exp.isEmpty()) ? "" : ("\n到期时间：" + exp);
+            Object[] options = new Object[]{"登录刷新", "升级", "取消"};
+            int choice = JOptionPane.showOptionDialog(
+                this,
+                "当前Pro授权无效或已过期。" + expLine + "\n\n你可以选择登录刷新授权，或查看升级说明。",
+                "授权提示",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[0]
+            );
+            if (choice == 0) {
+                showLoginDialog();
+            } else if (choice == 1) {
+                showProIntroDialog();
+            }
+            return;
+        }
+
+        showProIntroDialog();
+    }
+
+    private void onProStatusUpdated(boolean oldPro, boolean oldValid, boolean newPro, boolean newValid) {
+        if (newPro && newValid) {
+            proInvalidHintShown = false;
+            return;
+        }
+
+        if (newPro && !newValid && !proInvalidHintShown && (!oldPro || oldValid)) {
+            proInvalidHintShown = true;
+            String exp = getExpireText();
+            String expLine = (exp == null || exp.isEmpty()) ? "" : ("\n到期时间：" + exp);
+            Object[] options = new Object[]{"登录刷新", "升级", "忽略"};
+            int choice = JOptionPane.showOptionDialog(
+                this,
+                "检测到Pro授权无效或已过期。" + expLine + "\n\n你可以选择登录刷新授权，或查看升级说明。",
+                "授权提示",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[0]
+            );
+            if (choice == 0) {
+                showLoginDialog();
+            } else if (choice == 1) {
+                showProIntroDialog();
+            }
+        }
+    }
+
+    private String getExpireText() {
+        try {
+            long ms = ControlClient.getInstance().getExpireTimeMillis();
+            if (ms > 0) {
+                return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(ms));
+            }
+        } catch (Exception ignored) {
+        }
+        return "";
+    }
+
+    private void updateProLabelUi(boolean pro, boolean valid) {
+        if (proLabel == null) {
+            return;
+        }
+
+        if (!pro) {
+            proLabel.setText("Free");
+            proLabel.setForeground(Color.GRAY);
+            proLabel.setToolTipText("当前：Free。单击：Pro说明；右键：登录/刷新授权/升级/注销");
+            return;
+        }
+
+        if (valid) {
+            proLabel.setText("Pro");
+            proLabel.setForeground(new Color(0, 128, 0));
+            String exp = getExpireText();
+            String expText = (exp == null || exp.isEmpty()) ? "" : (" 到期:" + exp);
+            proLabel.setToolTipText("当前：Pro(有效)" + expText + "。单击：Pro说明；右键：登录/刷新授权/升级/注销");
+            return;
+        }
+
+        proLabel.setText("Pro(无效)");
+        proLabel.setForeground(Color.RED);
+        String exp = getExpireText();
+        String expText = (exp == null || exp.isEmpty()) ? "" : (" 到期:" + exp);
+        proLabel.setToolTipText("当前：Pro(无效/已过期)" + expText + "。单击：Pro说明；右键：登录/刷新授权/升级/注销");
     }
     
     private void initLayout() {

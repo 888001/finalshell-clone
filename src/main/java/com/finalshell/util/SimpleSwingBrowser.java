@@ -1,5 +1,7 @@
 package com.finalshell.util;
 
+import com.finalshell.ui.browser.SwingFXWebView;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -13,16 +15,13 @@ import java.net.URI;
  */
 public class SimpleSwingBrowser extends JFrame {
     
-    private JEditorPane editorPane;
+    private SwingFXWebView webView;
     private JTextField urlField;
     private JButton goButton;
     private JButton backButton;
     private JButton forwardButton;
     private JButton refreshButton;
     private JProgressBar progressBar;
-    
-    private java.util.List<String> history = new java.util.ArrayList<>();
-    private int historyIndex = -1;
     
     public SimpleSwingBrowser() {
         this("简易浏览器");
@@ -69,14 +68,7 @@ public class SimpleSwingBrowser extends JFrame {
         toolBar.add(goButton, BorderLayout.EAST);
         
         add(toolBar, BorderLayout.NORTH);
-        
-        // 内容区域
-        editorPane = new JEditorPane();
-        editorPane.setEditable(false);
-        editorPane.setContentType("text/html");
-        JScrollPane scrollPane = new JScrollPane(editorPane);
-        add(scrollPane, BorderLayout.CENTER);
-        
+
         // 状态栏
         JPanel statusBar = new JPanel(new BorderLayout());
         progressBar = new JProgressBar();
@@ -84,6 +76,78 @@ public class SimpleSwingBrowser extends JFrame {
         progressBar.setVisible(false);
         statusBar.add(progressBar, BorderLayout.CENTER);
         add(statusBar, BorderLayout.SOUTH);
+        
+        // 内容区域
+        webView = new SwingFXWebView();
+        String ua = System.getProperty("embedded.browser.userAgent");
+        if (ua != null && !ua.trim().isEmpty()) {
+            webView.setUserAgent(ua);
+        }
+        webView.setListener(new SwingFXWebView.ExtendedWebViewListener() {
+            @Override
+            public void onLoadStart(String url) {
+                SwingUtilities.invokeLater(() -> {
+                    progressBar.setVisible(true);
+                    progressBar.setIndeterminate(true);
+                    updateButtons();
+                });
+            }
+
+            @Override
+            public void onLoadFinished(String url) {
+                SwingUtilities.invokeLater(() -> {
+                    progressBar.setVisible(false);
+                    progressBar.setIndeterminate(false);
+                    updateButtons();
+                });
+            }
+
+            @Override
+            public void onLoadError(String url, String error) {
+                SwingUtilities.invokeLater(() -> {
+                    progressBar.setVisible(false);
+                    progressBar.setIndeterminate(false);
+                    updateButtons();
+                });
+            }
+
+            @Override
+            public void onTitleChanged(String title) {
+                SwingUtilities.invokeLater(() -> {
+                    if (title != null && !title.trim().isEmpty()) {
+                        setTitle(title);
+                    }
+                });
+            }
+
+            @Override
+            public void onLocationChanged(String url) {
+                SwingUtilities.invokeLater(() -> {
+                    if (url != null) {
+                        urlField.setText(url);
+                    }
+                    updateButtons();
+                });
+            }
+
+            @Override
+            public void onProgressChanged(double progress) {
+                SwingUtilities.invokeLater(() -> {
+                    if (progress >= 0 && progress <= 1) {
+                        progressBar.setVisible(true);
+                        progressBar.setIndeterminate(false);
+                        progressBar.setMinimum(0);
+                        progressBar.setMaximum(100);
+                        progressBar.setValue((int) (progress * 100));
+                    }
+                });
+            }
+
+            @Override
+            public void onStatusChanged(String status) {
+            }
+        });
+        add(webView, BorderLayout.CENTER);
         
         updateButtons();
     }
@@ -97,76 +161,35 @@ public class SimpleSwingBrowser extends JFrame {
             url = "http://" + url;
         }
         
-        final String finalUrl = url;
         urlField.setText(url);
-        progressBar.setVisible(true);
-        progressBar.setIndeterminate(true);
-        
-        new SwingWorker<Void, Void>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                editorPane.setPage(finalUrl);
-                return null;
-            }
-            
-            @Override
-            protected void done() {
-                progressBar.setVisible(false);
-                progressBar.setIndeterminate(false);
-                
-                // 添加到历史记录
-                historyIndex++;
-                while (history.size() > historyIndex) {
-                    history.remove(history.size() - 1);
-                }
-                history.add(finalUrl);
-                updateButtons();
-            }
-        }.execute();
+        if (webView != null) {
+            webView.loadUrl(url);
+        }
     }
     
     public void goBack() {
-        if (historyIndex > 0) {
-            historyIndex--;
-            String url = history.get(historyIndex);
-            urlField.setText(url);
-            try {
-                editorPane.setPage(url);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (webView != null) {
+            webView.goBack();
             updateButtons();
         }
     }
     
     public void goForward() {
-        if (historyIndex < history.size() - 1) {
-            historyIndex++;
-            String url = history.get(historyIndex);
-            urlField.setText(url);
-            try {
-                editorPane.setPage(url);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (webView != null) {
+            webView.goForward();
             updateButtons();
         }
     }
     
     public void refresh() {
-        if (historyIndex >= 0 && historyIndex < history.size()) {
-            String url = history.get(historyIndex);
-            try {
-                editorPane.setPage(url);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (webView != null) {
+            webView.reload();
         }
     }
     
     private void updateButtons() {
-        backButton.setEnabled(historyIndex > 0);
-        forwardButton.setEnabled(historyIndex < history.size() - 1);
+        backButton.setEnabled(webView != null && webView.canGoBack());
+        forwardButton.setEnabled(webView != null && webView.canGoForward());
     }
     
     public static void openInSystemBrowser(String url) {
